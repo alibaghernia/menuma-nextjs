@@ -1,0 +1,13 @@
+@import url('https://v1.fontapi.ir/css/VazirFD');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    font-size: 16px;
+    font-family: Vazir FD, sans-serif;
+}
+
+main {
+    background-color: theme("colors.secondary");
+}

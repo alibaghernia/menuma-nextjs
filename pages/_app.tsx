@@ -1,6 +1,8 @@
-import '@/styles/globals.css'
+
 import type { AppProps } from 'next/app'
+import "@/assets/styles/global.scss"
+
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  return <main className='min-h-screen'><Component {...pageProps} /></main>
 }

@@ -26,7 +26,7 @@ const Profile = () => {
                 socials={[{ icon: <InstagramIcon />, url: "#" }, { icon: <TelegramIcon />, url: "#" }]}
                 logo_url={cofeeshopLogo.src}
                 time_shifts={["9:30 تا 13:00", "9:30 تا 13:00"]} />
-            <div onClick={() => { router.push(`${router.asPath}/menu`) }} className="rounded-full text-typography py-[.8rem] px-[2.9rem] mt-[5.3rem] mx-auto w-fit bg-white text-[1.2rem] font-bold">
+            <div onClick={() => { router.push(`${router.asPath}/menu`) }} className="rounded-full text-typography py-[.8rem] px-[2.9rem] mt-[5.3rem] mx-auto w-fit bg-white text-[1rem] font-bold cursor-pointer">
                 مشاهده منوی کافه
             </div>
             <Section title="موقعیت روی نقشه" classNames="mt-[1.6rem]" append={<div className='text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F] rounded-[1rem]'>مسیریابی</div>}>

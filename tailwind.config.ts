@@ -15,7 +15,8 @@ const config: Config = {
       },
       colors: {
         typography: "#434343",
-        secondary: "#EDEDED"
+        secondary: "#EDEDED",
+        more: "#EEB33F",
       }
     },
     fontFamily: {

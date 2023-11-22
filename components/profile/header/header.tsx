@@ -10,7 +10,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
 
   const timeShifts = useMemo(() => {
     const elements = props.time_shifts.map((shift, key) => (
-      <div className="p-2 text-white text-[1rem] rounded-lg px-[.6rem] py-[.3rem] bg-white/[.20]" key={key}>
+      <div className="p-2 text-white text-[.9rem] rounded-lg px-[.6rem] py-[.3rem] bg-white/[.20]" key={key}>
         {shift}
       </div>
     ))
@@ -36,7 +36,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
 
   return (
     <div className='relative'>
-      <div className="flex flex-col pt-[5.1rem] pb-[5.6rem] relative rounded-bl-[3.6rem] rounded-br-[3.6rem] overflow-hidden z-10">
+      <div className="flex flex-col pt-[5.1rem] pb-[5.6rem] relative rounded-bl-[2.6rem] rounded-br-[2.6rem] overflow-hidden z-10">
         <Image fill src={props.image_url} alt="" className='absolute inset-0 -z-20' />
         <span className='absolute inset-0 -z-10 bg-black/[.6]' />
         <div className="text-[1.8rem] mx-auto font-bold text-white">{props.title}</div>

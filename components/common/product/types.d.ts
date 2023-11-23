@@ -5,6 +5,8 @@ declare interface IProductProps {
   image?: string;
   descriptions: string;
   single_mode?: boolean;
+  fullWidth?: boolean;
+  className?: string
   prices: {
     id: string;
     title: stirng;

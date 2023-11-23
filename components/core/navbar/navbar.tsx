@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import { INavBar } from './types'
 import { MenuIcon } from '@/icons/menu'
 import classNames from 'classnames'
@@ -6,14 +6,16 @@ import { ArrowBackIcon } from '@/icons/arrow-back'
 import { NoteIcon } from '@/icons/note'
 import { LinedCloseIcon } from '@/icons/lined_close'
 import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../../tailwind.config'
+import tailwindConfig from '@/tailwind.config'
 import { HomeIcon } from '@/icons/home'
 import { MenuCircleIcon } from '@/icons/menu-circle'
 import { SupportIcon } from '@/icons/support'
 import { Cart } from '@/components/common/cart/cart'
+import { ProviderContext } from '@/store/provider'
 
 export const Navbar: INavBar = (props) => {
 
+    const { state } = useContext(ProviderContext)
     const [menuOpen, setMenuOpen] = useState(false)
     const [cartOpen, setCartOpen] = useState(false)
     const [overlay, setOverlay] = useState(false)
@@ -68,7 +70,8 @@ export const Navbar: INavBar = (props) => {
                 </div>
                 <div className='flex items-center gap-[1rem]'>
                     {props.note && (
-                        <div className="cursor-pointer" onClick={() => {setCartOpen(!cartOpen); setOverlay(!overlay)}}>
+                        <div className="cursor-pointer relative" onClick={() => { setCartOpen(!cartOpen); setOverlay(!overlay) }}>
+                            <div className="absolute min-w-[1rem] text-center min-h-[1rem] p-[.1rem] bg-red-800 text-white rounded-[1rem] top-[-.3rem] left-0 text-[.8rem] font-semibold">{state.cart.length}</div>
                             <NoteIcon width={32} height={33} color={props.dark ? "white" : "#434343"} />
                         </div>
                     )}

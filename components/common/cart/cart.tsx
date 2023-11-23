@@ -1,31 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { ICart } from './types'
 import classNames from 'classnames'
 import { LinedCloseIcon } from '@/icons/lined_close'
 import sperso from '@/assets/images/sperso.png'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import colors from 'tailwindcss/colors'
-import tailwindConfig from '../../../tailwind.config'
+import tailwindConfig from '@/tailwind.config'
 import Image from 'next/image'
 import { Trash1Icon } from '@/icons/trash1'
+import { ProviderContext } from '@/store/provider'
 
 export const Cart: ICart = (props) => {
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
+    const { state, functions } = useContext(ProviderContext)
 
-    const orderItems = [
-        {
-            title: "اسپرسو",
-            type: "تک",
-            price: 45000,
-            count: 2,
-        },
-        {
-            title: "اسپرسو",
-            type: "دبل",
-            price: 50000,
-            count: 3,
-        },
-    ]
+    const orderItems = state.cart
 
     const renderOrderItems = orderItems.map((orderItem, key) => (
         <div className="flex gap-3 border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
@@ -37,7 +26,7 @@ export const Cart: ICart = (props) => {
                     <div className="flex flex-col gap-1">
                         {`${orderItem.title} - ${orderItem.type}`}
                     </div>
-                    <div className="cursor-pointer">
+                    <div className="cursor-pointer" onClick={() => functions.cart.removeItem(orderItem.id)}>
                         <Trash1Icon color={colors.red[500]} />
                     </div>
                 </div>
@@ -57,7 +46,9 @@ export const Cart: ICart = (props) => {
     ))
 
     const getCartSum = () => {
-        return orderItems.map(orderItem => orderItem.price * orderItem.count).reduce((a, b) => a + b).toLocaleString("IR-fa")
+        const prices = orderItems.map(orderItem => orderItem.price * orderItem.count)
+        if (!prices.length) return 0
+        return prices.reduce((a, b) => a + b).toLocaleString("IR-fa")
     }
 
 

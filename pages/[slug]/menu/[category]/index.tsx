@@ -13,47 +13,7 @@ export default function CategoryPage() {
         title: "ویژه ها",
     }
     const products = useMemo<IProductProps[]>(() => [
-        {
-            id: "sperso1",
-            title: "اسپرسو",
-            descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
-            image: sperso.src,
-            special: true,
-            prices: [{
-                id: "single",
-                price: 45000,
-                title: "تک"
-            }, {
-                id: "double",
-                price: 50000,
-                title: "دبل"
-            }
-            ],
-        },
-        {
-            id: "sperso2",
-            title: "اسپرسو",
-            descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
-            image: sperso.src,
-            special: true,
-            prices: [{
-                id: "single",
-                price: 45000,
-                title: "تک"
-            }],
-        },
-        {
-            id: "sperso3",
-            title: "اسپرسو",
-            descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
-            image: sperso.src,
-            special: true,
-            prices: [{
-                id: "single",
-                price: 45000,
-                title: "تک"
-            }],
-        },
+        
     ], [])
 
     const renderdProducts = useMemo(() => {

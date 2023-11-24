@@ -1,18 +1,20 @@
 import { IProductProps } from '@/components/common/product/types'
-import { Navbar } from '@/components/core/navbar'
+import { Navbar } from '@/components/core/navbar/noSSR'
 import sperso from '@/assets/images/sperso.png'
 import React, { useMemo, useState } from 'react'
 import { Product } from '@/components/common/product/product'
 import { SearchField } from '@/components/common/search_field/search_field'
+import { useParams } from 'next/navigation'
 
 export default function CategoryPage() {
-
+    const params = useParams()
     const [searchInput, setSearchInput] = useState<string>()
     const category = {
         title: "ویژه ها",
     }
     const products = useMemo<IProductProps[]>(() => [
         {
+            id: "sperso1",
             title: "اسپرسو",
             descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
             image: sperso.src,
@@ -22,13 +24,14 @@ export default function CategoryPage() {
                 amount: 45000,
                 title: "تک"
             }, {
-                id: "single",
+                id: "double",
                 amount: 50000,
                 title: "دبل"
             }
             ],
         },
         {
+            id: "sperso2",
             title: "اسپرسو",
             descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
             image: sperso.src,
@@ -40,6 +43,7 @@ export default function CategoryPage() {
             }],
         },
         {
+            id: "sperso3",
             title: "اسپرسو",
             descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
             image: sperso.src,
@@ -54,7 +58,9 @@ export default function CategoryPage() {
 
     const renderdProducts = useMemo(() => {
         return products.map((product, key) => (
-            <Product key={key}
+            <Product
+                id={product.id}
+                key={key}
                 title={product.title}
                 descriptions={product.descriptions}
                 image={product.image}

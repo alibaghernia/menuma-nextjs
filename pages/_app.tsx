@@ -1,6 +1,7 @@
 
 import type { AppProps } from 'next/app'
 import "@/assets/styles/global.scss"
+import "leaflet/dist/leaflet.css";
 import Provider from '@/store/provider'
 
 

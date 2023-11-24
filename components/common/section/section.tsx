@@ -2,7 +2,7 @@ import React from 'react'
 import { ISection } from './types'
 import classNames from 'classnames'
 
-export const Section: ISection = ({ children, ...props }) => {
+const Section: ISection = ({ children, ...props }) => {
     return (
         <div className={classNames("flex flex-col gap-[.5rem]", props.className)}>
             <div className="flex gap-2 items-center justify-between px-[1.9rem]">
@@ -22,3 +22,13 @@ export const Section: ISection = ({ children, ...props }) => {
         </div>
     )
 }
+
+const AppentRegularButton: ISection['AppentRegularButton'] = (props) => {
+    return (
+        <div className='text-more whitespace-nowrap text-[1rem] font-bold cursor-pointer' onClick={props.onClick}>مشاهده همه</div>
+    )
+}
+
+Section.AppentRegularButton = AppentRegularButton;
+
+export { Section }

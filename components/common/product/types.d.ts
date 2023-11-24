@@ -1,6 +1,7 @@
 import { FC } from "react";
 
 declare interface IProductProps {
+  id: string;
   title: string;
   image?: string;
   descriptions: string;
@@ -8,6 +9,7 @@ declare interface IProductProps {
   fullWidth?: boolean;
   special?: boolean;
   className?: string
+  categoryId?: string
   prices: {
     id: string;
     title: stirng;

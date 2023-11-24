@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/core/navbar'
+import { Navbar } from '@/components/core/navbar/noSSR'
 import { CategoryCard } from '@/components/menu/category-card'
 import warmDrink from '@/assets/images/warm-drink.png'
 import sperso from '@/assets/images/sperso.png'
@@ -16,11 +16,15 @@ import _ from 'lodash'
 import { IProductProps } from '@/components/common/product/types'
 import { title } from 'process'
 import { SearchField } from '@/components/common/search_field/search_field'
+import { useParams } from 'next/navigation'
+import resolveConfig from 'tailwindcss/resolveConfig'
+import tailwindConfig from '@/tailwind.config'
+import { useRouter } from 'next/router'
 
 export default function MenuPage() {
-
     const [searchInput, setSearchInput] = useState<string>()
-
+    const router = useRouter()
+    const params = useParams()
     const categories: category[] = useMemo(() => [
         {
             id: "1",
@@ -50,21 +54,24 @@ export default function MenuPage() {
     ], []);
     const products = useMemo<IProductProps[]>(() => [
         {
+            id: "sperso1",
             title: "اسپرسو",
             descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
             image: sperso.src,
-            prices: [{
-                id: "single",
-                amount: 45000,
-                title: "تک"
-            }, {
-                id: "single",
-                amount: 50000,
-                title: "دبل"
-            }
+            prices: [
+                {
+                    id: "single",
+                    amount: 45000,
+                    title: "تک"
+                }, {
+                    id: "double",
+                    amount: 50000,
+                    title: "دبل"
+                }
             ],
         },
         {
+            id: "sperso2",
             title: "اسپرسو",
             descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
             image: sperso.src,
@@ -75,6 +82,7 @@ export default function MenuPage() {
             }],
         },
         {
+            id: "sperso3",
             title: "اسپرسو",
             descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.",
             image: sperso.src,
@@ -95,24 +103,27 @@ export default function MenuPage() {
             <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[1rem] !w-fit' key={key1}>
                 {categories.map((category, key2) => (
                     <div key={key2}>
-                        <CategoryCard image={category.image} title={category.title} url={category.url!} selected={selectedCategory == category.id} onClick={() => { setSelectedCategory(category.id) }} />
+                        <CategoryCard image={category.image} title={category.title} url={category.url!}
+                            // selected={selectedCategory == category.id} 
+                            onClick={() => { setSelectedCategory(category.id) }} />
                     </div>
                 ))}
             </SwiperSlide>
         )
         )
-    }, [categories, selectedCategory])
+    }, [categories])
 
     const renderProducts = useMemo(() => {
         return products.map((product, key1) => (
             <Product
                 key={key1}
+                id={product.id}
                 title={product.title}
                 descriptions={product.descriptions}
                 image={product.image}
                 prices={product.prices}
                 fullWidth
-                className='px-5'
+                className='px-5 max-w-lg'
             />
         )
         )
@@ -132,7 +143,11 @@ export default function MenuPage() {
                             el: "#swiper-pagination",
                             bulletActiveClass: styles['swiper-pagination-bullet']
                         }}
-                        centeredSlides
+                        breakpoints={{
+                            768: {
+                                centerInsufficientSlides: true
+                            }
+                        }}
 
                         modules={[Pagination]}
                     >
@@ -142,18 +157,26 @@ export default function MenuPage() {
                 <div id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'></div>
             </div>
             <div className="mt-4 mx-6">
-                <SearchField value={searchInput ?? ""} onChange={setSearchInput} onSearch={(value) => {}} />
+                <SearchField value={searchInput ?? ""} onChange={setSearchInput} onSearch={(value) => { }} />
             </div>
-            <Section className="mt-[1.125rem]" title='ویژه ها' append={<div className='text-more whitespace-nowrap text-[1rem] font-bold'>مشاهده همه</div>}>
+            <Section className="mt-[1.125rem]" title='ویژه ها' append={<Section.AppentRegularButton title="مشاهده همه" onClick={() => {
+                router.push(`/${params.slug}/menu/special`)
+            }} />}>
                 <Swiper
                     slidesPerView={"auto"}
                     slidesOffsetBefore={30.4}
                     slidesOffsetAfter={30.4}
                     spaceBetween={25.6}
                     modules={[Pagination]}
+                    breakpoints={{
+                        768: {
+                            centerInsufficientSlides: true
+                        }
+                    }}
                 >
                     <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
                         <Product
+                            id='sperso1'
                             title='اسپرسو'
                             descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
                             single_mode
@@ -167,6 +190,7 @@ export default function MenuPage() {
                     </SwiperSlide>
                     <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
                         <Product
+                            id='sperso2'
                             title='اسپرسو'
                             descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
                             single_mode
@@ -180,6 +204,21 @@ export default function MenuPage() {
                     </SwiperSlide>
                     <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
                         <Product
+                            id='sperso3'
+                            title='اسپرسو'
+                            descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
+                            single_mode
+                            image={sperso.src}
+                            prices={[{
+                                id: "single",
+                                amount: 45000,
+                                title: "تک"
+                            }]}
+                        />
+                    </SwiperSlide>
+                    <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
+                        <Product
+                            id='sperso4'
                             title='اسپرسو'
                             descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
                             single_mode

@@ -37,7 +37,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
   return (
     <div className='relative'>
       <div className="flex flex-col pt-[5.1rem] pb-[5.6rem] relative rounded-bl-[2.6rem] rounded-br-[2.6rem] overflow-hidden z-10">
-        <Image fill src={props.image_url} alt="" className='absolute inset-0 -z-20' />
+        <Image fill src={props.image_url} alt="" className='absolute inset-0 -z-20 object-cover' />
         <span className='absolute inset-0 -z-10 bg-black/[.6]' />
         <div className="text-[1.8rem] mx-auto font-bold text-white">{props.title}</div>
         <div className="text-[1rem] mx-auto font-light text-white">{props.address}</div>

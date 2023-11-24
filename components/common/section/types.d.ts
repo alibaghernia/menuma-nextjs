@@ -1,10 +1,16 @@
 import { FC, PropsWithChildren } from "react";
 
 declare interface ISectionProps {
-    title: string;
-    className?: string;
-    contentClassNames?: string;
-    append?: JSX.Element
+  title: string;
+  className?: string;
+  contentClassNames?: string;
+  append?: JSX.Element;
+}
+declare interface IAppentRegularButtonProps {
+  title: sting;
+  onClick?: () => void;
 }
 
-declare type ISection = FC<PropsWithChildren<ISectionProps>>
+declare type ISection = FC<PropsWithChildren<ISectionProps>> & {
+  AppentRegularButton: FC<IAppentRegularButtonProps>;
+};

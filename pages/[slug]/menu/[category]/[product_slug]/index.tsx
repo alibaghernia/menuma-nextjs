@@ -1,8 +1,6 @@
 import { IProductProps } from '@/components/common/product/types';
-import { Navbar } from '@/components/core/navbar'
-import { useParams } from 'next/navigation';
+import { Navbar } from '@/components/core/navbar/noSSR'
 import sperso from '@/assets/images/sperso.png'
-import { useRouter } from 'next/router'
 import React, { useCallback, useContext, useMemo, useState } from 'react'
 import Image from 'next/image';
 import { ProviderContext } from '@/store/provider';
@@ -13,7 +11,7 @@ export default function ProductPage() {
     const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
 
     const product: Omit<IProductProps, "fullWidth" | "className"> & { id: string } = useMemo(() => ({
-        id: "product-1",
+        id: "sperso1",
         title: "قهوه اسپرسو",
         descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.",
         image: sperso.src,

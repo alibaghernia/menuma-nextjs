@@ -19,6 +19,7 @@ declare interface IProfile {
   instagram?: string;
   telegram?: string;
   twitter?: string;
+  has_pager?: string;
 }
 
 declare module "next" {

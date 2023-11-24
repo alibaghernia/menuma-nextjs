@@ -9,8 +9,9 @@ import { useParams } from 'next/navigation';
 import { useQuery } from 'react-query';
 import { IProfile } from '@/pages/[slug]/types';
 import { ProviderContext } from '../main/provider';
+import { toast } from 'react-toastify';
 
-export const CofeeShopProviderContext = createContext<{
+export const CoffeeShopProviderContext = createContext<{
     state: IProviderState,
     dispatch: (action: any) => void,
     functions: ReturnType<typeof Functions>
@@ -28,7 +29,7 @@ const CoffeShopProvider: IProvider = ({ children }) => {
         return axios.get<IProfile>(`/api/cafe-restaurants/${params.slug}`).then(({ data }) => data)
     }
 
-    const { isLoading, isSuccess, data, refetch, isFetching, isRefetching, status, isFetched } = useQuery({ queryKey: `fetch-profile-${params?.slug}`, queryFn: profileFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const { isLoading, isSuccess, data, refetch, isFetching, isRefetching, status, isFetched, isError } = useQuery({ queryKey: `fetch-profile-${params?.slug}`, queryFn: profileFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
 
     useEffect(() => {
         if (isSuccess) {
@@ -45,20 +46,27 @@ const CoffeShopProvider: IProvider = ({ children }) => {
         setLoading(!isSuccess)
     }, [setLoading, isFetched, isSuccess])
 
-
+    useEffect(() => {
+        console.log({
+            isError
+        });
+        if (isError) {
+            toast.error("خطا در ارتباط با سرور")
+        }
+    }, [isError])
 
 
 
 
     return (
         <>
-            <CofeeShopProviderContext.Provider value={{
+            <CoffeeShopProviderContext.Provider value={{
                 state,
                 dispatch,
                 functions
             }}>
                 {children}
-            </CofeeShopProviderContext.Provider>
+            </CoffeeShopProviderContext.Provider>
         </>
     )
 }

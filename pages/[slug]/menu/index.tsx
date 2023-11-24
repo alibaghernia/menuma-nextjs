@@ -7,7 +7,7 @@ import styles from '@/assets/styles/pages/menu/menu.module.scss'
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
 import { EffectCoverflow, Pagination } from 'swiper/modules';
 import { Section } from '@/components/common/section/section';
@@ -17,14 +17,16 @@ import { IProductProps } from '@/components/common/product/types'
 import { SearchField } from '@/components/common/search_field/search_field'
 import { useParams } from 'next/navigation'
 import { useRouter } from 'next/router'
-import CoffeShopProvider, { CofeeShopProviderContext } from '@/providers/cofee_shop/provider'
+import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 import { axios, serverBaseUrl } from '@/utils/axios'
 import { useQuery } from 'react-query'
 import { ProviderContext } from '@/providers/main/provider'
+import Head from 'next/head'
+import { toast } from 'react-toastify'
 
 function MenuPage() {
     const [menuData, setMenuData] = useState<APICateogory[]>([])
-    const { state } = useContext(CofeeShopProviderContext)
+    const { state } = useContext(CoffeeShopProviderContext)
     const { setLoading } = useContext(ProviderContext)
     const [searchInput, setSearchInput] = useState<string>("")
     const router = useRouter()
@@ -36,8 +38,13 @@ function MenuPage() {
         return axios.get(`/api/cafe-restaurants/${params.slug}/menu`).then(({ data }) => data)
     }
 
-    const { isSuccess, data, refetch, status } = useQuery({ queryKey: `fetch-menu-${params?.slug}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const { isSuccess, data, refetch, status, isError } = useQuery({ queryKey: `fetch-menu-${params?.slug}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
 
+    useEffect(() => {
+        if (isError) {
+            toast.error("خطا در ارتباط با سرور")
+        }
+    }, [isError])
     useEffect(() => {
         if (!params) return
         setLoading(true)
@@ -45,12 +52,12 @@ function MenuPage() {
     }, [refetch, setLoading, params])
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess && menuData) {
             setSelectedCategory(data[0].id)
             setMenuData(data)
             setLoading(false)
         }
-    }, [isSuccess, setLoading, data, status])
+    }, [isSuccess, setLoading, data, status, menuData, params])
 
 
     const categoriesSwiperSlides = useMemo(() => {
@@ -58,7 +65,7 @@ function MenuPage() {
             <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit' key={key1}>
                 {categories.map((category, key2) => (
                     <div key={key2}>
-                        <CategoryCard image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : warmDrink.src} title={category.name} url={"#"}
+                        <CategoryCard image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : warmDrink.src} title={category.name} url={`#${category.name}`}
                             onClick={() => { setSelectedCategory(category.id); setSearchInput("") }} />
                     </div>
                 ))}
@@ -67,8 +74,14 @@ function MenuPage() {
         )
     }, [menuData, setSelectedCategory])
 
-    const renderProducts = useMemo(() => {
-        const categoryItems = menuData.find(category => category.id == selectedCategory)?.items || []
+    const renderProducts = useCallback((category: APICateogory) => {
+        const categoryItems = category?.items || []
+        const filtred = categoryItems.filter(product => product.name.includes(searchInput!))
+        if (!filtred.length) return (
+            <div className="w-full text-gray-400 text-[1rem] text-center">
+                آیتمی یافت نشد
+            </div>
+        )
         return categoryItems.filter(product => product.name.includes(searchInput!))?.map((product, key1) => (
             <Product
                 key={key1}
@@ -83,41 +96,55 @@ function MenuPage() {
             />
         )
         )
-    }, [menuData, selectedCategory, searchInput])
+    }, [searchInput])
+
+    const renderCategorySections = () => {
+        return menuData.filter(category => category.items.filter(product => product.name.includes(searchInput!)).length).map((category, key) => (
+            <Section key={key} id={category.name} className="mt-[1.125rem] pb-5 scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title={category.name}>
+                {renderProducts(category)}
+            </Section>
+        ))
+    }
 
     return (
-        <main className='bg-secondary min-h-screen'>
-            <Navbar title={state?.profile?.name} note back />
-            <div className="sticky top-0 bg-secondary z-20 pb-[1.125rem]">
-                <div className="flex flex-col gap-2 pt-[5.5rem]">
-                    <div className="px-2">
-                        <Swiper
-                            slidesPerView={"auto"}
-                            spaceBetween={8}
-                            grabCursor={true}
-                            pagination={{
-                                clickable: true,
-                                el: "#swiper-pagination",
-                                bulletActiveClass: styles['swiper-pagination-bullet']
-                            }}
-                            breakpoints={{
-                                768: {
-                                    centerInsufficientSlides: true
-                                }
-                            }}
-                            modules={[Pagination]}
-                        >
-                            {categoriesSwiperSlides}
-                        </Swiper>
+        <>
+            <Head>
+                <title>
+                    {state.profile?.name} - منو - منوما
+                </title>
+            </Head>
+            <main className='bg-secondary min-h-screen'>
+                <Navbar title={state?.profile?.name} note back />
+                <div className="sticky top-0 bg-secondary z-20 pb-[1.125rem]">
+                    <div className="flex flex-col gap-2 pt-[5.5rem]">
+                        <div className="px-2">
+                            <Swiper
+                                slidesPerView={"auto"}
+                                spaceBetween={8}
+                                grabCursor={true}
+                                pagination={{
+                                    clickable: true,
+                                    el: "#swiper-pagination",
+                                    bulletActiveClass: styles['swiper-pagination-bullet']
+                                }}
+                                breakpoints={{
+                                    768: {
+                                        centerInsufficientSlides: true
+                                    }
+                                }}
+                                modules={[Pagination]}
+                            >
+                                {categoriesSwiperSlides}
+                            </Swiper>
+                        </div>
+                        <div id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'></div>
                     </div>
-                    <div id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'></div>
+                    <div className="mt-4 mx-6">
+                        <SearchField value={searchInput ?? ""} onChange={setSearchInput} onSearch={(value) => { }} />
+                    </div>
                 </div>
-                <div className="mt-4 mx-6">
-                    <SearchField value={searchInput ?? ""} onChange={setSearchInput} onSearch={(value) => { }} />
-                </div>
-            </div>
-            <div className="z-10 relative">
-                {/* <Section title='ویژه ها' append={<Section.AppentRegularButton title="مشاهده همه" onClick={() => {
+                <div className="z-10 relative">
+                    {/* <Section title='ویژه ها' append={<Section.AppentRegularButton title="مشاهده همه" onClick={() => {
                     router.push(`/${params.slug}/menu/special`)
                 }} />}>
                     <Swiper
@@ -190,11 +217,11 @@ function MenuPage() {
                         </SwiperSlide>
                     </Swiper>
                 </Section> */}
-                <Section className="mt-[1.125rem] pb-5" contentClassNames='flex flex-col gap-[1rem] items-center' title={menuData.find(item => item.id == selectedCategory)?.name!}>
-                    {renderProducts}
-                </Section>
-            </div>
-        </main>
+                    {renderCategorySections()}
+                </div>
+            </main>
+
+        </>
     )
 }
 

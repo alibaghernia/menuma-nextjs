@@ -5,8 +5,9 @@ import React, { useMemo, useState } from 'react'
 import { Product } from '@/components/common/product/product'
 import { SearchField } from '@/components/common/search_field/search_field'
 import { useParams } from 'next/navigation'
+import CoffeShopProvider from '@/providers/coffee_shop/provider'
 
-export default function CategoryPage() {
+function CategoryPage() {
     const params = useParams()
     const [searchInput, setSearchInput] = useState<string>()
     const category = {
@@ -52,3 +53,7 @@ export default function CategoryPage() {
         </>
     )
 }
+
+CategoryPage.provider = CoffeShopProvider
+
+export default CategoryPage

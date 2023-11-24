@@ -1,6 +1,6 @@
 import { ProfileHeader } from '@/components/profile/header/header'
-import cofeeshopImage from '@/assets/images/cofeeshop.jpg'
-import cofeeshopLogo from '@/assets/images/cofeeshopLogo.png'
+import coffeeshopImage from '@/assets/images/coffeeshop.jpg'
+import coffeeshopLogo from '@/assets/images/coffeeshopLogo.png'
 import mapPlaceholder from '@/assets/images/map-placeholder.png'
 import React, { useContext, useEffect, useState } from 'react'
 import { InstagramIcon } from '@/icons/instagram'
@@ -17,22 +17,25 @@ import { axios, serverBaseUrl } from '@/utils/axios'
 import { NextPage } from 'next'
 import { ProviderContext } from '@/providers/main/provider'
 import { IProfile } from './types'
-import CoffeShopProvider, { CofeeShopProviderContext } from '@/providers/cofee_shop/provider'
+import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
+import Head from 'next/head'
 
 const Profile: NextPage = () => {
-    const { state } = useContext(CofeeShopProviderContext)
+    const { state } = useContext(CoffeeShopProviderContext)
     const profileData: IProfile = state.profile
-    const params = useParams()
     const router = useRouter()
-    const location: ILocation = {
-        coordinates: [31.875474, 54.397410]
-    }
 
     const MapComponent = dynamic(import('@/components/common/map/map'), { ssr: false })
 
     const locationCoordinates: [number, number] = [parseFloat(profileData.location_lat || "0"), parseFloat(profileData.location_long || "0" )]
 
     return (
+        <>
+        <Head>
+            <title>
+                {profileData.name} - منوما
+            </title>
+        </Head>
         <main className='bg-secondary min-h-screen'>
             <Navbar
                 dark
@@ -41,9 +44,9 @@ const Profile: NextPage = () => {
             />
             <div className="z-0">
                 <ProfileHeader
-                    image_url={profileData?.banner_path || cofeeshopImage.src}
+                    image_url={profileData?.banner_path ? `${serverBaseUrl}/storage/${profileData?.banner_path}` : coffeeshopImage.src}
                     title={profileData?.name || "CafeeShop Name"}
-                    address={profileData?.address || "CofeeShop Address"}
+                    address={profileData?.address || "CoffeeShop Address"}
                     //@ts-ignore
                     socials={
                         [
@@ -51,7 +54,7 @@ const Profile: NextPage = () => {
                             (profileData?.telegram ? { icon: <TelegramIcon />, url: profileData.telegram } : undefined),
                         ].filter(Boolean)
                     }
-                    logo_url={profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : cofeeshopLogo.src}
+                    logo_url={profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : coffeeshopLogo.src}
                     time_shifts={["9:30 تا 13:00", "9:30 تا 13:00"]} />
                 <div className=" text-typography mt-[4.3rem] mx-auto text-[.8rem] font-bold px-10 text-justify leading-6">
                     {profileData?.description}
@@ -68,6 +71,7 @@ const Profile: NextPage = () => {
                 </Section>
             </div>
         </main>
+        </>
     )
 }
 

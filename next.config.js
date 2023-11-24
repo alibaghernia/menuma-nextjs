@@ -9,6 +9,12 @@ const nextConfig = {
         port: "8000",
         pathname: '/storage/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'panel.menuma.online',
+        port: "",
+        pathname: '/storage/**',
+      },
     ],
   },
 }

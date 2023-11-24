@@ -9,10 +9,12 @@ import tailwindConfig from '@/tailwind.config'
 import Image from 'next/image'
 import { Trash1Icon } from '@/icons/trash1'
 import { ProviderContext } from '@/providers/main/provider'
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 
 export const Cart: ICart = (props) => {
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
     const { state, functions } = useContext(ProviderContext)
+    const { state: coffeeShopState } = useContext(CoffeeShopProviderContext)
 
     const orderItems = state.cart
 
@@ -61,9 +63,9 @@ export const Cart: ICart = (props) => {
             </div>
             <div className="text-[1.5rem] font-bold text-center w-full grow-0">سفارشات شما</div>
             {renderOrderItems.length ? (
-            <div className="flex flex-col mt-4 overflow-y-auto grow gap-3">
-                {renderOrderItems}
-            </div>
+                <div className="flex flex-col mt-4 overflow-y-auto grow gap-3">
+                    {renderOrderItems}
+                </div>
             ) : (
                 <div className="flex flex-col justify-center grow">
                     <div className="text-gray-400 text-center">سفارشی ثبت نکرده اید</div>
@@ -81,9 +83,11 @@ export const Cart: ICart = (props) => {
                 </div>
             </div>
             <div className="mt-[1.5rem] grow-0">
-                <div className="px-[2rem] py-[.8rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold">
-                    صدا زدن گارسون
-                </div>
+                {Boolean(parseInt(coffeeShopState.profile.has_pager)) && (
+                    <div className="px-[2rem] py-[.8rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold">
+                        صدا زدن گارسون
+                    </div>
+                )}
             </div>
         </div >
     )

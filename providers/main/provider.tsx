@@ -4,7 +4,7 @@ import reducer from './reducer';
 import { INITIAL_STATE, REDUCER_KEYS } from './constants';
 import _ from 'lodash'
 import functions from './functions';
-import cofeeLoadingGIF from '@/assets/images/cofee_animation.gif'
+import coffeeLoadingGIF from '@/assets/images/coffee_animation.gif'
 import Image from 'next/image';
 
 export const ProviderContext = createContext<{
@@ -67,7 +67,7 @@ const Provider: IProvider = ({ children }) => {
             {
                 loading && (
                     <div className="fixed inset-0 bg-white z-50 ">
-                        <Image width={cofeeLoadingGIF.width} height={cofeeLoadingGIF.height} alt='Loading' src={cofeeLoadingGIF.src} className='mx-auto absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]' />
+                        <Image width={coffeeLoadingGIF.width} height={coffeeLoadingGIF.height} alt='Loading' src={coffeeLoadingGIF.src} className='mx-auto absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]' />
                     </div>
                 )
             }

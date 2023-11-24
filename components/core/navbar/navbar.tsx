@@ -14,9 +14,11 @@ import { Cart } from '@/components/common/cart/cart'
 import { ProviderContext } from '@/providers/main/provider'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
     const router = useRouter()
+    const { state: coffeShopState } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const { state } = useContext(ProviderContext)
     const [menuOpen, setMenuOpen] = useState(false)
@@ -37,10 +39,10 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
             icon: <MenuCircleIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
             url: `/${params?.slug}/menu`
         },
-        {
-            title: "پشتیبانی",
-            icon: <SupportIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-        }
+        // {
+        //     title: "پشتیبانی",
+        //     icon: <SupportIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
+        // }
     ], [resolvedTailwindConfig, params])
 
     const renderMenuItems = useMemo(() => {
@@ -73,7 +75,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
     return (
         <div className={classNames('z-50', { "fixed top-0 w-full": !props.fixed, })}>
             <div
-                className={classNames("relative flex items-center justify-between px-[1.6rem] z-20 left-0 right-0 py-[1.2rem]", {  "bg-secondary": background })}>
+                className={classNames("relative flex items-center justify-between px-[1.6rem] z-20 left-0 right-0 py-[1.2rem]", { "bg-secondary": background })}>
                 <div className='flex items-center gap-[.5rem]'>
                     <div className="cursor-pointer" onClick={() => { setMenuOpen(!menuOpen); setOverlay(!overlay) }}>
                         <MenuIcon width={32} height={32} color={props.dark ? "white" : "#434343"} />
@@ -88,7 +90,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                     }
                 </div>
                 <div className='flex items-center gap-[.5rem]'>
-                    {callPager && (
+                    {callPager && Boolean(parseInt(coffeShopState.profile.has_pager)) && (
                         <div className="px-[1rem] py-[.2rem] text-[.9rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold whitespace-nowrap">
                             صدا زدن گارسون
                         </div>
@@ -113,20 +115,25 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 setMenuOpen(false)
                 setCartOpen(false)
             }} />
-            <div className={classNames("fixed top-0 bottom-0 max-w-sm w-full bg-white z-50 transition-all duration-[.3s] flex flex-col rounded-bl-[2rem] rounded-tl-[2rem]", { "right-0": menuOpen, "right-[-100%]": !menuOpen })}>
-                <div className="mt-[2rem] flex items-center justify-between px-[1.5rem]">
-                    <div className="text-typography text-[1.5rem]">کافه شب</div>
-                    <div className="cursor-pointer" onClick={() => {
-                        setOverlay(false)
-                        setMenuOpen(!menuOpen)
-                    }}>
-                        <LinedCloseIcon width={32} height={32} color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />
+            <div className={classNames("fixed top-0 bottom-0 max-w-sm w-full bg-white z-50 transition-all duration-[.3s] flex flex-col justify-between rounded-bl-[2rem] rounded-tl-[2rem]", { "right-0": menuOpen, "right-[-100%]": !menuOpen })}>
+                <div>
+                    <div className="mt-[2rem] flex items-center justify-between px-[1.5rem]">
+                        <div className="text-typography text-[1.5rem]">{coffeShopState.profile?.name}</div>
+                        <div className="cursor-pointer" onClick={() => {
+                            setOverlay(false)
+                            setMenuOpen(!menuOpen)
+                        }}>
+                            <LinedCloseIcon width={32} height={32} color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />
+                        </div>
+                    </div>
+                    <div className="mt-[2rem]">
+                        <div className="flex flex-col">
+                            {renderMenuItems}
+                        </div>
                     </div>
                 </div>
-                <div className="mt-[2rem]">
-                    <div className="flex flex-col">
-                        {renderMenuItems}
-                    </div>
+                <div>
+                    <div className="text-gray-300 font-bold w-full text-center py-3">قدرت گرفته از منوما</div>
                 </div>
             </div>
             <Cart open={cartOpen} onClose={() => {

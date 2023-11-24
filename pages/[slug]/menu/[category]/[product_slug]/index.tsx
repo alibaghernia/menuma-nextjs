@@ -60,7 +60,7 @@ export default function ProductPage() {
             functions.cart.decreaseCount(key)
     }, [functions, product.id])
 
-    const prices = useMemo(() => product.prices.map((price, key) => {
+    const prices = useMemo(() => product.prices.map((price: any, key: number) => {
 
         const order = functions.cart.getItem(`${product.id}-${price.id}`);
 

@@ -15,8 +15,12 @@ import { Product } from '@/components/common/product/product';
 import _ from 'lodash'
 import { IProductProps } from '@/components/common/product/types'
 import { title } from 'process'
+import { SearchField } from '@/components/common/search_field/search_field'
 
 export default function MenuPage() {
+
+    const [searchInput, setSearchInput] = useState<string>()
+
     const categories: category[] = useMemo(() => [
         {
             id: "1",
@@ -137,15 +141,10 @@ export default function MenuPage() {
                 </div>
                 <div id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'></div>
             </div>
-            <div className="mt-4">
-                <div className="rounded-full p-[.3rem] flex items-center mx-6 bg-white overflow-hidden gap-2">
-                    <div className="p-[.4rem] px-2 bg-black/[15%] rounded-tr-2xl rounded-br-2xl rounded-tl-lg rounded-bl-lg cursor-pointer">
-                        <SearchIcon width={18} height={18} />
-                    </div>
-                    <input type="text" className='outline-none bg-transparent placeholder:text-[.8rem] w-full' placeholder='جستجو...' />
-                </div>
+            <div className="mt-4 mx-6">
+                <SearchField value={searchInput ?? ""} onChange={setSearchInput} onSearch={(value) => {}} />
             </div>
-            <Section classNames="mt-[1.125rem]" title='ویژه ها' append={<div className='text-more whitespace-nowrap text-[1rem] font-bold'>مشاهده همه</div>}>
+            <Section className="mt-[1.125rem]" title='ویژه ها' append={<div className='text-more whitespace-nowrap text-[1rem] font-bold'>مشاهده همه</div>}>
                 <Swiper
                     slidesPerView={"auto"}
                     slidesOffsetBefore={30.4}
@@ -194,7 +193,7 @@ export default function MenuPage() {
                     </SwiperSlide>
                 </Swiper>
             </Section>
-            <Section classNames="mt-[1.125rem] pb-5" contentClassNames='flex flex-col gap-[1rem] items-center' title={categories.find(item => item.id == selectedCategory)?.title!}>
+            <Section className="mt-[1.125rem] pb-5" contentClassNames='flex flex-col gap-[1rem] items-center' title={categories.find(item => item.id == selectedCategory)?.title!}>
                 {renderProducts}
             </Section>
         </main>

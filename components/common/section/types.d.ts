@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 
 declare interface ISectionProps {
     title: string;
-    classNames?: string;
+    className?: string;
     contentClassNames?: string;
     append?: JSX.Element
 }

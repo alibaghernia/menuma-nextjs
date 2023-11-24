@@ -9,8 +9,7 @@ declare type ICartItem = {
 };
 
 declare type IProviderState = {
-  restored: boolean;
-  cart: ICartItem[];
+  profile: any
 };
 
 declare type IProvider = FC<PropsWithChildren<{}>>;

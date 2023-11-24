@@ -11,11 +11,11 @@ import { HomeIcon } from '@/icons/home'
 import { MenuCircleIcon } from '@/icons/menu-circle'
 import { SupportIcon } from '@/icons/support'
 import { Cart } from '@/components/common/cart/cart'
-import { ProviderContext } from '@/store/provider'
+import { ProviderContext } from '@/providers/main/provider'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
 
-export const Navbar: INavBar = ({ background = true, ...props }) => {
+export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
     const router = useRouter()
     const params = useParams()
     const { state } = useContext(ProviderContext)
@@ -71,10 +71,10 @@ export const Navbar: INavBar = ({ background = true, ...props }) => {
     }
 
     return (
-        <div className='z-50'>
+        <div className={classNames('z-50', { "fixed top-0 w-full": !props.fixed, })}>
             <div
-                className={classNames("flex items-center justify-between px-[1.6rem] z-20 left-0 right-0 py-[1.2rem]", { "fixed ": props.fixed, "fixed top-0 ": !props.fixed, "bg-secondary": background })}>
-                <div className='flex items-center gap-[.7rem]'>
+                className={classNames("relative flex items-center justify-between px-[1.6rem] z-20 left-0 right-0 py-[1.2rem]", {  "bg-secondary": background })}>
+                <div className='flex items-center gap-[.5rem]'>
                     <div className="cursor-pointer" onClick={() => { setMenuOpen(!menuOpen); setOverlay(!overlay) }}>
                         <MenuIcon width={32} height={32} color={props.dark ? "white" : "#434343"} />
                     </div>
@@ -83,16 +83,18 @@ export const Navbar: INavBar = ({ background = true, ...props }) => {
                             <div className={classNames({
                                 "text-typography": !props.dark,
                                 "text-white": props.dark,
-                            }, "text-[1.3rem]")}>{props.title}</div>
+                            }, "text-[1.3rem] whitespace-nowrap")}>{props.title}</div>
                         )
                     }
                 </div>
-                <div className='flex items-center gap-[1rem]'>
-                    <div className="px-[1rem] py-[.2rem] text-[.9rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold">
-                        صدا زدن گارسون
-                    </div>
+                <div className='flex items-center gap-[.5rem]'>
+                    {callPager && (
+                        <div className="px-[1rem] py-[.2rem] text-[.9rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold whitespace-nowrap">
+                            صدا زدن گارسون
+                        </div>
+                    )}
                     {props.note && (
-                        <div className="cursor-pointer relative" onClick={() => { setCartOpen(!cartOpen); setOverlay(!overlay) }}>
+                        <div className="cursor-pointer relative" onClick={() => { setCartOpen(true); setOverlay(true) }}>
                             {Boolean(state.cart.length) && (
                                 <div className="absolute min-w-[1rem] text-center min-h-[1rem] p-[.1rem] bg-red-800 text-white rounded-[1rem] top-[-.3rem] left-0 text-[.8rem] font-semibold">{state.cart.length}</div>
                             )}

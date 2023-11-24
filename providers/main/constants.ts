@@ -1,6 +1,7 @@
 export const INITIAL_STATE = {
     restored: false,
-    cart: []
+    cart: [],
+    profile: {}
 }
 
 export const REDUCER_KEYS = {
@@ -12,5 +13,8 @@ export const REDUCER_KEYS = {
         UPDATE_ITEM: "cart-update_item",
         INCREASE_COUNT: "cart-increase_count",
         DECREASE_COUNT: "cart-decrease_count",
+    },
+    profile: {
+        UPDATE: 'profile-update'
     }
 }

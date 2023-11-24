@@ -8,6 +8,7 @@ declare interface INavBarProps {
     dark?: boolean
     fixed?: boolean
     background?: boolean
+    callPager?: boolean
 }
 
 declare type INavBar = FC<INavBarProps>

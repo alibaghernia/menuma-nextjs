@@ -21,11 +21,11 @@ export default function CategoryPage() {
             special: true,
             prices: [{
                 id: "single",
-                amount: 45000,
+                price: 45000,
                 title: "تک"
             }, {
                 id: "double",
-                amount: 50000,
+                price: 50000,
                 title: "دبل"
             }
             ],
@@ -38,7 +38,7 @@ export default function CategoryPage() {
             special: true,
             prices: [{
                 id: "single",
-                amount: 45000,
+                price: 45000,
                 title: "تک"
             }],
         },
@@ -50,7 +50,7 @@ export default function CategoryPage() {
             special: true,
             prices: [{
                 id: "single",
-                amount: 45000,
+                price: 45000,
                 title: "تک"
             }],
         },

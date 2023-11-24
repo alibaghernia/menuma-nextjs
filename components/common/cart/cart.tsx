@@ -8,7 +8,7 @@ import colors from 'tailwindcss/colors'
 import tailwindConfig from '@/tailwind.config'
 import Image from 'next/image'
 import { Trash1Icon } from '@/icons/trash1'
-import { ProviderContext } from '@/store/provider'
+import { ProviderContext } from '@/providers/main/provider'
 
 export const Cart: ICart = (props) => {
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
@@ -26,7 +26,7 @@ export const Cart: ICart = (props) => {
                     <div className="flex flex-col gap-1">
                         {`${orderItem.title} - ${orderItem.type}`}
                     </div>
-                    <div className="cursor-pointer" onClick={(e) => { e.stopPropagation(); functions.cart.removeItem(orderItem.id) }}>
+                    <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); functions.cart.removeItem(orderItem.id); }}>
                         <Trash1Icon color={colors.red[500]} />
                     </div>
                 </div>
@@ -61,7 +61,7 @@ export const Cart: ICart = (props) => {
             </div>
             <div className="text-[1.5rem] font-bold text-center w-full grow-0">سفارشات شما</div>
             {renderOrderItems.length ? (
-            <div className="flex flex-col mt-4 overflow-y-auto grow">
+            <div className="flex flex-col mt-4 overflow-y-auto grow gap-3">
                 {renderOrderItems}
             </div>
             ) : (

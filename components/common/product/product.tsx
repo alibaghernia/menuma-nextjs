@@ -3,11 +3,13 @@ import { IProduct } from './types'
 import Image from 'next/image'
 import classNames from 'classnames'
 import { LinedAddIcon } from '@/icons/lined_add'
-import { ProviderContext } from '@/store/provider';
+import { ProviderContext } from '@/providers/main/provider';
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export const Product: IProduct = (props) => {
+    const router = useRouter()
     const params = useParams()
     const { state, functions } = useContext(ProviderContext)
 
@@ -21,7 +23,7 @@ export const Product: IProduct = (props) => {
             id: key,
             title: props.title,
             count: 1,
-            price: price.amount,
+            price: price.price,
             type: price.title
         })
     }, [functions, props])
@@ -64,7 +66,7 @@ export const Product: IProduct = (props) => {
                         "active:scale-[.8]": !order
                     })} onClick={() => orderItem(price)}>
                         <div className="text-[1rem] font-[500] text-typography">
-                            {`${price.amount.toLocaleString("IR-fa")} ت`}
+                            {`${parseInt(price.price).toLocaleString("IR-fa")} ت`}
                         </div>
                         {order ? (
                             <div className="flex items-center gap-2">
@@ -83,7 +85,7 @@ export const Product: IProduct = (props) => {
 
     const renderImage = useCallback((mono: boolean) => {
         return (
-            <Link href={productSlug} className={classNames("bg-white !w-[12rem] overflow-hidden rounded-[2.4rem]  border border-black/[.05]", {
+            <Link href={productSlug} className={classNames("flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]", {
                 "absolute !h-[12rem] right-[0]": !mono,
                 "relative h-full": mono,
             })}>
@@ -94,7 +96,7 @@ export const Product: IProduct = (props) => {
                             background: "linear-gradient(180deg, rgba(255, 255, 255, 0.00) 40%, rgba(224, 224, 224, 0.75) 100%)"
                         }}></span>
                         <div className="text-[1.2rem] text-typography absolute bottom-[.3rem] left-[50%] translate-x-[-50%] font-bold z-20">
-                            {`${props.prices[0].amount.toLocaleString("IR-fa")} ت`}
+                            {`${parseInt(props.prices[0].price).toLocaleString("IR-fa")} ت`}
                         </div>
                     </>
                 )}
@@ -104,20 +106,10 @@ export const Product: IProduct = (props) => {
     }, [props, productSlug])
 
     const renderSingleModePrice = () => {
-        const price = props.prices[0]
-        const itemId = `${props.id}-${price.id}`
-        const order = functions.cart.getItem(itemId)
-        return order ? (
-            <div className="flex items-center gap-2">
-                <div className="w-7 h-7 flex items-center justify-center bg-black/[.05] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={(e) => { e.stopPropagation(); decreasOrderItemCount(price) }}>-</div>
-                {order.count}
-                <div className="w-7 h-7 flex items-center justify-center bg-black/[.05] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={(e) => { e.stopPropagation(); increaseOrderItemCount(price) }}>+</div>
-            </div>
-        ) : (
-            <div className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s]" onClick={() => orderItem(price)}>
-                افزودن به سفارشات
-            </div>
-        )
+
+        return (<div className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s]" onClick={() => router.push(productSlug)}>
+            سفارش
+        </div>)
     }
 
     return (
@@ -134,7 +126,7 @@ export const Product: IProduct = (props) => {
                         <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full">
                             {props.title}
                         </Link>
-                        <div className="text-[0.8rem] font-[300] text-typography w-full">
+                        <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
                             {props.descriptions}
                         </div>
                     </div>

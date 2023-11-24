@@ -1,32 +1,38 @@
 import { IProductProps } from '@/components/common/product/types';
 import { Navbar } from '@/components/core/navbar/noSSR'
 import sperso from '@/assets/images/sperso.png'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image';
-import { ProviderContext } from '@/store/provider';
+import { ProviderContext } from '@/providers/main/provider';
+import axios from 'axios';
+import { CofeeShopProviderContext } from '@/providers/cofee_shop/provider';
+import { useParams } from 'next/navigation';
+import { useQuery } from 'react-query';
 
 export default function ProductPage() {
-
+    const { setLoading } = useContext(ProviderContext)
     const { state, functions } = useContext(ProviderContext)
+    const params = useParams()
     const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
+    const [product, setProduct] = useState<any>({})
+    function menuFetcher(): Promise<APICateogory[]> {
+        return axios.get(`/api/cafe-restaurants/${params.slug}/menu/items/${params.product_slug}`).then(({ data }) => data)
+    }
 
-    const product: Omit<IProductProps, "fullWidth" | "className"> & { id: string } = useMemo(() => ({
-        id: "sperso1",
-        title: "قهوه اسپرسو",
-        descriptions: "لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است.",
-        image: sperso.src,
-        prices: [{
-            id: "single",
-            amount: 45000,
-            title: "تک"
-        }, {
-            id: "double",
-            amount: 50000,
-            title: "دبل"
+    const { isSuccess, data, refetch, status } = useQuery({ queryKey: `fetch-menu-${params?.slug}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+
+    useEffect(() => {
+        if (!params) return
+        setLoading(true)
+        refetch()
+    }, [refetch, setLoading, params])
+
+    useEffect(() => {
+        if (isSuccess) {
+            setProduct(data)
+            setLoading(false)
         }
-        ],
-    }), [])
-
+    }, [isSuccess, setLoading, data, status])
 
     const orderItem = useCallback((price: any) => {
         const key = `${product.id}-${price.id}`
@@ -34,7 +40,7 @@ export default function ProductPage() {
             id: key,
             title: product.title,
             count: 1,
-            price: price.amount,
+            price: price.price,
             type: price.title
         })
     }, [functions, product])
@@ -60,7 +66,7 @@ export default function ProductPage() {
 
         return (<div className="flex justify-between p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] items-center" key={key}>
             <div className="text-[1.3rem] text-typography">
-                {[price.title ? `${price.title}: ` : '', price.amount.toLocaleString("IR-fa")].filter(Boolean).join(" ")}
+                {[price.title ? `${price.title}: ` : '', price.price.toLocaleString("IR-fa")].filter(Boolean).join(" ")}
             </div>
             {!order ? (
                 <div className="rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={() => orderItem(price)}>

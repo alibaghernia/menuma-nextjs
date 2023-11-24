@@ -17,7 +17,7 @@ export const Map: IMap = ({ location }) => {
                 position={location.coordinates}
                 icon={L.icon({
                     iconSize: [64, 64],
-                    // iconAnchor: [(64 / 2) + 30, 64],
+                    iconAnchor: [(64 / 2), 64],
                     // className: "mymarker",
                     iconUrl: mapMarker.src
                   })}

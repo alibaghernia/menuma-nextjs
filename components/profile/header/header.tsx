@@ -19,7 +19,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
         {elements}
       </div>  
     )
-  }, [])
+  }, [props])
 
   const socials = useMemo(() => {
     const elements = props.socials.map((social, key) => (
@@ -32,7 +32,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
         {elements}
       </div>
     )
-  }, [])
+  }, [props])
 
   return (
     <div className='relative'>
@@ -41,9 +41,9 @@ export const ProfileHeader: IProfileHeader = (props) => {
         <span className='absolute inset-0 -z-10 bg-black/[.6]' />
         <div className="text-[1.8rem] mx-auto font-bold text-white">{props.title}</div>
         <div className="text-[1rem] mx-auto font-light text-white">{props.address}</div>
-        <div className="mx-auto mt-[1.4rem]">
+        {/* <div className="mx-auto mt-[1.4rem]">
           {timeShifts}
-        </div>
+        </div> */}
         <div className="mx-auto mt-[1.4rem]">
           {socials}
         </div>

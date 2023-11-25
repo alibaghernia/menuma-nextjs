@@ -93,7 +93,7 @@ export const Product: IProduct = (props) => {
                 "absolute !h-[12rem] right-[0]": !mono,
                 "relative h-full": mono,
             })}>
-                <Image fill src={props.image!} alt={props.title} className='z-0' />
+                <Image fill src={props.image!} alt={props.title} className='z-0 object-cover' />
                 {props.single_mode && (
                     <>
                         <span className="z-10 absolute inset-0" style={{

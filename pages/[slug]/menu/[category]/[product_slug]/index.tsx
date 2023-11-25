@@ -1,4 +1,3 @@
-import { IProductProps } from '@/components/common/product/types';
 import { Navbar } from '@/components/core/navbar/noSSR'
 import noImage from '@/assets/images/no-image.jpg'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
@@ -28,7 +27,7 @@ function ProductPage() {
             toast.error("خطا در ارتباط با سرور")
         }
     }, [isError])
-    
+
     useEffect(() => {
         if (!params) return
         setLoading(true)
@@ -40,7 +39,7 @@ function ProductPage() {
             setProduct(data)
             setLoading(false)
         }
-    }, [isSuccess, setLoading, data, status])
+    }, [isSuccess, setLoading, data, status, params])
 
     const orderItem = useCallback((price: any) => {
         const key = `${product?.id}-${price.id}`
@@ -50,7 +49,15 @@ function ProductPage() {
             title: product?.name!,
             count: 1,
             price: price.price,
-            type: price.title
+            type: price.title,
+            product: {
+                id: product?.id!,
+                title: product?.name!,
+                descriptions: product?.description!,
+                prices: product?.prices!.map(price => ({ id: price.id.toString(), title: price.title, price: price.price })) || [],
+                categoryId: product?.category_id,
+                image: product?.image_path ? `${serverBaseUrl}/storage/${product.image_path}` : noImage.src
+            }
         })
     }, [functions, product])
 
@@ -94,11 +101,11 @@ function ProductPage() {
 
     return (
         <>
-        <Head>
-            <title>
-                {product?.name} - منوما
-            </title>
-        </Head>
+            <Head>
+                <title>
+                    {product?.name} - منوما
+                </title>
+            </Head>
             <Navbar title={product?.name} note back />
             <div className='bg-secondary h-screen pt-[4.5rem] z-10'>
                 <div className="rounded-[2.4rem] overflow-hidden relative w-[22.4rem] h-[22.4rem] mx-auto bg-white shadow">

@@ -1,3 +1,4 @@
+import { IProductProps } from "@/components/common/product/types";
 import { FC, PropsWithChildren } from "react";
 
 declare type ICartItem = {
@@ -7,6 +8,7 @@ declare type ICartItem = {
   type: string;
   count: number;
   price: number;
+  product: IProductProps
 };
 
 declare type IProviderState = {

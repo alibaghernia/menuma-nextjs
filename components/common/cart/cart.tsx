@@ -10,42 +10,48 @@ import Image from 'next/image'
 import { Trash1Icon } from '@/icons/trash1'
 import { ProviderContext } from '@/providers/main/provider'
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
 
 export const Cart: ICart = (props) => {
+    const params = useParams()
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
     const { state, functions } = useContext(ProviderContext)
     const { state: coffeeShopState } = useContext(CoffeeShopProviderContext)
 
     const orderItems = state.cart
 
-    const renderOrderItems = orderItems.map((orderItem, key) => (
-        <div className="flex gap-3 border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
-            <div className="relative w-[10rem] bg-white rounded-[.5rem] overflow-hidden">
-                <Image fill src={orderItem.image || sperso.src} alt='' />
-            </div>
-            <div className="flex flex-col gap-10 w-full ">
-                <div className="flex items-center justify-between">
-                    <div className="flex flex-col gap-1">
-                        {`${orderItem.title} - ${orderItem.type}`}
+    const renderOrderItems = orderItems.map((orderItem, key) => {
+        const productSlug = params && orderItem.product ? `/${params?.slug}/menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
+        return (
+            <div className="flex gap-3 border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
+                <Link href={productSlug} className="relative w-[10rem] bg-white rounded-[.5rem] overflow-hidden">
+                    <Image fill src={orderItem.image || sperso.src} alt='' />
+                </Link>
+                <div className="flex flex-col gap-10 w-full ">
+                    <div className="flex items-center justify-between">
+                        <Link href={productSlug} className="flex flex-col gap-1">
+                            {`${orderItem.title} - ${orderItem.type}`}
+                        </Link>
+                        <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); functions.cart.removeItem(orderItem.id); }}>
+                            <Trash1Icon color={colors.red[500]} />
+                        </div>
                     </div>
-                    <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); functions.cart.removeItem(orderItem.id); }}>
-                        <Trash1Icon color={colors.red[500]} />
-                    </div>
-                </div>
-                <div className="flex justify-between gap-3 items-center">
-                    <div className="text-[.7rem] font-bold whitespace-nowrap">
-                        {orderItem.count > 1 ? `${(orderItem.price).toLocaleString("IR-fa")} * ${orderItem.count}` : (orderItem.price).toLocaleString("IR-fa")}
-                    </div>
-                    <hr className='w-full' />
-                    <div className="flex items-center gap-1 whitespace-nowrap">
-                        <div className="text-[1rem] font-bold bg-typography text-white px-[.7rem] py-[.2rem] rounded-full">
-                            {(orderItem.price * orderItem.count).toLocaleString("IR-fa")} ت
+                    <div className="flex justify-between gap-3 items-center">
+                        <div className="text-[.7rem] font-bold whitespace-nowrap">
+                            {orderItem.count > 1 ? `${(orderItem.price).toLocaleString("IR-fa")} * ${orderItem.count}` : (orderItem.price).toLocaleString("IR-fa")}
+                        </div>
+                        <hr className='w-full' />
+                        <div className="flex items-center gap-1 whitespace-nowrap">
+                            <div className="text-[1rem] font-bold bg-typography text-white px-[.7rem] py-[.2rem] rounded-full">
+                                {(orderItem.price * orderItem.count).toLocaleString("IR-fa")} ت
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    ))
+        )
+    })
 
     const getCartSum = () => {
         const prices = orderItems.map(orderItem => orderItem.price * orderItem.count)

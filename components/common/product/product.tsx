@@ -27,7 +27,8 @@ export const Product: IProduct = (props) => {
             title: props.title,
             count: 1,
             price: price.price,
-            type: price.title
+            type: price.title,
+            product: props
         })
     }, [functions, props])
 

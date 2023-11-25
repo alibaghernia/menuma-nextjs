@@ -47,9 +47,6 @@ const CoffeShopProvider: IProvider = ({ children }) => {
     }, [setLoading, isFetched, isSuccess])
 
     useEffect(() => {
-        console.log({
-            isError
-        });
         if (isError) {
             toast.error("خطا در ارتباط با سرور")
         }

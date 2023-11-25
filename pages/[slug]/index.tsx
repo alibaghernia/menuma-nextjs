@@ -20,6 +20,7 @@ import { IProfile } from './types'
 import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 import Head from 'next/head'
 import { Button } from '@/components/common/button'
+import { XIcon } from '@/icons/x'
 
 const Profile: NextPage = () => {
     const { state } = useContext(CoffeeShopProviderContext)
@@ -53,6 +54,7 @@ const Profile: NextPage = () => {
                             [
                                 (profileData?.instagram ? { icon: <InstagramIcon />, url: profileData.instagram } : undefined),
                                 (profileData?.telegram ? { icon: <TelegramIcon />, url: profileData.telegram } : undefined),
+                                (profileData?.twitter ? { icon: <XIcon />, url: profileData.twitter } : undefined),
                             ].filter(Boolean)
                         }
                         logo_url={profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : coffeeshopLogo.src}

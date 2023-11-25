@@ -1,10 +1,11 @@
 import React from 'react'
 import { ISection } from './types'
 import classNames from 'classnames'
+import { twMerge } from 'tailwind-merge'
 
 const Section: ISection = ({ children, ...props }) => {
     return (
-        <div className={classNames("flex flex-col gap-[.5rem]", props.className)} id={props.id}>
+        <div className={twMerge("flex flex-col gap-[.5rem]", props.className)} id={props.id}>
             <div className="flex gap-2 items-center justify-between px-[1.9rem]">
                 <div className="text-[1.4rem] text-typography w-fit whitespace-nowrap">
                     {props.title}

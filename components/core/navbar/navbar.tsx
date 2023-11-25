@@ -18,6 +18,7 @@ import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
     const router = useRouter()
+    const { setLoading } = useContext(ProviderContext)
     const { state: coffeShopState } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const { state } = useContext(ProviderContext)
@@ -32,7 +33,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
         {
             title: "پروفایل کافه",
             icon: <HomeIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-            url: `/${params?.slug}`
+            url: `/${params?.slug}`,
         },
         {
             title: "منوی کافه",
@@ -51,6 +52,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 if (menuItem.url) {
                     setOverlay(false)
                     setMenuOpen(false)
+                    setLoading(true)
                     router.push(menuItem.url)
                 }
             }}>
@@ -62,7 +64,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 </div>
             </div>
         ))
-    }, [menuItems, router])
+    }, [menuItems, router, setLoading])
 
     function handleBack() {
         if (props.backUrl) {

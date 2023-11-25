@@ -13,7 +13,7 @@ import { serverBaseUrl } from '@/utils/axios'
 export const Product: IProduct = (props) => {
     const router = useRouter()
     const params = useParams()
-    const { state, functions } = useContext(ProviderContext)
+    const { state, functions, setLoading } = useContext(ProviderContext)
 
     const productSlug = useMemo(() => params ? `/${params?.slug}/menu/${props.categoryId}/${props.id}` : "#", [params, props])
 
@@ -89,7 +89,7 @@ export const Product: IProduct = (props) => {
 
     const renderImage = useCallback((mono: boolean) => {
         return (
-            <Link href={productSlug} className={classNames("flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]", {
+            <Link href={productSlug} onClick={() => setLoading(true)} className={classNames("flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]", {
                 "absolute !h-[12rem] right-[0]": !mono,
                 "relative h-full": mono,
             })}>
@@ -127,7 +127,7 @@ export const Product: IProduct = (props) => {
                         renderImage(true)
                     )}
                     <div className='flex flex-col gap-2'>
-                        <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full">
+                        <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
                             {props.title}
                         </Link>
                         <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">

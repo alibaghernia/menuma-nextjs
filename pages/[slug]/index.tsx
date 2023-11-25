@@ -23,6 +23,7 @@ import { Button } from '@/components/common/button'
 import { XIcon } from '@/icons/x'
 
 const Profile: NextPage = () => {
+    const { setLoading } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const profileData: IProfile = state.profile
     const router = useRouter()
@@ -63,7 +64,7 @@ const Profile: NextPage = () => {
                         {profileData?.description}
                     </div>
                     <Button
-                        onClick={() => { router.push(`${router.asPath}/menu`) }} className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit font-bold"
+                        onClick={() => { router.push(`${router.asPath}/menu`); setLoading(true) }} className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit font-bold"
                         rounded
                     >
                         مشاهده منوی کافه

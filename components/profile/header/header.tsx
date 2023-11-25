@@ -49,7 +49,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
         </div>
       </div>
       <div className="absolute left-[50%] bottom-[-4.25rem] rounded-full z-20 w-[8.5rem] h-[8.5rem] translate-x-[-50%] overflow-hidden border-[0.7rem] border-secondary">
-        <Image fill src={props.logo_url} alt={props.title} />
+        <Image fill src={props.logo_url} alt={props.title} className='object-cover' />
       </div>
     </div>
   )

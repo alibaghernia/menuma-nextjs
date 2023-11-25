@@ -65,7 +65,7 @@ function MenuPage() {
             <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit' key={key1}>
                 {categories.map((category, key2) => (
                     <div key={key2}>
-                        <CategoryCard image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name} url={`#${category.name}`}
+                        <CategoryCard image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name} url={`#category-${category.id}`}
                             onClick={() => { setSelectedCategory(category.id); setSearchInput("") }} />
                     </div>
                 ))}
@@ -100,7 +100,7 @@ function MenuPage() {
 
     const renderCategorySections = () => {
         return menuData.filter(category => category.items.filter(product => product.name.includes(searchInput!)).length).map((category, key) => (
-            <Section key={key} id={category.name} className="mt-[1.125rem] pb-5 scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title={category.name}>
+            <Section key={key} id={`category-${category.id}`} className="mt-[1.125rem] pb-5 scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title={category.name}>
                 {renderProducts(category)}
             </Section>
         ))
@@ -122,6 +122,7 @@ function MenuPage() {
                                 slidesPerView={"auto"}
                                 spaceBetween={8}
                                 grabCursor={true}
+                                scrollbar
                                 pagination={{
                                     clickable: true,
                                     el: "#swiper-pagination",

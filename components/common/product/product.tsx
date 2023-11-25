@@ -74,9 +74,9 @@ export const Product: IProduct = (props) => {
                         </div>
                         {order ? (
                             <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={(e) => { e.stopPropagation(); decreasOrderItemCount(price) }}>-</div>
+                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={(e) => { e.stopPropagation(); decreasOrderItemCount(price) }}>-</div>
                                 {order.count}
-                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={(e) => { e.stopPropagation(); increaseOrderItemCount(price) }}>+</div>
+                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={(e) => { e.stopPropagation(); increaseOrderItemCount(price) }}>+</div>
                             </div>
                         ) : (
                             <LinedAddIcon color='#434343' />

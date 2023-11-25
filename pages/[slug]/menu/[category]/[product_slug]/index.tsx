@@ -81,7 +81,7 @@ function ProductPage() {
 
         const order = functions.cart.getItem(`${product.id}-${price.id}`);
 
-        return (<div className="flex justify-between p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] items-center" key={key}>
+        return (<div className="flex justify-between p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] items-center md:max-w-md md:w-full md:mx-auto" key={key}>
             <div className="text-[1.3rem] text-typography">
                 {[price.title ? `${price.title}: ` : '', parseInt(price.price).toLocaleString("IR-fa")].filter(Boolean).join(" ")}
             </div>
@@ -91,9 +91,9 @@ function ProductPage() {
                 </div>
             ) : (
                 <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={() => increaseOrderItemCount(price)}>+</div>
+                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => increaseOrderItemCount(price)}>+</div>
                     {order.count}
-                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={() => decreasOrderItemCount(price)}>-</div>
+                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => decreasOrderItemCount(price)}>-</div>
                 </div>
             )}
         </div>)
@@ -118,7 +118,7 @@ function ProductPage() {
                         <div className="w-fit text-[1.8rem] font-[600] whitespace-nowrap text-typography">{product?.name}</div>
                         <hr className="border-black/10 w-full" />
                     </div>
-                    <div className="text-[1rem] font-[300] mt-[.8rem] text-typography">
+                    <div className="text-[1rem] font-[300] mt-[.8rem] text-typography md:text-center">
                         {product?.description}
                     </div>
                     <div className="mt-[3.2rem] flex flex-col gap-4">

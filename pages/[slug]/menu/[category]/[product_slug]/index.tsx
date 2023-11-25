@@ -54,7 +54,8 @@ function ProductPage() {
                 id: product?.id!,
                 title: product?.name!,
                 descriptions: product?.description!,
-                prices: product?.prices!.map(price => ({ id: price.id.toString(), title: price.title, price: price.price })) || [],
+                //@ts-ignore
+                prices: product?.prices,
                 categoryId: product?.category_id,
                 image: product?.image_path ? `${serverBaseUrl}/storage/${product.image_path}` : noImage.src
             }

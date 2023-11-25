@@ -34,7 +34,7 @@ const Profile: NextPage = () => {
 
     useEffect(() => {
         if (profileData) setLoading(false)
-    }, [setLoading, profileData])
+    }, [setLoading, state.profile, profileData, router])
 
     return (
         <>
@@ -64,7 +64,7 @@ const Profile: NextPage = () => {
                         }
                         logo_url={profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : coffeeshopLogo.src}
                         time_shifts={["9:30 تا 13:00", "9:30 تا 13:00"]} />
-                    <div className=" text-typography mt-[4.3rem] mx-auto text-[.8rem] font-bold px-10 text-justify leading-6">
+                    <div className=" text-typography mt-[4.3rem] mx-auto text-[.8rem] font-bold px-10 text-justify leading-6 md:text-center md:text-[1rem]">
                         {profileData?.description}
                     </div>
                     <Button

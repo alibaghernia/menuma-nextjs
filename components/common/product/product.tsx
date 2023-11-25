@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { serverBaseUrl } from '@/utils/axios'
+import _ from 'lodash'
 
 export const Product: IProduct = (props) => {
     const router = useRouter()
@@ -76,7 +77,7 @@ export const Product: IProduct = (props) => {
                             <div className="flex items-center gap-2">
                                 <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={(e) => { e.stopPropagation(); decreasOrderItemCount(price) }}>-</div>
                                 {order.count}
-                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={(e) => { e.stopPropagation(); increaseOrderItemCount(price) }}>+</div>
+                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle((e) => { e.stopPropagation(); increaseOrderItemCount(price) }, 500)}>+</div>
                             </div>
                         ) : (
                             <LinedAddIcon color='#434343' />

@@ -9,6 +9,7 @@ import { useQuery } from 'react-query';
 import { axios, serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
 import { toast } from 'react-toastify';
+import _ from 'lodash'
 
 function ProductPage() {
     const { setLoading } = useContext(ProviderContext)
@@ -91,7 +92,7 @@ function ProductPage() {
                 </div>
             ) : (
                 <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => increaseOrderItemCount(price)}>+</div>
+                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle(() => increaseOrderItemCount(price), 500)}>+</div>
                     {order.count}
                     <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => decreasOrderItemCount(price)}>-</div>
                 </div>

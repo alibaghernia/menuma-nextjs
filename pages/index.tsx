@@ -14,7 +14,7 @@ function Home() {
     <div className="min-h-screen">
       <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col gap-3 items-center">
         <div className="text-[5rem] text-gray-400">
-          منوما
+          870745
         </div>
         <div className="text-[1.5rem] text-gray-600">
           در حال توسعه هستیم

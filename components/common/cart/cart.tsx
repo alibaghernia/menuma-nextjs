@@ -26,7 +26,7 @@ export const Cart: ICart = (props) => {
         return (
             <div className="flex gap-3 border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
                 <Link href={productSlug} className="relative w-[10rem] bg-white rounded-[.5rem] overflow-hidden">
-                    <Image fill src={orderItem.image || sperso.src} alt='' />
+                    <Image fill src={orderItem.image || sperso.src} alt='' className='object-cover' />
                 </Link>
                 <div className="flex flex-col gap-10 w-full ">
                     <div className="flex items-center justify-between">

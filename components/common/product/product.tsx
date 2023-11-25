@@ -3,10 +3,12 @@ import { IProduct } from './types'
 import Image from 'next/image'
 import classNames from 'classnames'
 import { LinedAddIcon } from '@/icons/lined_add'
+import noImage from '@/assets/images/no-image.jpg'
 import { ProviderContext } from '@/providers/main/provider';
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { serverBaseUrl } from '@/utils/axios'
 
 export const Product: IProduct = (props) => {
     const router = useRouter()
@@ -21,6 +23,7 @@ export const Product: IProduct = (props) => {
         const key = `${props.id}-${price.id}`
         functions.cart.addItem({
             id: key,
+            image: props.image || noImage.src,
             title: props.title,
             count: 1,
             price: price.price,

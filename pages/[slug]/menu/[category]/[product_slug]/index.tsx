@@ -46,6 +46,7 @@ function ProductPage() {
         const key = `${product?.id}-${price.id}`
         functions.cart.addItem({
             id: key,
+            image: product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src,
             title: product?.name!,
             count: 1,
             price: price.price,

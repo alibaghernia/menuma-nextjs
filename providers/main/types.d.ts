@@ -2,6 +2,7 @@ import { FC, PropsWithChildren } from "react";
 
 declare type ICartItem = {
   id: string;
+  image: string;
   title: string;
   type: string;
   count: number;

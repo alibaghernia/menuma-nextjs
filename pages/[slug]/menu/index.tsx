@@ -65,7 +65,7 @@ function MenuPage() {
             <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit' key={key1}>
                 {categories.map((category, key2) => (
                     <div key={key2}>
-                        <CategoryCard image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : warmDrink.src} title={category.name} url={`#${category.name}`}
+                        <CategoryCard image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name} url={`#${category.name}`}
                             onClick={() => { setSelectedCategory(category.id); setSearchInput("") }} />
                     </div>
                 ))}

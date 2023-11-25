@@ -6,7 +6,7 @@ import classNames from 'classnames'
 
 export const CategoryCard: ICategoryCard = (props) => {
   return (
-    <a href={props.url} className={classNames("rounded-[.625rem] w-[8.7rem] h-[8.7rem] relative px-[3.3rem] py-[4.4rem] block overflow-hidden cursor-pointer", { "border-4": props.selected, "border-more": props.selected })}>
+    <a href={props.url} className={classNames("rounded-[1.625rem] w-[8.7rem] h-[8.7rem] relative px-[3.3rem] py-[4.4rem] block overflow-hidden cursor-pointer", { "border-4": props.selected, "border-more": props.selected })}>
       <Image fill src={props.image} alt={props.title} className='z-0 object-cover' />
       <span className="bg-black/[.6] absolute inset-0 z-0" />
 

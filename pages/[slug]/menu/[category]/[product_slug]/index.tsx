@@ -110,7 +110,7 @@ function ProductPage() {
             <Navbar title={product?.name} note back />
             <div className='bg-secondary h-screen pt-[4.5rem] z-10'>
                 <div className="rounded-[2.4rem] overflow-hidden relative w-[22.4rem] h-[22.4rem] mx-auto bg-white shadow">
-                    <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name!} className='inset-0 block' fill />
+                    <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name!} className='inset-0 block object-cover' fill />
                 </div>
                 <div className="mt-[2.1rem] mx-[3.1rem]">
                     <div className=" flex items-center gap-3">

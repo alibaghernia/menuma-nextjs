@@ -32,6 +32,10 @@ const Profile: NextPage = () => {
 
     const locationCoordinates: [number, number] = [parseFloat(profileData.location_lat || "0"), parseFloat(profileData.location_long || "0")]
 
+    useEffect(() => {
+        if (profileData) setLoading(false)
+    }, [setLoading, profileData])
+
     return (
         <>
             <Head>

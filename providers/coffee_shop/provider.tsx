@@ -40,9 +40,6 @@ const CoffeShopProvider: IProvider = ({ children }) => {
     useEffect(() => {
         if (!state.profile || params?.slug != state.profile.slug)
             refetch()
-        else {
-            setLoading(false)
-        }
     }, [refetch, params, state, setLoading])
 
     useEffect(() => {

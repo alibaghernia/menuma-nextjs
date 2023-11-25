@@ -16,7 +16,7 @@ export const ProviderContext = createContext<{
     // @ts-ignore
 }>({})
 
-const localStoragekey = "menuma-provider-storage"
+const localStoragekey = "menuma-provider-storage-new"
 
 const Provider: IProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)

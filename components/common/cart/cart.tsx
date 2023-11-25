@@ -31,7 +31,7 @@ export const Cart: ICart = (props) => {
                 <div className="flex flex-col gap-10 w-full ">
                     <div className="flex items-center justify-between">
                         <Link href={productSlug} className="flex flex-col gap-1">
-                            {`${orderItem.title} - ${orderItem.type}`}
+                            {orderItem.type ? `${orderItem.title} - ${orderItem.type}` : orderItem.title}
                         </Link>
                         <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); functions.cart.removeItem(orderItem.id); }}>
                             <Trash1Icon color={colors.red[500]} />

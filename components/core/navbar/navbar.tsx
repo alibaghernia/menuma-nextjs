@@ -115,7 +115,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 setMenuOpen(false)
                 setCartOpen(false)
             }} />
-            <div className={classNames("fixed top-0 bottom-0 max-w-sm w-full bg-white z-50 transition-all duration-[.3s] flex flex-col justify-between rounded-bl-[2rem] rounded-tl-[2rem]", { "right-0": menuOpen, "right-[-100%]": !menuOpen })}>
+            <div className={classNames("fixed top-0 bottom-0 max-w-xs w-full bg-white z-50 transition-all duration-[.3s] flex flex-col justify-between rounded-bl-[2rem] rounded-tl-[2rem]", { "right-0": menuOpen, "right-[-100%]": !menuOpen })}>
                 <div>
                     <div className="mt-[2rem] flex items-center justify-between px-[1.5rem]">
                         <div className="text-typography text-[1.5rem]">{coffeShopState.profile?.name}</div>

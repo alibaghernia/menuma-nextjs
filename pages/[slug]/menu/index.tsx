@@ -53,7 +53,7 @@ function MenuPage() {
 
     useEffect(() => {
         if (isSuccess && menuData) {
-            setSelectedCategory(data[0].id)
+            setSelectedCategory(data[0]?.id)
             setMenuData(data)
             setLoading(false)
         }

@@ -20,6 +20,9 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`http://localhost`) &&
     !reqUrl.startsWith(`https://localhost`)
   ) {
+    console.log({
+      request,
+    });
     const domain_name = host?.split(".") || [];
 
     return NextResponse.rewrite(

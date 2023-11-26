@@ -8,6 +8,9 @@ export function middleware(request: NextRequest) {
     process.exit(1)
   }
   const url = new URL(request.url);
+  console.log({
+    host: request.headers.get('host')
+  });
   console.log(" ---------------------- ", `${url.protocol}//${appDomain}/`, " ---------------------- ", `${url.protocol}//${appDomain}/_next`, " ---------------------- ", `${url.protocol}//localhost`);
   const reqUrl = request.url.replace('localhost', request.headers.get('host') || '')
   if (

@@ -22,7 +22,7 @@ export function middleware(request: NextRequest) {
     const domain_name = host?.split(".") || [];
 
     return NextResponse.rewrite(new URL(
-        `${protocol}//${host}/${(domain_name.length > 1 ? domain_name[domain_name.length - 2] : domain_name.toString())}`
+        `${protocol}://${host}/${(domain_name.length > 1 ? domain_name[domain_name.length - 2] : domain_name.toString())}`
     ));
   }
 }

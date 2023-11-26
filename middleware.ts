@@ -10,10 +10,11 @@ export function middleware(request: NextRequest) {
   const url = new URL(request.url);
   console.log({
     host: request.headers.get('host'),
-    url: request.url
+    url: request.url,
+    url2: url.host
   });
   console.log(" ---------------------- ", `${url.protocol}//${appDomain}/`, " ---------------------- ", `${url.protocol}//${appDomain}/_next`, " ---------------------- ", `${url.protocol}//localhost`);
-  const reqUrl = request.url.replace('localhost', request.headers.get('host') || '')
+  const reqUrl = request.url.replace(`${url.host}`, request.headers.get('host') || '')
   if (
     !reqUrl.startsWith(`http://${appDomain}/`) &&
     !reqUrl.startsWith(`https://${appDomain}/`) &&

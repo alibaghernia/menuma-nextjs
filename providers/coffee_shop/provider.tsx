@@ -20,7 +20,7 @@ export const CoffeeShopProviderContext = createContext<{
 
 
 const CoffeShopProvider: IProvider = ({ children }) => {
-    const { setLoading, } = useContext(ProviderContext)
+    const { setLoading, state: mainState, } = useContext(ProviderContext)
     const params = useParams()
     const [state, dispatch] = useReducer((state: IProviderState, action: any) => reducer(_.cloneDeep(state), action), INITIAL_STATE)
     const functions = Functions(state, dispatch);
@@ -29,7 +29,7 @@ const CoffeShopProvider: IProvider = ({ children }) => {
         return axios.get<IProfile>(`/api/cafe-restaurants/${params.slug}`).then(({ data }) => data)
     }
 
-    const { isLoading, isSuccess, data, refetch, isFetching, isRefetching, status, isFetched, isError } = useQuery({ queryKey: `fetch-profile-${params?.slug}`, queryFn: profileFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const { isLoading, isSuccess, data, refetch, isFetching, isRefetching, status, isFetched, isError } = useQuery({ queryKey: `fetch-profile-${mainState.isNotMenuma ? `` : `${params?.slug}/`}`, queryFn: profileFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
 
     useEffect(() => {
         if (isSuccess) {

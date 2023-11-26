@@ -22,7 +22,7 @@ export const Cart: ICart = (props) => {
     const orderItems = state.cart
 
     const renderOrderItems = orderItems.map((orderItem, key) => {
-        const productSlug = params && orderItem.product ? `/${params?.slug}/menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
+        const productSlug = params && orderItem.product ? `/${state.isNotMenuma ? `` : `${params?.slug}/`}menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
         return (
             <div className="flex gap-3 border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
                 <Link href={productSlug} className="relative w-[10rem] bg-white rounded-[.5rem] overflow-hidden">

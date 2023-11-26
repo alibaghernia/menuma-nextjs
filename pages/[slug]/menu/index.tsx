@@ -27,7 +27,7 @@ import { toast } from 'react-toastify'
 function MenuPage() {
     const [menuData, setMenuData] = useState<APICateogory[]>([])
     const { state } = useContext(CoffeeShopProviderContext)
-    const { setLoading } = useContext(ProviderContext)
+    const { setLoading, state: mainState } = useContext(ProviderContext)
     const [searchInput, setSearchInput] = useState<string>("")
     const router = useRouter()
     const params = useParams()
@@ -38,7 +38,7 @@ function MenuPage() {
         return axios.get(`/api/cafe-restaurants/${params.slug}/menu`).then(({ data }) => data)
     }
 
-    const { isSuccess, data, refetch, status, isError } = useQuery({ queryKey: `fetch-menu-${params?.slug}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const { isSuccess, data, refetch, status, isError } = useQuery({ queryKey: `fetch-menu-${mainState.isNotMenuma ? `` : `${params?.slug}/`}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
 
     useEffect(() => {
         if (isError) {

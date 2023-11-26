@@ -33,12 +33,12 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
         {
             title: "پروفایل کافه",
             icon: <HomeIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-            url: `/${params?.slug}`,
+            url: `/${state.isNotMenuma ? `` : `${params?.slug}/`}`,
         },
         {
             title: "منوی کافه",
             icon: <MenuCircleIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-            url: `/${params?.slug}/menu`
+            url: `/${state.isNotMenuma ? `` : `${params?.slug}/`}/menu`
         },
         // {
         //     title: "پشتیبانی",

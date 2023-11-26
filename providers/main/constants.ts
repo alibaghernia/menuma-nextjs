@@ -1,5 +1,5 @@
 export const INITIAL_STATE = {
-    isNotMenuma: false,
+    isNotMenuma: true,
     restored: false,
     cart: [],
     profile: {}

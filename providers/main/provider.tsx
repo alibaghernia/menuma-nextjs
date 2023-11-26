@@ -17,7 +17,7 @@ export const ProviderContext = createContext<{
     // @ts-ignore
 }>({})
 
-const localStoragekey = "menuma-provider-storage-new-v2"
+const localStoragekey = "menuma-provider-storage-new-v2.1"
 
 const Provider: IProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
@@ -72,7 +72,7 @@ const Provider: IProvider = ({ children }) => {
 
     useEffect(() => {
         getReducerState()
-        checkAppDomain()
+        // checkAppDomain()
     }, [])
 
     return (

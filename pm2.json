@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "menuma",
+      "script": "cd /var/www/menuma && pnpm start",
+      "interpreter": "/root/.nvm/versions/node/v18.18.2/bin/node"
+    }
+  ]
+}

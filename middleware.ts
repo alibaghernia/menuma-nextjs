@@ -8,14 +8,15 @@ export function middleware(request: NextRequest) {
     process.exit(1)
   }
   const url = new URL(request.url);
-  console.log({
-    url: request.headers.get('host')
-  });
   console.log(" ---------------------- ", `${url.protocol}//${appDomain}/`, " ---------------------- ", `${url.protocol}//${appDomain}/_next`, " ---------------------- ", `${url.protocol}//localhost`);
+  const reqUrl = request.url.replace('localhost', request.headers.get('host') || '')
   if (
-    !request.url.startsWith(`${url.protocol}//${appDomain}/`) &&
-    !request.url.startsWith(`${url.protocol}//${appDomain}/_next`) &&
-    !request.url.startsWith(`${url.protocol}//localhost`)
+    !reqUrl.startsWith(`http://${appDomain}/`) &&
+    !reqUrl.startsWith(`https://${appDomain}/`) &&
+    !reqUrl.startsWith(`http://${appDomain}/_next`) &&
+    !reqUrl.startsWith(`https://${appDomain}/_next`) &&
+    !reqUrl.startsWith(`http://localhost`) &&
+    !reqUrl.startsWith(`https://localhost`)
   ) {
     const domain_name = request.headers.get('host')?.split(".") || [];
 

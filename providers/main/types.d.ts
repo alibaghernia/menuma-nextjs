@@ -12,6 +12,7 @@ declare type ICartItem = {
 };
 
 declare type IProviderState = {
+  isNotMenuma: boolean;
   restored: boolean;
   cart: ICartItem[];
   profile: any

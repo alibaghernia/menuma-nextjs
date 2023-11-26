@@ -14,7 +14,7 @@ function Home() {
   return (
     <>
     <Head>
-      <title>870745</title>
+      <title>منوما</title>
     </Head>
     <div className="min-h-screen">
       <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col gap-3 items-center">

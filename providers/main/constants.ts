@@ -1,10 +1,12 @@
 export const INITIAL_STATE = {
+    isNotMenuma: false,
     restored: false,
     cart: [],
     profile: {}
 }
 
 export const REDUCER_KEYS = {
+    UPDATE: 'update',
     RESTORE_DATA: 'restore_data',
     SET_RESTORED_DATA: 'set_restored_data',
     cart: {

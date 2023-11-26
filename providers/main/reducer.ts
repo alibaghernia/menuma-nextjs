@@ -3,6 +3,12 @@ import { IProviderState } from "./types";
 
 export default function reducer(state: IProviderState, action: any) {
   switch (action.type) {
+    case REDUCER_KEYS.UPDATE: {
+      const { key, value } = action.data;
+      //@ts-ignore
+      state[key] = value;
+      return state;
+    }
     case REDUCER_KEYS.cart.ADD_ITEM: {
       state.cart.push(action.data);
       return state;

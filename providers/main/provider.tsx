@@ -6,6 +6,7 @@ import _ from 'lodash'
 import functions from './functions';
 import coffeeLoadingGIF from '@/assets/images/coffee_animation.gif'
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 export const ProviderContext = createContext<{
     state: IProviderState,
@@ -23,6 +24,26 @@ const Provider: IProvider = ({ children }) => {
 
     function storeReducerState(state: IProviderState): void {
         localStorage.setItem(localStoragekey, JSON.stringify(state))
+    }
+    function checkAppDomain() {
+        if (typeof window != "undefined") {
+            const location = window.location
+            const domain = location.host
+            const menumaDomain = process.env.NEXT_PUBLIC_MENUMA_DOMAIN
+            if (!menumaDomain) {
+                console.log("Please check the menuma domain env");
+                process.exit(1)
+            }
+            if (domain != menumaDomain && !state.isNotMenuma) {
+                dispatch({
+                    type: REDUCER_KEYS.UPDATE,
+                    data: {
+                        key: 'isNotMenuma',
+                        value: true
+                    }
+                })
+            }
+        }
     }
 
     const [state, dispatch] = useReducer((state: IProviderState, action: any) => reducer(_.cloneDeep(state), action), INITIAL_STATE)
@@ -51,6 +72,7 @@ const Provider: IProvider = ({ children }) => {
 
     useEffect(() => {
         getReducerState()
+        checkAppDomain()
     }, [])
 
     return (

@@ -8,13 +8,8 @@ export function middleware(request: NextRequest) {
     process.exit(1)
   }
   const url = new URL(request.url);
-  console.log({
-    host: request.headers.get('host'),
-    url: request.url,
-    url2: url.host
-  });
-  console.log(" ---------------------- ", `${url.protocol}//${appDomain}/`, " ---------------------- ", `${url.protocol}//${appDomain}/_next`, " ---------------------- ", `${url.protocol}//localhost`);
-  const reqUrl = request.url.replace(`${url.host}`, request.headers.get('host') || '')
+  const host = request.headers.get('host');
+  const reqUrl = request.url.replace(`${url.host}`, host || '')
   if (
     !reqUrl.startsWith(`http://${appDomain}/`) &&
     !reqUrl.startsWith(`https://${appDomain}/`) &&
@@ -23,10 +18,10 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`http://localhost`) &&
     !reqUrl.startsWith(`https://localhost`)
   ) {
-    const domain_name = request.headers.get('host')?.split(".") || [];
+    const domain_name = host?.split(".") || [];
 
     return NextResponse.rewrite(new URL(
-        `${url.protocol}//${url.host}/${(domain_name.length > 1 ? domain_name[domain_name.length - 2] : domain_name.toString())}`, request.url
+        `${url.protocol}//${host}/${(domain_name.length > 1 ? domain_name[domain_name.length - 2] : domain_name.toString())}`, request.url
     ));
   }
 }

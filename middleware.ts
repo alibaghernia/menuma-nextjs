@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`https://localhost`)
   ) {
     console.log({
-      request,
+      url: request.url
     });
     const domain_name = host?.split(".") || [];
 

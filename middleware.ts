@@ -8,6 +8,9 @@ export function middleware(request: NextRequest) {
     process.exit(1)
   }
   const url = new URL(request.url);
+  console.log({
+    url: request.url
+  });
   console.log(" ---------------------- ", `${url.protocol}//${appDomain}/`, " ---------------------- ", `${url.protocol}//${appDomain}/_next`, " ---------------------- ", `${url.protocol}//localhost`);
   if (
     !request.url.startsWith(`${url.protocol}//${appDomain}/`) &&

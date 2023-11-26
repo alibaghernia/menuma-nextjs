@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
   }
   const url = new URL(request.url);
   console.log({
-    url: request.url
+    url: request.headers.get('host')
   });
   console.log(" ---------------------- ", `${url.protocol}//${appDomain}/`, " ---------------------- ", `${url.protocol}//${appDomain}/_next`, " ---------------------- ", `${url.protocol}//localhost`);
   if (
@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
     !request.url.startsWith(`${url.protocol}//${appDomain}/_next`) &&
     !request.url.startsWith(`${url.protocol}//localhost`)
   ) {
-    const domain_name = url.hostname.split(".");
+    const domain_name = request.headers.get('host')?.split(".") || [];
 
     return NextResponse.rewrite(new URL(
         `${url.protocol}//${url.host}/${(domain_name.length > 1 ? domain_name[domain_name.length - 2] : domain_name.toString())}`, request.url

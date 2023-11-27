@@ -37,7 +37,7 @@ export const Cart: ICart = (props) => {
                     </Link>
                 </FlexItem>
                 <FlexItem grow>
-                    <FlexBox direction='column' gap={10} className="w-full">
+                    <FlexBox direction='column' gap={'2rem'} className="w-full">
                         <FlexItem>
                             <FlexBox alignItems='center' justify='between'>
                                 <FlexItem>

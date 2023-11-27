@@ -21,9 +21,10 @@ export const FlexBox: IFlexBox = ({
             `items-${alignItems}`,
             {
                 [`gap-${props.gap}`]: typeof props.gap == "number",
-                [`gap-[${props.gap}]`]: typeof props.gap == "string",
             },
             className
-        )}>{children}</div>
+        )} style={{
+            gap: typeof props.gap == "string" ? props.gap : undefined
+        }}>{children}</div>
     )
 }

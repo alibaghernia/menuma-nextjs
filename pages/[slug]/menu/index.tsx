@@ -145,7 +145,7 @@ function MenuPage() {
                         </div>
                         <div id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'></div>
                     </div>
-                    <div className="mt-4 mx-6">
+                    <div className="mt-4 mx-6 md:mx-auto md:max-w-md">
                         <SearchField value={searchInput ?? ""} onChange={setSearchInput} onSearch={(value) => { }} />
                     </div>
                 </div>

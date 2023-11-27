@@ -7,5 +7,5 @@ export function useSlug(traillingSlash: boolean = true) {
   const params = useParams();
 
   const slug = state.isNotMenuma ? `` : params?.slug;
-  return traillingSlash ? `${slug}/` : slug;
+  return traillingSlash && slug ? `${slug}/` : slug;
 }

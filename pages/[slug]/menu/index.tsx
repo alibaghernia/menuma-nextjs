@@ -27,8 +27,11 @@ import { useSlug } from '@/providers/main/hooks'
 import { Container } from '@/components/common/container/container'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
+import classNames from 'classnames'
+import { twMerge } from 'tailwind-merge'
 
 function MenuPage() {
+    const [scrolled, setScrolled] = useState(false)
     const [menuData, setMenuData] = useState<APICateogory[]>([])
     const { state } = useContext(CoffeeShopProviderContext)
     const { setLoading, state: mainState } = useContext(ProviderContext)
@@ -63,13 +66,35 @@ function MenuPage() {
         }
     }, [isSuccess, setLoading, data, status, menuData, params])
 
+    useEffect(() => {
+
+        const handler = () => {
+            const scroll = window.scrollY
+            setScrolled(scroll > 50)
+        }
+
+        window.addEventListener('scroll', _.throttle(
+            handler, 20
+        ))
+
+        return () => {
+            window.removeEventListener('scroll', _.throttle(handler, 20))
+        }
+    }, [])
 
     const categoriesSwiperSlides = useMemo(() => {
         return _.chunk(menuData, 2).map((categories, key1) => (
             <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit' key={key1}>
                 {categories.map((category, key2) => (
                     <div key={key2}>
-                        <CategoryCard image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name}
+                        <CategoryCard
+                            className={classNames({
+                                'w-[6.7rem] h-[3.7rem] rounded-[1rem]': scrolled
+                            })}
+                            titleClassName={classNames({
+                                'text-[.9rem]': scrolled
+                            })}
+                            image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name}
                             onClick={() => {
                                 setSelectedCategory(category.id); setSearchInput(""); window.document.getElementById(`category-${category.id}`)?.scrollIntoView({
                                     behavior: 'smooth'
@@ -80,7 +105,7 @@ function MenuPage() {
             </SwiperSlide>
         )
         )
-    }, [menuData, setSelectedCategory])
+    }, [menuData, setSelectedCategory, scrolled])
 
     const renderProducts = useCallback((category: APICateogory) => {
         const categoryItems = category?.items || []
@@ -124,54 +149,63 @@ function MenuPage() {
             <main className='bg-secondary min-h-screen'>
                 <Navbar title={state?.profile?.name} note back />
                 <FlexBox direction='column'>
-                    <FlexItem>
-                        <Container
-                            position='sticky'
-                            className="top-0 bg-secondary z-20 pb-[1.125rem]"
-                        >
-                            <FlexBox direction='column'>
-                                <FlexItem>
-                                    <FlexBox
-                                        direction='column'
-                                        gap={2}
-                                        className="pt-[5.5rem]"
-                                    >
-                                        <FlexItem className="px-2">
-                                            <Swiper
-                                                slidesPerView={"auto"}
-                                                spaceBetween={8}
-                                                grabCursor={true}
-                                                scrollbar
-                                                pagination={{
-                                                    clickable: true,
-                                                    el: "#swiper-pagination",
-                                                    bulletActiveClass: styles['swiper-pagination-bullet']
-                                                }}
-                                                breakpoints={{
-                                                    768: {
-                                                        centerInsufficientSlides: true
+                    <Container
+                        position='sticky'
+                        className={twMerge(classNames("top-0 bg-secondary z-20", {
+                            "pb-[1.125rem]": !scrolled,
+                            "pb-[1rem]": scrolled,
+                        }))}
+                    >
+                        <FlexBox direction='column'>
+                            <FlexItem>
+                                <FlexBox
+                                    direction='column'
+                                    gap={2}
+                                    className="pt-[4.5rem]"
+                                >
+                                    <FlexItem className="px-2">
+                                        <Swiper
+                                            slidesPerView={"auto"}
+                                            spaceBetween={8}
+                                            grabCursor={true}
+                                            scrollbar
+                                            pagination={{
+                                                clickable: true,
+                                                el: "#swiper-pagination",
+                                                bulletActiveClass: styles['swiper-pagination-bullet']
+                                            }}
+                                            breakpoints={{
+                                                768: {
+                                                    centerInsufficientSlides: true
+                                                }
+                                            }}
+                                            modules={[Pagination]}
+                                        >
+                                            {categoriesSwiperSlides}
+                                        </Swiper>
+                                    </FlexItem>
+                                    <FlexItem
+                                        id="swiper-pagination" className={
+                                            twMerge(
+                                                classNames(
+                                                    'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
+                                                    {
+                                                        '!hidden': scrolled
                                                     }
-                                                }}
-                                                modules={[Pagination]}
-                                            >
-                                                {categoriesSwiperSlides}
-                                            </Swiper>
-                                        </FlexItem>
-                                        <FlexItem
-                                            id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'
-                                        />
-                                    </FlexBox>
-                                </FlexItem>
-                                <FlexItem className="mt-4 mx-6 md:mx-auto md:max-w-md">
-                                    <SearchField
-                                        value={searchInput ?? ""}
-                                        onChange={setSearchInput}
-                                        onSearch={(value) => { }}
+                                                )
+                                            )}
                                     />
-                                </FlexItem>
-                            </FlexBox>
-                        </Container>
-                    </FlexItem>
+                                </FlexBox>
+                            </FlexItem>
+                            <FlexItem className="mt-4 mx-6 md:mx-auto md:max-w-md">
+                                <SearchField
+                                    value={searchInput ?? ""}
+                                    onChange={setSearchInput}
+                                    onSearch={(value) => { }}
+                                />
+                            </FlexItem>
+                        </FlexBox>
+                    </Container>
                     <FlexItem className="z-10 relative">
                         {renderCategorySections()}
                     </FlexItem>

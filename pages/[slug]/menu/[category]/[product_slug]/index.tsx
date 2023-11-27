@@ -107,7 +107,16 @@ function ProductPage() {
                     className="p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto">
                     <FlexItem
                         className="text-[1.3rem] text-typography">
-                        {[price.title ? `${price.title}: ` : '', parseInt(price.price).toLocaleString("IR-fa")].filter(Boolean).join(" ")}
+                        <FlexBox gap={2}>
+                            {price.title && (
+                                <FlexItem>
+                                    {price.title}:
+                                </FlexItem>
+                            )}
+                            <FlexItem>
+                                {parseInt(price.price).toLocaleString("IR-fa")}
+                            </FlexItem>
+                        </FlexBox>
                     </FlexItem>
                     {!order ? (
                         <FlexItem
@@ -119,13 +128,13 @@ function ProductPage() {
                     ) : (
                         <FlexItem>
                             <FlexBox gap={2} alignItems='center'>
-                                <FlexItem className="w-7 h-7bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle(() => increaseOrderItemCount(price), 500)}>
+                                <FlexItem className="relative w-7 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle(() => increaseOrderItemCount(price), 500)}>
                                     <Container center>
                                         +
                                     </Container>
                                 </FlexItem>
                                 {order.count}
-                                <FlexItem className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => decreasOrderItemCount(price)}>
+                                <FlexItem className="relative w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => decreasOrderItemCount(price)}>
                                     <Container center>
                                         -
                                     </Container>
@@ -166,7 +175,7 @@ function ProductPage() {
                                 {product?.description}
                             </FlexItem>
                             <FlexItem className="mt-[3.2rem]">
-                                <FlexBox direction='column' gap={4}>
+                                <FlexBox direction='column' gap={2}>
                                     {prices}
                                 </FlexBox>
                             </FlexItem>

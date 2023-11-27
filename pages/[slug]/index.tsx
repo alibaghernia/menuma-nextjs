@@ -35,7 +35,7 @@ const Profile: NextPage = () => {
     const locationCoordinates: [number, number] = [parseFloat(profileData.location_lat || "0"), parseFloat(profileData.location_long || "0")]
 
     useEffect(() => {
-        if (profileData) setLoading(false)
+        if (Object.keys(profileData).length) setLoading(false)
     }, [setLoading, state.profile, profileData, router])
 
     return (
@@ -70,7 +70,7 @@ const Profile: NextPage = () => {
                         {profileData?.description}
                     </div>
                     <Button
-                        onClick={() => { router.push(`/${slug}menu`); setLoading(true) }} className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit font-bold"
+                        onClick={() => { router.push(`/${slug}menu`); setLoading(true) }} className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit shadow-[0_0_40px_5px_rgba(0,0,0,0.1)] font-bold"
                         rounded
                     >
                         مشاهده منوی کافه

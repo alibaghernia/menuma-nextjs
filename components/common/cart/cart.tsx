@@ -31,7 +31,7 @@ export const Cart: ICart = (props) => {
 
 
         return (
-            <FlexBox gap={3} className="border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
+            <FlexBox gap="1rem" className="border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
                 <FlexItem className='relative bg-white rounded-[.5rem] overflow-hidden w-[6rem]'>
                     <Link href={productSlug}>
                         <Image fill src={orderItem.image || sperso.src} alt='' className='object-cover' />
@@ -58,7 +58,7 @@ export const Cart: ICart = (props) => {
                                 </FlexItem>
                             </FlexBox>
                         </FlexItem>
-                        <FlexBox justify='between' gap={3} alignItems='center'>
+                        <FlexBox justify='between' gap={2} alignItems='center'>
                             <FlexItem>
                                 <div className="text-[.7rem] font-bold whitespace-nowrap">
                                     {orderItem.count > 1 ? `${(orderItem.price).toLocaleString("IR-fa")} * ${orderItem.count}` : (orderItem.price).toLocaleString("IR-fa")}
@@ -68,7 +68,7 @@ export const Cart: ICart = (props) => {
                                 <hr className='w-full' />
                             </FlexItem>
                             <FlexItem>
-                                <FlexBox alignItems='center' gap={1} className="whitespace-nowrap">
+                                <FlexBox alignItems='center' gap={2} className="whitespace-nowrap">
                                     <FlexItem>
                                         <div className="text-[1rem] font-bold bg-typography text-white px-[.7rem] py-[.2rem] rounded-full">
                                             {(orderItem.price * orderItem.count).toLocaleString("IR-fa")} ت

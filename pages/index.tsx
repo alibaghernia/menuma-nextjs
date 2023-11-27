@@ -1,7 +1,7 @@
 import { Container } from "@/components/common/container/container"
 import { FlexBox } from "@/components/common/flex_box/flex_box"
 import { FlexItem } from "@/components/common/flex_item/flex_item"
-import CoffeShopProvider from "@/providers/coffee_shop/provider"
+import CoffeShopProvider, { CoffeeShopProviderContext } from "@/providers/coffee_shop/provider"
 import { useSlug } from "@/providers/main/hooks"
 import { ProviderContext } from "@/providers/main/provider"
 import Head from "next/head"
@@ -10,11 +10,13 @@ import { useContext, useEffect } from "react"
 function Home() {
 
   const { setLoading } = useContext(ProviderContext)
+  const { state } = useContext(CoffeeShopProviderContext)
   const slug = useSlug()
 
   useEffect(() => {
-    setLoading(false)
-  }, [setLoading])
+    if (state.profile)
+      setLoading(false)
+  }, [setLoading, state])
 
   return (
     <>
@@ -37,6 +39,6 @@ function Home() {
   )
 }
 
-// Home.provider = CoffeShopProvider
+Home.provider = CoffeShopProvider
 
 export default Home

@@ -20,8 +20,8 @@ export const Container: IContainer = ({
                             "left-[50%] translate-x-[-50%]": typeof props.center == "string" && props.center == "horizontal",
                             "top-[50%] translate-y-[-50%]": typeof props.center == "string" && props.center == "vertical",
                         },
-                        className
-                    )
+                    ),
+                    className
                 )
             }
             {...props}

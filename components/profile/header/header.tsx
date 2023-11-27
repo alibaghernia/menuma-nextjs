@@ -70,7 +70,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
         </FlexItem>
       </FlexBox>
       <Container
-        className="left-[50%] bottom-[-4.25rem] rounded-full z-20 w-[8.5rem] h-[8.5rem] translate-x-[-50%] overflow-hidden border-[0.7rem] border-secondary"
+        className="left-[50%] bottom-[-4.25rem] rounded-full z-20 w-[8.5rem] h-[8.5rem] translate-x-[-50%] overflow-hidden border-[0.7rem] border-secondary bg-white"
       >
         <Image
           fill

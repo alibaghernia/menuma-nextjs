@@ -54,7 +54,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
     const renderMenuItems = useMemo(() => {
         return menuItems.map((menuItem, key) => (
             <FlexBox
-                gap={5}
+                gap={2}
                 alignItems='center'
                 className="px-[1.5rem] py-[.8rem] border-black transition-[border] duration-[.1s] hover:border-r-[5px] border-b border-b-black/[.1] last:border-b-0 cursor-pointer"
                 key={key}

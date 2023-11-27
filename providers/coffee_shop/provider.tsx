@@ -53,12 +53,15 @@ const CoffeShopProvider: IProvider = ({ children }) => {
     }, [isSuccess, data])
 
     useEffect(() => {
-        if (!state.profile || params?.slug != state.profile.slug)
+        if (!state.profile || params?.slug != state.profile.slug) {
+            setLoading(true)
             refetch()
+        }
     }, [refetch, params, state, setLoading])
 
     useEffect(() => {
-        setLoading(!isSuccess)
+        if (isSuccess)
+            setLoading(false)
     }, [setLoading, isFetched, isSuccess])
 
     useEffect(() => {
@@ -66,8 +69,6 @@ const CoffeShopProvider: IProvider = ({ children }) => {
             toast.error("خطا در ارتباط با سرور")
         }
     }, [isError])
-
-
 
 
     return (

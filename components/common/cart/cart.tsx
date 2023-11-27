@@ -12,9 +12,11 @@ import { ProviderContext } from '@/providers/main/provider'
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import { useSlug } from '@/providers/main/hooks'
 
 export const Cart: ICart = (props) => {
     const params = useParams()
+    const slug = useSlug()
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
     const { state, functions } = useContext(ProviderContext)
     const { state: coffeeShopState } = useContext(CoffeeShopProviderContext)
@@ -22,7 +24,7 @@ export const Cart: ICart = (props) => {
     const orderItems = state.cart
 
     const renderOrderItems = orderItems.map((orderItem, key) => {
-        const productSlug = params && orderItem.product ? `/${state.isNotMenuma ? `` : `${params?.slug}/`}menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
+        const productSlug = params && orderItem.product ? `/${slug}menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
         return (
             <div className="flex gap-3 border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
                 <Link href={productSlug} className="relative w-[10rem] bg-white rounded-[.5rem] overflow-hidden">

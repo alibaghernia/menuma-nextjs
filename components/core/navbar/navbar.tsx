@@ -15,9 +15,11 @@ import { ProviderContext } from '@/providers/main/provider'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
+import { useSlug } from '@/providers/main/hooks'
 
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
     const router = useRouter()
+    const slug = useSlug()
     const { setLoading } = useContext(ProviderContext)
     const { state: coffeShopState } = useContext(CoffeeShopProviderContext)
     const params = useParams()
@@ -33,18 +35,18 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
         {
             title: "پروفایل کافه",
             icon: <HomeIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-            url: `/${state.isNotMenuma ? `` : `${params?.slug}/`}`,
+            url: `/${slug}`,
         },
         {
             title: "منوی کافه",
             icon: <MenuCircleIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-            url: `/${state.isNotMenuma ? `` : `${params?.slug}/`}menu`
+            url: `/${slug}menu`
         },
         // {
         //     title: "پشتیبانی",
         //     icon: <SupportIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
         // }
-    ], [resolvedTailwindConfig, params])
+    ], [resolvedTailwindConfig, slug])
 
     const renderMenuItems = useMemo(() => {
         return menuItems.map((menuItem, key) => (

@@ -10,13 +10,15 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { serverBaseUrl } from '@/utils/axios'
 import _ from 'lodash'
+import { useSlug } from '@/providers/main/hooks'
 
 export const Product: IProduct = (props) => {
     const router = useRouter()
     const params = useParams()
-    const { state, functions, setLoading } = useContext(ProviderContext)
+    const slug = useSlug()
+    const { functions, setLoading } = useContext(ProviderContext)
 
-    const productSlug = useMemo(() => params ? `/${state.isNotMenuma ? `` : `${params?.slug}/`}menu/${props.categoryId}/${props.id}` : "#", [params, props, state.isNotMenuma])
+    const productSlug = useMemo(() => params ? `/${slug}menu/${props.categoryId}/${props.id}` : "#", [params, props, slug])
 
 
 

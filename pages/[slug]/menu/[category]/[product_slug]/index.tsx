@@ -10,18 +10,32 @@ import { axios, serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
 import { toast } from 'react-toastify';
 import _ from 'lodash'
+import { useSlug } from '@/providers/main/hooks';
 
 function ProductPage() {
     const { setLoading } = useContext(ProviderContext)
     const { state, functions } = useContext(ProviderContext)
     const params = useParams()
+    const slug = useSlug(false)
     const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
     const [product, setProduct] = useState<APIProduct>()
     function productFetcher(): Promise<APIProduct> {
         return axios.get(`/api/cafe-restaurants/${params.slug}/menu/items/${params.product_slug}`).then(({ data }) => data)
     }
 
-    const { isSuccess, data, refetch, status, isError } = useQuery({ queryKey: `fetch-menu-${state.isNotMenuma ? `` : `${params?.slug}`}`, queryFn: productFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const {
+        isSuccess,
+        data,
+        refetch,
+        status,
+        isError
+    } = useQuery({
+        queryKey: `fetch-menu-${slug}`,
+        queryFn: productFetcher,
+        enabled: false,
+        retry: 2,
+        cacheTime: 5 * 60 * 1000
+    })
 
     useEffect(() => {
         if (isError) {

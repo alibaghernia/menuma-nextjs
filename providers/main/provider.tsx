@@ -97,5 +97,4 @@ const Provider: IProvider = ({ children }) => {
     )
 }
 
-
 export default Provider;

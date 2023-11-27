@@ -20,17 +20,22 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`http://localhost`) &&
     !reqUrl.startsWith(`https://localhost`)
   ) {
-    console.log({
-      url: request.url
-    });
     const domain_name = host?.split(".") || [];
+    const nginxUrl = `${protocol}//${host}`;
+    const nextUrl = `${url.protocol}//${url.host}`
+    const username = (domain_name.length > 1
+    ? domain_name[domain_name.length - 2]
+    : domain_name.toString()).replace(/:(\d+)/, '')
+    const pathname = request.url.replace(nextUrl, '')
 
-    return NextResponse.rewrite(
-      `${protocol}//${host}/${
-        domain_name.length > 1
-          ? domain_name[domain_name.length - 2]
-          : domain_name.toString()
-      }`
-    );
+    console.log({
+      domain_name,
+      nginxUrl,
+      nextUrl,
+      username,
+      pathname
+    });
+      
+    return NextResponse.rewrite(`${nextUrl}/${username}${pathname}`);
   }
 }

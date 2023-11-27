@@ -67,20 +67,31 @@ function MenuPage() {
     }, [isSuccess, setLoading, data, status, menuData, params])
 
     useEffect(() => {
-
+        const height = window.innerHeight;
         const handler = () => {
+            const actegoryBar = window.document.getElementById('category-bar')
             const scroll = window.scrollY
-            setScrolled(scroll > 50)
+            console.log({
+                height,
+                scroll,
+                diff: height - (height + scroll)
+            });
+            if (scrolled && scroll == 0) {
+                setScrolled(false)
+            } else if (scroll > (actegoryBar?.clientHeight || 100) / 2.8) {
+                setScrolled(true)
+            }
+            // setScrolled(height - (height + scroll) < -50)
         }
 
         window.addEventListener('scroll', _.throttle(
-            handler, 20
+            handler, 50
         ))
 
         return () => {
-            window.removeEventListener('scroll', _.throttle(handler, 20))
+            window.removeEventListener('scroll', _.throttle(handler, 50))
         }
-    }, [])
+    }, [scrolled])
 
     const categoriesSwiperSlides = useMemo(() => {
         return _.chunk(menuData, 2).map((categories, key1) => (
@@ -151,6 +162,7 @@ function MenuPage() {
                 <FlexBox direction='column'>
                     <Container
                         position='sticky'
+                        id='category-bar'
                         className={twMerge(classNames("top-0 bg-secondary z-20", {
                             "pb-[1.125rem]": !scrolled,
                             "pb-[1rem]": scrolled,

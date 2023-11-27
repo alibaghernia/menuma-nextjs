@@ -9,7 +9,8 @@ export function middleware(request: NextRequest) {
   }
   const url = new URL(request.url);
   const host = request.headers.get("host");
-  const protocol = `${request.headers.get("x-forwarded-proto")}:` || url.protocol;
+  const protocol =
+    `${request.headers.get("x-forwarded-proto")}:` || url.protocol;
   const reqUrl = request.url.replace(`${url.host}`, host || "");
   if (
     !reqUrl.startsWith(`http://${appDomain}/`) &&
@@ -18,16 +19,20 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`https://${appDomain}/_next`) &&
     !reqUrl.startsWith(`${protocol}//${host}/_next`) &&
     !reqUrl.startsWith(`http://localhost`) &&
-    !reqUrl.startsWith(`https://localhost`)
+    !reqUrl.startsWith(`https://localhost`) &&
+    !reqUrl.startsWith(`http://192.168.`) &&
+    !reqUrl.startsWith(`https://192.168.`)
   ) {
     const domain_name = host?.split(".") || [];
     const nginxUrl = `${protocol}//${host}`;
-    const nextUrl = `${url.protocol}//${url.host}`
-    const username = (domain_name.length > 1
-    ? domain_name[domain_name.length - 2]
-    : domain_name.toString()).replace(/:(\d+)/, '')
-    const pathname = request.url.replace(nextUrl, '')
-      
+    const nextUrl = `${url.protocol}//${url.host}`;
+    const username = (
+      domain_name.length > 1
+        ? domain_name[domain_name.length - 2]
+        : domain_name.toString()
+    ).replace(/:(\d+)/, "");
+    const pathname = request.url.replace(nextUrl, "");
+
     return NextResponse.rewrite(`${nextUrl}/${username}${pathname}`);
   }
 }

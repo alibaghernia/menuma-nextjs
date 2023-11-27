@@ -11,6 +11,9 @@ import Head from 'next/head';
 import { toast } from 'react-toastify';
 import _ from 'lodash'
 import { useSlug } from '@/providers/main/hooks';
+import { FlexBox } from '@/components/common/flex_box/flex_box';
+import { FlexItem } from '@/components/common/flex_item/flex_item';
+import { Container } from '@/components/common/container/container';
 
 function ProductPage() {
     const { setLoading } = useContext(ProviderContext)
@@ -96,22 +99,42 @@ function ProductPage() {
 
         const order = functions.cart.getItem(`${product.id}-${price.id}`);
 
-        return (<div className="flex justify-between p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] items-center md:max-w-md md:w-full md:mx-auto" key={key}>
-            <div className="text-[1.3rem] text-typography">
-                {[price.title ? `${price.title}: ` : '', parseInt(price.price).toLocaleString("IR-fa")].filter(Boolean).join(" ")}
-            </div>
-            {!order ? (
-                <div className="rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]" onClick={() => orderItem(price)}>
-                    سفارش
-                </div>
-            ) : (
-                <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle(() => increaseOrderItemCount(price), 500)}>+</div>
-                    {order.count}
-                    <div className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => decreasOrderItemCount(price)}>-</div>
-                </div>
-            )}
-        </div>)
+        return (
+            <FlexItem key={key}>
+                <FlexBox
+                    justify='between'
+                    alignItems='center'
+                    className="p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto">
+                    <FlexItem
+                        className="text-[1.3rem] text-typography">
+                        {[price.title ? `${price.title}: ` : '', parseInt(price.price).toLocaleString("IR-fa")].filter(Boolean).join(" ")}
+                    </FlexItem>
+                    {!order ? (
+                        <FlexItem
+                            className="rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]"
+                            onClick={() => orderItem(price)}
+                        >
+                            سفارش
+                        </FlexItem>
+                    ) : (
+                        <FlexItem>
+                            <FlexBox gap={2} alignItems='center'>
+                                <FlexItem className="w-7 h-7bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle(() => increaseOrderItemCount(price), 500)}>
+                                    <Container center>
+                                        +
+                                    </Container>
+                                </FlexItem>
+                                {order.count}
+                                <FlexItem className="w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={() => decreasOrderItemCount(price)}>
+                                    <Container center>
+                                        -
+                                    </Container>
+                                </FlexItem>
+                            </FlexBox>
+                        </FlexItem>
+                    )}
+                </FlexBox>
+            </FlexItem>)
     }), [product, functions, increaseOrderItemCount, decreasOrderItemCount, orderItem])
 
 
@@ -124,22 +147,33 @@ function ProductPage() {
             </Head>
             <Navbar title={product?.name} note back />
             <div className='bg-secondary h-screen pt-[4.5rem] z-10'>
-                <div className="rounded-[2.4rem] overflow-hidden relative w-[22.4rem] h-[22.4rem] mx-auto bg-white shadow">
-                    <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name!} className='inset-0 block object-cover' fill />
-                </div>
-                <div className="mt-[2.1rem] mx-[3.1rem]">
-                    <div className=" flex items-center gap-3">
-                        <hr className="border-black/10 w-full" />
-                        <div className="w-fit text-[1.8rem] font-[600] whitespace-nowrap text-typography">{product?.name}</div>
-                        <hr className="border-black/10 w-full" />
-                    </div>
-                    <div className="text-[1rem] font-[300] mt-[.8rem] text-typography md:text-center">
-                        {product?.description}
-                    </div>
-                    <div className="mt-[3.2rem] flex flex-col gap-4">
-                        {prices}
-                    </div>
-                </div>
+                <FlexBox direction='column'>
+                    <FlexItem
+                        className="rounded-[2.4rem] overflow-hidden relative w-[22.4rem] h-[22.4rem] mx-auto bg-white shadow"
+                    >
+                        <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name!} className='inset-0 block object-cover' fill />
+                    </FlexItem>
+                    <FlexItem className="mt-[2.1rem] mx-[3.1rem]">
+                        <FlexBox direction='column'>
+                            <FlexItem>
+                                <FlexBox alignItems='center' gap={3}>
+                                    <hr className="border-black/10 w-full" />
+                                    <div className="w-fit text-[1.8rem] font-[600] whitespace-nowrap text-typography">{product?.name}</div>
+                                    <hr className="border-black/10 w-full" />
+                                </FlexBox>
+                            </FlexItem>
+                            <FlexItem className="text-[1rem] font-[300] mt-[.8rem] text-typography md:text-center">
+                                {product?.description}
+                            </FlexItem>
+                            <FlexItem className="mt-[3.2rem]">
+                                <FlexBox direction='column' gap={4}>
+                                    {prices}
+                                </FlexBox>
+                            </FlexItem>
+                        </FlexBox>
+
+                    </FlexItem>
+                </FlexBox>
             </div>
         </>
     )

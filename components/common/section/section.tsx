@@ -2,25 +2,47 @@ import React from 'react'
 import { ISection } from './types'
 import classNames from 'classnames'
 import { twMerge } from 'tailwind-merge'
+import { FlexBox } from '../flex_box/flex_box'
+import { FlexItem } from '../flex_item/flex_item'
 
 const Section: ISection = ({ children, ...props }) => {
     return (
-        <div className={twMerge("flex flex-col gap-[.5rem]", props.className)} id={props.id}>
-            <div className="flex gap-2 items-center justify-between px-[1.9rem]">
-                <div className="text-[1.4rem] text-typography w-fit whitespace-nowrap">
-                    {props.title}
-                </div>
-                <hr className='border-black/10 w-full' />
-                {props.append && (
-                    <div className="w-fit">
-                        {props.append}
-                    </div>
-                )}
-            </div>
-            <div className={classNames(props.contentClassNames)}>
+        <FlexBox
+            direction='column'
+            gap={".5rem"}
+            className={twMerge(props.className)}
+            id={props.id}
+        >
+            <FlexItem>
+                <FlexBox
+                    gap={2}
+                    alignItems='center'
+                    justify='between'
+                    className="px-[1.9rem]"
+                >
+                    <FlexItem
+                        grow={false}
+                        className="text-[1.4rem] text-typography w-fit whitespace-nowrap"
+                    >
+                        {props.title}
+                    </FlexItem>
+                    <FlexItem grow>
+                        <hr className='border-black/10 w-full' />
+                    </FlexItem>
+                    {props.append && (
+                        <FlexItem
+                            grow={false} className="w-fit">
+                            {props.append}
+                        </FlexItem>
+                    )}
+                </FlexBox>
+            </FlexItem>
+            <FlexItem
+                className={classNames(props.contentClassNames)}
+            >
                 {children}
-            </div>
-        </div>
+            </FlexItem>
+        </FlexBox>
     )
 }
 

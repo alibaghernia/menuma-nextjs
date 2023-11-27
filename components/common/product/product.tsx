@@ -8,9 +8,11 @@ import { ProviderContext } from '@/providers/main/provider';
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { serverBaseUrl } from '@/utils/axios'
 import _ from 'lodash'
 import { useSlug } from '@/providers/main/hooks'
+import { Container } from '../container/container'
+import { FlexBox } from '@/components/common/flex_box/flex_box'
+import { FlexItem } from '@/components/common/flex_item/flex_item'
 
 export const Product: IProduct = (props) => {
     const router = useRouter()
@@ -57,35 +59,78 @@ export const Product: IProduct = (props) => {
             <div className={classNames("w-full relative bg-white h-[5rem] mt-[-2rem] rounded-bl-[2rem] rounded-br-[2rem] overflow-hidden border border-white")} style={{
                 zIndex: ~key
             }} key={price.id}>
-                <span className="absolute inset-0 bg-typography/[.20]"></span>
-                <div className="py-[.5rem] px-[1.7rem] absolute bottom-0 left-0 right-0 flex items-center justify-between">
-                    <div className="flex gap-2 items-center px-[0.9rem]">
-                        {props.prices.length > 1 && (
-                            <div className="text-typography text-[1rem] font-bold">
-                                {key + 1}-
-                            </div>
-                        )}
-                        <div className="text-typography text-[1rem] font-bold" >
-                            {price.title}
-                        </div>
-                    </div>
-                    <div className={classNames('px-[.8rem] py-[.2rem] bg-white/[.3] flex items-center rounded-[1rem] gap-2 cursor-pointer transition-all duration-[.3s]', {
-                        "active:scale-[.8]": !order
-                    })} onClick={() => orderItem(price)}>
-                        <div className="text-[1rem] font-[500] text-typography">
-                            {`${parseInt(price.price).toLocaleString("IR-fa")} ت`}
-                        </div>
-                        {order ? (
-                            <div className="flex items-center gap-2">
-                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={(e) => { e.stopPropagation(); decreasOrderItemCount(price) }}>-</div>
-                                {order.count}
-                                <div className="w-6 h-6 flex items-center justify-center bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle((e) => { e.stopPropagation(); increaseOrderItemCount(price) }, 500)}>+</div>
-                            </div>
-                        ) : (
-                            <LinedAddIcon color='#434343' />
-                        )}
-                    </div>
-                </div>
+                <span className="absolute inset-0 bg-typography/[.20] z-0 pointer-events-none"></span>
+                <Container className='bottom-0 left-0 right-0 py-[.5rem] px-[1.7rem] z-10'>
+                    <FlexBox alignItems='center' justify='between'>
+                        <FlexItem>
+                            <FlexBox alignItems='center' gap={2} className="px-[0.9rem]">
+                                {props.prices.length > 1 && (
+                                    <FlexItem>
+                                        <div className="text-typography text-[1rem] font-bold">
+                                            {key + 1}-
+                                        </div>
+                                    </FlexItem>
+                                )}
+                                <FlexItem>
+                                    <div className="text-typography text-[1rem] font-bold" >
+                                        {price.title}
+                                    </div>
+                                </FlexItem>
+                            </FlexBox>
+                        </FlexItem>
+                        <FlexItem>
+                            <FlexBox
+                                alignItems='center'
+                                gap={2}
+                                className={
+                                    classNames('px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] cursor-pointer transition-all duration-[.3s]',
+                                        {
+                                            "active:scale-[.8]": !order
+                                        }
+                                    )
+                                }
+                                onClick={() => orderItem(price)}
+                            >
+                                <FlexItem>
+                                    <div className="text-[1rem] font-[500] text-typography">
+                                        {`${parseInt(price.price).toLocaleString("IR-fa")} ت`}
+                                    </div>
+                                </FlexItem>
+                                <FlexItem>
+                                    {order ? (
+                                        <FlexBox alignItems='center' gap={2}>
+                                            <FlexItem className='relative w-6 h-6 bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none'
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    decreasOrderItemCount(price);
+                                                }}>
+                                                <Container
+                                                    center
+                                                >
+                                                    -
+                                                </Container>
+                                            </FlexItem>
+                                            {order.count}
+                                            <FlexItem className='relative w-6 h-6 bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none'
+                                                onClick={_.throttle((e) => {
+                                                    e.stopPropagation();
+                                                    increaseOrderItemCount(price);
+                                                }, 500)}>
+                                                <Container
+                                                    center
+                                                >
+                                                    +
+                                                </Container>
+                                            </FlexItem>
+                                        </FlexBox>
+                                    ) : (
+                                        <LinedAddIcon color='#434343' />
+                                    )}
+                                </FlexItem>
+                            </FlexBox>
+                        </FlexItem>
+                    </FlexBox>
+                </Container>
             </div>
         )
     }), [orderItem, increaseOrderItemCount, decreasOrderItemCount, functions, props])
@@ -121,30 +166,61 @@ export const Product: IProduct = (props) => {
 
     return (
         <div className={classNames({ "w-full": props.fullWidth }, props.className)}>
-            <div className={classNames("flex items-center relative", { "w-full": props.fullWidth, "pr-[7.25rem]": !props.fullWidth, "flex flex-col": !props.single_mode })}>
+            <FlexBox
+                className={
+                    classNames(
+                        "relative",
+                        {
+                            "w-full": props.fullWidth,
+                            "pr-[7.25rem]": !props.fullWidth,
+                            "flex-col ": !props.single_mode
+                        }
+                    )
+                }>
                 {!props.fullWidth && (
                     renderImage(false)
                 )}
-                <div className={classNames("bg-white h-[12.9rem] rounded-[2rem] flex border border-black/[.05]", { "w-[16.3rem] pr-[5.6rem] flex-col  py-[1.1rem] pl-[1.4rem]  items-center  justify-between": !props.fullWidth, "w-full p-[1rem] items-start gap-[1.4rem] z-10": props.fullWidth, "z-20": !props.single_mode })}>
-                    {props.fullWidth && (
-                        renderImage(true)
-                    )}
-                    <div className='flex flex-col gap-2'>
-                        <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
-                            {props.title}
-                        </Link>
-                        <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
-                            {props.descriptions}
-                        </div>
-                    </div>
-                    {props.single_mode && renderSingleModePrice()}
-                </div>
+                <FlexItem className={classNames("w-full", { "z-20": !props.single_mode })}>
+                    <FlexBox
+                        className={
+                            classNames(
+                                "bg-white h-[12.9rem] rounded-[2rem] border border-black/[.05]",
+                                {
+                                    "w-[16.3rem] pr-[5.6rem] flex-col  py-[1.1rem] pl-[1.4rem]  items-center  justify-between": !props.fullWidth,
+                                    "w-full p-[1rem] gap-[1.4rem] z-10": props.fullWidth,
+                                }
+                            )
+                        }>
+                        {props.fullWidth && (
+                            <FlexItem>
+                                {renderImage(true)}
+                            </FlexItem>
+                        )}
+                        <FlexItem grow>
+                            <FlexBox direction='column' gap={2}>
+                                <FlexItem>
+                                    <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
+                                        {props.title}
+                                    </Link>
+                                </FlexItem>
+                                <FlexItem>
+                                    <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
+                                        {props.descriptions}
+                                    </div>
+                                </FlexItem>
+                            </FlexBox>
+                        </FlexItem>
+                        <FlexItem>
+                            {props.single_mode && renderSingleModePrice()}
+                        </FlexItem>
+                    </FlexBox>
+                </FlexItem>
                 {!props.single_mode && (
-                    <div className="flex shrink-0 flex-col w-full z-0">
+                    <FlexBox direction='column' className="shrink-0 w-full z-0">
                         {renderPrices()}
-                    </div>
+                    </FlexBox>
                 )}
-            </div>
+            </FlexBox>
         </div>
     )
 }

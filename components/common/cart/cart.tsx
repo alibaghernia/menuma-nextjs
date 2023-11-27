@@ -15,6 +15,7 @@ import { useParams } from 'next/navigation'
 import { useSlug } from '@/providers/main/hooks'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
+import { Container } from '../container/container'
 
 export const Cart: ICart = (props) => {
     const params = useParams()
@@ -49,7 +50,10 @@ export const Cart: ICart = (props) => {
                                         </FlexBox>
                                     </Link>
                                 </FlexItem>
-                                <FlexItem className="cursor-pointer" onClick={(e) => { e.preventDefault(); functions.cart.removeItem(orderItem.id); }}>
+                                <FlexItem className="cursor-pointer" onClick={(e) => {
+                                    e.preventDefault();
+                                    functions.cart.removeItem(orderItem.id);
+                                }}>
                                     <Trash1Icon color={colors.red[500]} />
                                 </FlexItem>
                             </FlexBox>
@@ -87,40 +91,67 @@ export const Cart: ICart = (props) => {
 
 
     return (
-        <div className={classNames("fixed left-[50%] translate-x-[-50%] max-w-sm w-full py-[1rem] px-[1.5rem] pb-[3rem] bg-white z-50 rounded-[2.5rem] top-[5rem] bottom-[5rem] overflow-hidden flex flex-col", { "block": props.open, "hidden": !props.open })}>
-            <div className="absolute top-[1.5rem] right-[2rem]">
-                <div className=" cursor-pointer" onClick={props.onClose}>
-                    <LinedCloseIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />
-                </div>
-            </div>
-            <div className="text-[1.5rem] font-bold text-center w-full grow-0">سفارشات شما</div>
-            {renderOrderItems.length ? (
-                <div className="flex flex-col mt-4 overflow-y-auto grow gap-3">
-                    {renderOrderItems}
-                </div>
-            ) : (
-                <div className="flex flex-col justify-center grow">
-                    <div className="text-gray-400 text-center">سفارشی ثبت نکرده اید</div>
-                </div>
-            )}
-            <div className="mt-[1.5rem] grow-0">
-                <div className="flex gap-3 items-center whitespace-nowrap">
-                    <div className="text-[1rem]">
-                        مبلغ قابل پرداخت
-                    </div>
-                    <hr className='w-full' />
-                    <div className="text-[1rem]">
-                        {getCartSum()} تومان
-                    </div>
-                </div>
-            </div>
-            <div className="mt-[1.5rem] grow-0">
-                {Boolean(parseInt(coffeeShopState.profile.has_pager)) && (
-                    <div className="px-[2rem] py-[.8rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold">
-                        صدا زدن گارسون
-                    </div>
+        <Container
+            position='fixed'
+            center="horizontal"
+            className={
+                classNames(
+                    "max-w-sm w-full py-[1rem] px-[1.5rem] pb-[3rem] bg-white z-50 rounded-[2.5rem] top-[5rem] bottom-[5rem] overflow-hidden",
+                    {
+                        "block": props.open,
+                        "hidden": !props.open
+                    }
+                )
+            }>
+            <FlexBox direction='column' className='h-full'>
+                <FlexItem>
+                    <Container className="top-[1.5rem] right-[2rem]">
+                        <div className="cursor-pointer" onClick={props.onClose}>
+                            <LinedCloseIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />
+                        </div>
+                    </Container>
+                </FlexItem>
+                <FlexItem grow={false}>
+                    <div className='text-[1.5rem] font-bold text-center w-full'>سفارشات شما</div>
+                </FlexItem>
+                {renderOrderItems.length ? (
+                    <FlexItem grow>
+                        <FlexBox gap={3} direction='column' className="mt-4 overflow-y-auto">
+                            {renderOrderItems}
+                        </FlexBox>
+                    </FlexItem>
+                ) : (
+                    <FlexItem grow>
+                        <Container center>
+                            <div className="text-gray-400 text-center">سفارشی ثبت نکرده اید</div>
+                        </Container>
+                    </FlexItem>
                 )}
-            </div>
-        </div >
+                <FlexItem grow={false} className="mt-[1.5rem]">
+                    <FlexBox gap={3} alignItems='center' className="whitespace-nowrap">
+                        <FlexItem>
+                            <div className="text-[1rem]">
+                                مبلغ قابل پرداخت
+                            </div>
+                        </FlexItem>
+                        <FlexItem grow>
+                            <hr className='w-full' />
+                        </FlexItem>
+                        <FlexItem>
+                            <div className="text-[1rem]">
+                                {getCartSum()} تومان
+                            </div>
+                        </FlexItem>
+                    </FlexBox>
+                </FlexItem>
+                <FlexItem grow={false} className="mt-[1.5rem]">
+                    {Boolean(parseInt(coffeeShopState.profile.has_pager)) && (
+                        <div className="px-[2rem] py-[.8rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold">
+                            صدا زدن گارسون
+                        </div>
+                    )}
+                </FlexItem>
+            </FlexBox>
+        </Container>
     )
 }

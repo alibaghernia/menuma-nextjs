@@ -24,6 +24,9 @@ import { ProviderContext } from '@/providers/main/provider'
 import Head from 'next/head'
 import { toast } from 'react-toastify'
 import { useSlug } from '@/providers/main/hooks'
+import { Container } from '@/components/common/container/container'
+import { FlexBox } from '@/components/common/flex_box/flex_box'
+import { FlexItem } from '@/components/common/flex_item/flex_item'
 
 function MenuPage() {
     const [menuData, setMenuData] = useState<APICateogory[]>([])
@@ -120,111 +123,59 @@ function MenuPage() {
             </Head>
             <main className='bg-secondary min-h-screen'>
                 <Navbar title={state?.profile?.name} note back />
-                <div className="sticky top-0 bg-secondary z-20 pb-[1.125rem]">
-                    <div className="flex flex-col gap-2 pt-[5.5rem]">
-                        <div className="px-2">
-                            <Swiper
-                                slidesPerView={"auto"}
-                                spaceBetween={8}
-                                grabCursor={true}
-                                scrollbar
-                                pagination={{
-                                    clickable: true,
-                                    el: "#swiper-pagination",
-                                    bulletActiveClass: styles['swiper-pagination-bullet']
-                                }}
-                                breakpoints={{
-                                    768: {
-                                        centerInsufficientSlides: true
-                                    }
-                                }}
-                                modules={[Pagination]}
-                            >
-                                {categoriesSwiperSlides}
-                            </Swiper>
-                        </div>
-                        <div id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'></div>
-                    </div>
-                    <div className="mt-4 mx-6 md:mx-auto md:max-w-md">
-                        <SearchField value={searchInput ?? ""} onChange={setSearchInput} onSearch={(value) => { }} />
-                    </div>
-                </div>
-                <div className="z-10 relative">
-                    {/* <Section title='ویژه ها' append={<Section.AppentRegularButton title="مشاهده همه" onClick={() => {
-                    router.push(`/${params.slug}/menu/special`)
-                }} />}>
-                    <Swiper
-                        slidesPerView={"auto"}
-                        slidesOffsetBefore={30.4}
-                        slidesOffsetAfter={30.4}
-                        spaceBetween={25.6}
-                        modules={[Pagination]}
-                        breakpoints={{
-                            768: {
-                                centerInsufficientSlides: true
-                            }
-                        }}
-                    >
-                        <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
-                            <Product
-                                id='sperso1'
-                                title='اسپرسو'
-                                descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
-                                single_mode
-                                image={sperso.src}
-                                prices={[{
-                                    id: "single",
-                                    price: "45000",
-                                    title: "تک"
-                                }]}
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
-                            <Product
-                                id='sperso2'
-                                title='اسپرسو'
-                                descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
-                                single_mode
-                                image={sperso.src}
-                                prices={[{
-                                    id: "single",
-                                    price: "45000",
-                                    title: "تک"
-                                }]}
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
-                            <Product
-                                id='sperso3'
-                                title='اسپرسو'
-                                descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
-                                single_mode
-                                image={sperso.src}
-                                prices={[{
-                                    id: "single",
-                                    price: "45000",
-                                    title: "تک"
-                                }]}
-                            />
-                        </SwiperSlide>
-                        <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-2 !w-fit'>
-                            <Product
-                                id='sperso4'
-                                title='اسپرسو'
-                                descriptions='لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم.'
-                                single_mode
-                                image={sperso.src}
-                                prices={[{
-                                    id: "single",
-                                    price: "45000",
-                                    title: "تک"
-                                }]}
-                            />
-                        </SwiperSlide>
-                    </Swiper>
-                </Section> */}
-                    {renderCategorySections()}
-                </div>
+                <FlexBox direction='column'>
+                    <FlexItem>
+                        <Container
+                            position='sticky'
+                            className="top-0 bg-secondary z-20 pb-[1.125rem]"
+                        >
+                            <FlexBox direction='column'>
+                                <FlexItem>
+                                    <FlexBox
+                                        direction='column'
+                                        gap={2}
+                                        className="pt-[5.5rem]"
+                                    >
+                                        <FlexItem className="px-2">
+                                            <Swiper
+                                                slidesPerView={"auto"}
+                                                spaceBetween={8}
+                                                grabCursor={true}
+                                                scrollbar
+                                                pagination={{
+                                                    clickable: true,
+                                                    el: "#swiper-pagination",
+                                                    bulletActiveClass: styles['swiper-pagination-bullet']
+                                                }}
+                                                breakpoints={{
+                                                    768: {
+                                                        centerInsufficientSlides: true
+                                                    }
+                                                }}
+                                                modules={[Pagination]}
+                                            >
+                                                {categoriesSwiperSlides}
+                                            </Swiper>
+                                        </FlexItem>
+                                        <FlexItem
+                                            id="swiper-pagination" className='mx-auto mt-2 !flex gap-0 !w-fit'
+                                        />
+                                    </FlexBox>
+                                </FlexItem>
+                                <FlexItem className="mt-4 mx-6 md:mx-auto md:max-w-md">
+                                    <SearchField
+                                        value={searchInput ?? ""}
+                                        onChange={setSearchInput}
+                                        onSearch={(value) => { }}
+                                    />
+                                </FlexItem>
+                            </FlexBox>
+                        </Container>
+                    </FlexItem>
+                    <FlexItem className="z-10 relative">
+                        {renderCategorySections()}
+                    </FlexItem>
+                </FlexBox>
             </main>
 
         </>

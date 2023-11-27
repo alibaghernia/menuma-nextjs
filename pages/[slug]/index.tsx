@@ -69,7 +69,7 @@ const Profile: NextPage = () => {
                         {profileData?.description}
                     </div>
                     <Button
-                        onClick={() => { router.push(`/${mainState.isNotMenuma ? `` : `${params?.slug}/`}/menu`); setLoading(true) }} className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit font-bold"
+                        onClick={() => { router.push(`/${mainState.isNotMenuma ? `` : `${params?.slug}/`}menu`); setLoading(true) }} className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit font-bold"
                         rounded
                     >
                         مشاهده منوی کافه

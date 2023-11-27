@@ -29,7 +29,7 @@ const CoffeShopProvider: IProvider = ({ children }) => {
         return axios.get<IProfile>(`/api/cafe-restaurants/${params.slug}`).then(({ data }) => data)
     }
 
-    const { isLoading, isSuccess, data, refetch, isFetching, isRefetching, status, isFetched, isError } = useQuery({ queryKey: `fetch-profile-${mainState.isNotMenuma ? `` : `${params?.slug}/`}`, queryFn: profileFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const { isLoading, isSuccess, data, refetch, isFetching, isRefetching, status, isFetched, isError } = useQuery({ queryKey: `fetch-profile-${mainState.isNotMenuma ? `` : `${params?.slug}`}`, queryFn: profileFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
 
     useEffect(() => {
         if (isSuccess) {

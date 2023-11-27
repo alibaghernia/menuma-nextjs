@@ -16,7 +16,7 @@ export const Product: IProduct = (props) => {
     const params = useParams()
     const { state, functions, setLoading } = useContext(ProviderContext)
 
-    const productSlug = useMemo(() => params ? `/${state.isNotMenuma ? `` : `${params?.slug}/`}/menu/${props.categoryId}/${props.id}` : "#", [params, props, state.isNotMenuma])
+    const productSlug = useMemo(() => params ? `/${state.isNotMenuma ? `` : `${params?.slug}/`}menu/${props.categoryId}/${props.id}` : "#", [params, props, state.isNotMenuma])
 
 
 

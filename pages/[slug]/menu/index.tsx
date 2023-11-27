@@ -38,7 +38,7 @@ function MenuPage() {
         return axios.get(`/api/cafe-restaurants/${params.slug}/menu`).then(({ data }) => data)
     }
 
-    const { isSuccess, data, refetch, status, isError } = useQuery({ queryKey: `fetch-menu-${mainState.isNotMenuma ? `` : `${params?.slug}/`}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const { isSuccess, data, refetch, status, isError } = useQuery({ queryKey: `fetch-menu-${mainState.isNotMenuma ? `` : `${params?.slug}`}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
 
     useEffect(() => {
         if (isError) {

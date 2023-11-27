@@ -38,7 +38,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
         {
             title: "منوی کافه",
             icon: <MenuCircleIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-            url: `/${state.isNotMenuma ? `` : `${params?.slug}/`}/menu`
+            url: `/${state.isNotMenuma ? `` : `${params?.slug}/`}menu`
         },
         // {
         //     title: "پشتیبانی",

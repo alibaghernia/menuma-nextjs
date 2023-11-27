@@ -27,14 +27,6 @@ export function middleware(request: NextRequest) {
     ? domain_name[domain_name.length - 2]
     : domain_name.toString()).replace(/:(\d+)/, '')
     const pathname = request.url.replace(nextUrl, '')
-
-    console.log({
-      domain_name,
-      nginxUrl,
-      nextUrl,
-      username,
-      pathname
-    });
       
     return NextResponse.rewrite(`${nextUrl}/${username}${pathname}`);
   }

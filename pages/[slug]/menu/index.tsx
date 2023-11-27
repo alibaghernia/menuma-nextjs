@@ -115,7 +115,7 @@ function MenuPage() {
         <>
             <Head>
                 <title>
-                    {state.profile?.name} - منو - منوما
+                    {state.profile?.name} - منو{slug && ' - منوما'}
                 </title>
             </Head>
             <main className='bg-secondary min-h-screen'>

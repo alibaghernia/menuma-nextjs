@@ -1,4 +1,8 @@
+import { AbsoluteContainer } from "@/components/common/absolute_container/absolute_container"
+import { FlexBox } from "@/components/common/flex_box/flex_box"
+import { FlexItem } from "@/components/common/flex_item/flex_item"
 import CoffeShopProvider from "@/providers/coffee_shop/provider"
+import { useSlug } from "@/providers/main/hooks"
 import { ProviderContext } from "@/providers/main/provider"
 import Head from "next/head"
 import { useContext, useEffect } from "react"
@@ -6,6 +10,7 @@ import { useContext, useEffect } from "react"
 function Home() {
 
   const { setLoading } = useContext(ProviderContext)
+  const slug = useSlug()
 
   useEffect(() => {
     setLoading(false)
@@ -13,20 +18,21 @@ function Home() {
 
   return (
     <>
-    <Head>
-      <title>منوما</title>
-    </Head>
-    <div className="min-h-screen">
-      <div className="absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col gap-3 items-center">
-        <div className="text-[5rem] text-gray-400">
-          منوما
-        </div>
-        <div className="text-[1.5rem] text-gray-600">
-          در حال توسعه هستیم
-        </div>
+      <Head>
+        <title>{slug && 'منوما'}</title>
+      </Head>
+      <div className="min-h-screen">
+        <AbsoluteContainer center>
+          <FlexBox alignItems="center" gap={3} direction="column">
+            <FlexItem className="text-[5rem] text-gray-400">
+              منوما
+            </FlexItem>
+            <FlexItem className="text-[1.5rem] text-gray-600">
+              در حال توسعه هستیم
+            </FlexItem>
+          </FlexBox>
+        </AbsoluteContainer>
       </div>
-    </div>
-
     </>
   )
 }

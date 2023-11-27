@@ -17,7 +17,7 @@ export const ProviderContext = createContext<{
     // @ts-ignore
 }>({})
 
-const localStoragekey = "menuma-provider-storage-new-v2.6"
+const localStoragekey = "menuma-provider-storage-new-v2.8"
 
 const Provider: IProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
@@ -34,7 +34,7 @@ const Provider: IProvider = ({ children }) => {
                 console.log("Please check the menuma domain env");
                 process.exit(1)
             }
-            if (domain != menumaDomain && !state.isNotMenuma) {
+            if (domain != menumaDomain && !state.isNotMenuma && !domain.startsWith("localhost")) {
                 dispatch({
                     type: REDUCER_KEYS.UPDATE,
                     data: {

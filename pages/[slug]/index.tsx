@@ -42,7 +42,7 @@ const Profile: NextPage = () => {
         <>
             <Head>
                 <title>
-                    {profileData.name} - منوما
+                    {profileData.name}{slug && ' - منوما'}
                 </title>
             </Head>
             <main className='bg-secondary min-h-screen'>

@@ -13,6 +13,8 @@ import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useSlug } from '@/providers/main/hooks'
+import { FlexBox } from '@/components/common/flex_box/flex_box'
+import { FlexItem } from '@/components/common/flex_item/flex_item'
 
 export const Cart: ICart = (props) => {
     const params = useParams()
@@ -25,33 +27,55 @@ export const Cart: ICart = (props) => {
 
     const renderOrderItems = orderItems.map((orderItem, key) => {
         const productSlug = params && orderItem.product ? `/${slug}menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
+
+
         return (
-            <div className="flex gap-3 border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
-                <Link href={productSlug} className="relative w-[10rem] bg-white rounded-[.5rem] overflow-hidden">
-                    <Image fill src={orderItem.image || sperso.src} alt='' className='object-cover' />
-                </Link>
-                <div className="flex flex-col gap-10 w-full ">
-                    <div className="flex items-center justify-between">
-                        <Link href={productSlug} className="flex flex-col gap-1">
-                            {orderItem.type ? `${orderItem.title} - ${orderItem.type}` : orderItem.title}
-                        </Link>
-                        <div className="cursor-pointer" onClick={(e) => { e.preventDefault(); functions.cart.removeItem(orderItem.id); }}>
-                            <Trash1Icon color={colors.red[500]} />
-                        </div>
-                    </div>
-                    <div className="flex justify-between gap-3 items-center">
-                        <div className="text-[.7rem] font-bold whitespace-nowrap">
-                            {orderItem.count > 1 ? `${(orderItem.price).toLocaleString("IR-fa")} * ${orderItem.count}` : (orderItem.price).toLocaleString("IR-fa")}
-                        </div>
-                        <hr className='w-full' />
-                        <div className="flex items-center gap-1 whitespace-nowrap">
-                            <div className="text-[1rem] font-bold bg-typography text-white px-[.7rem] py-[.2rem] rounded-full">
-                                {(orderItem.price * orderItem.count).toLocaleString("IR-fa")} ت
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <FlexBox gap={3} className="border border-black/[0.05] px-[.5rem] py-[.5rem] rounded-[1.5rem]" key={key}>
+                <FlexItem className='relative bg-white rounded-[.5rem] overflow-hidden w-[6rem]'>
+                    <Link href={productSlug}>
+                        <Image fill src={orderItem.image || sperso.src} alt='' className='object-cover' />
+                    </Link>
+                </FlexItem>
+                <FlexItem grow>
+                    <FlexBox direction='column' gap={10} className="w-full">
+                        <FlexItem>
+                            <FlexBox alignItems='center' justify='between'>
+                                <FlexItem>
+                                    <Link href={productSlug}>
+                                        <FlexBox direction='column' gap={1}>
+                                            <FlexItem>
+                                                {orderItem.type ? `${orderItem.title} - ${orderItem.type}` : orderItem.title}
+                                            </FlexItem>
+                                        </FlexBox>
+                                    </Link>
+                                </FlexItem>
+                                <FlexItem className="cursor-pointer" onClick={(e) => { e.preventDefault(); functions.cart.removeItem(orderItem.id); }}>
+                                    <Trash1Icon color={colors.red[500]} />
+                                </FlexItem>
+                            </FlexBox>
+                        </FlexItem>
+                        <FlexBox justify='between' gap={3} alignItems='center'>
+                            <FlexItem>
+                                <div className="text-[.7rem] font-bold whitespace-nowrap">
+                                    {orderItem.count > 1 ? `${(orderItem.price).toLocaleString("IR-fa")} * ${orderItem.count}` : (orderItem.price).toLocaleString("IR-fa")}
+                                </div>
+                            </FlexItem>
+                            <FlexItem grow>
+                                <hr className='w-full' />
+                            </FlexItem>
+                            <FlexItem>
+                                <FlexBox alignItems='center' gap={1} className="whitespace-nowrap">
+                                    <FlexItem>
+                                        <div className="text-[1rem] font-bold bg-typography text-white px-[.7rem] py-[.2rem] rounded-full">
+                                            {(orderItem.price * orderItem.count).toLocaleString("IR-fa")} ت
+                                        </div>
+                                    </FlexItem>
+                                </FlexBox>
+                            </FlexItem>
+                        </FlexBox>
+                    </FlexBox>
+                </FlexItem>
+            </FlexBox>
         )
     })
 

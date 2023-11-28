@@ -21,14 +21,15 @@ export const FlexBox: IFlexBox = ({
                         "flex-row": direction == "row",
                         "flex-col": direction == "column",
                     },
-                    `justify-${justify}`,
                     `items-${alignItems}`,
+                    `justify-${justify}`,
                     {
                         [`gap-${props.gap}`]: typeof props.gap == "number",
                     },
                 ), className)}
             style={{
                 gap: typeof props.gap == "string" ? props.gap : undefined,
+                justifyContent: justify,
                 ...(style || {})
             }}
             {...props}

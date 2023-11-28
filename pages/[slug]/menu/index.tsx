@@ -1,7 +1,5 @@
 import { Navbar } from '@/components/core/navbar/navbar'
 import { CategoryCard } from '@/components/menu/category-card'
-import warmDrink from '@/assets/images/warm-drink.png'
-import sperso from '@/assets/images/sperso.png'
 import noImage from '@/assets/images/no-image.jpg'
 import styles from '@/assets/styles/pages/menu/menu.module.scss'
 import 'swiper/css';
@@ -67,21 +65,14 @@ function MenuPage() {
     }, [isSuccess, setLoading, data, status, menuData, params])
 
     useEffect(() => {
-        const height = window.innerHeight;
         const handler = () => {
             const actegoryBar = window.document.getElementById('category-bar')
-            const scroll = window.scrollY
-            console.log({
-                height,
-                scroll,
-                diff: height - (height + scroll)
-            });
+            const scroll = window.scrollY;
             if (scrolled && scroll == 0) {
                 setScrolled(false)
             } else if (scroll > (actegoryBar?.clientHeight || 100) / 2.8) {
                 setScrolled(true)
             }
-            // setScrolled(height - (height + scroll) < -50)
         }
 
         window.addEventListener('scroll', _.throttle(
@@ -99,13 +90,22 @@ function MenuPage() {
                 {categories.map((category, key2) => (
                     <div key={key2}>
                         <CategoryCard
-                            className={classNames({
-                                'w-[6.7rem] h-[3.7rem] rounded-[1rem]': scrolled
-                            })}
-                            titleClassName={classNames({
-                                'text-[.9rem]': scrolled
-                            })}
-                            image={category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name}
+                            className={
+                                classNames(
+                                    {
+                                        'w-[6.7rem] h-[3.7rem] rounded-[1rem]': scrolled
+                                    }
+                                )
+                            }
+                            titleClassName={
+                                classNames(
+                                    {
+                                        'text-[.9rem]': scrolled
+                                    }
+                                )
+                            }
+                            image={
+                                category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name}
                             onClick={() => {
                                 setSelectedCategory(category.id); setSearchInput(""); window.document.getElementById(`category-${category.id}`)?.scrollIntoView({
                                     behavior: 'smooth'
@@ -150,6 +150,10 @@ function MenuPage() {
         ))
     }
 
+    const navbar = useMemo(() => (
+        <Navbar title={state?.profile?.name} note back />
+    ), [state.profile])
+
     return (
         <>
             <Head>
@@ -157,8 +161,8 @@ function MenuPage() {
                     {state.profile?.name} - منو{slug && ' - منوما'}
                 </title>
             </Head>
-            <main className='bg-secondary min-h-screen'>
-                <Navbar title={state?.profile?.name} note back />
+            <div className='bg-secondary min-h-screen'>
+                {navbar}
                 <FlexBox direction='column'>
                     <Container
                         position='sticky'
@@ -209,12 +213,14 @@ function MenuPage() {
                                     />
                                 </FlexBox>
                             </FlexItem>
-                            <FlexItem className="mt-4 mx-6 md:mx-auto md:max-w-md">
-                                <SearchField
-                                    value={searchInput ?? ""}
-                                    onChange={setSearchInput}
-                                    onSearch={(value) => { }}
-                                />
+                            <FlexItem>
+                                <div className="mt-4 md:max-w-md md:mx-auto mx-6">
+                                    <SearchField
+                                        value={searchInput ?? ""}
+                                        onChange={setSearchInput}
+                                        onSearch={(value) => { }}
+                                    />
+                                </div>
                             </FlexItem>
                         </FlexBox>
                     </Container>
@@ -222,7 +228,7 @@ function MenuPage() {
                         {renderCategorySections()}
                     </FlexItem>
                 </FlexBox>
-            </main>
+            </div>
 
         </>
     )

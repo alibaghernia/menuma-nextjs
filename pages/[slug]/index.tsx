@@ -45,7 +45,7 @@ const Profile: NextPage = () => {
                     {profileData.name}{slug && ' - منوما'}
                 </title>
             </Head>
-            <main className='bg-secondary min-h-screen'>
+            <div className='bg-secondary min-h-screen'>
                 <Navbar
                     dark
                     background={false}
@@ -66,18 +66,34 @@ const Profile: NextPage = () => {
                         }
                         logo_url={profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : coffeeshopLogo.src}
                         time_shifts={["9:30 تا 13:00", "9:30 تا 13:00"]} />
-                    <div className=" text-typography mt-[4.3rem] mx-auto text-[.8rem] font-bold px-10 text-justify leading-6 md:text-center md:text-[1rem]">
+                    <div className=" text-typography mt-[4.3rem] md:mt-[5.3rem] mx-auto text-[.8rem] font-bold px-10 text-justify leading-6 md:text-center md:text-[1rem]">
                         {profileData?.description}
                     </div>
                     <Button
-                        onClick={() => { router.push(`/${slug}menu`); setLoading(true) }} className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit shadow-[0_0_40px_5px_rgba(0,0,0,0.1)] font-bold"
+                        onClick={
+                            () => {
+                                router.push(`/${slug}menu`);
+                                setLoading(true);
+                            }
+                        }
+                        className="py-[.8rem] px-[2.9rem] mt-[1.3rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
                         rounded
                     >
                         مشاهده منوی کافه
                     </Button>
-                    <Section title="موقعیت روی نقشه" className="mt-[1.6rem]" append={
-                        <Button link={`https://www.google.com/maps/dir//${locationCoordinates[0]},${locationCoordinates[1]}?entry=ttu`} className='text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F]' linkTarget='_blank' rounded="1rem" >مسیریابی</Button>
-                    }>
+                    <Section
+                        title="موقعیت روی نقشه"
+                        className="mt-[1.6rem]"
+                        append={
+                            <Button
+                                link={`https://www.google.com/maps/search/?api=1&query=${locationCoordinates[0]},${locationCoordinates[1]}`}
+                                className='text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F]'
+                                linkTarget='_blank'
+                                rounded="1rem"
+                            >
+                                مسیریابی
+                            </Button>
+                        }>
                         <div className="rounded-[2rem] overflow-hidden mb-10 mx-[2.5rem] h-[20.7rem] relative mt-[1rem] z-0">
                             <MapComponent location={{
                                 coordinates: locationCoordinates
@@ -85,7 +101,7 @@ const Profile: NextPage = () => {
                         </div>
                     </Section>
                 </div>
-            </main>
+            </div>
         </>
     )
 }

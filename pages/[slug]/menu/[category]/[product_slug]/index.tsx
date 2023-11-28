@@ -107,9 +107,9 @@ function ProductPage() {
                     className="p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto">
                     <FlexItem
                         className="text-[1.3rem] text-typography">
-                        <FlexBox gap={2}>
+                        <FlexBox gap={2} alignItems='center'>
                             {price.title && (
-                                <FlexItem>
+                                <FlexItem className='text-[1rem]'>
                                     {price.title}:
                                 </FlexItem>
                             )}
@@ -146,6 +146,9 @@ function ProductPage() {
             </FlexItem>)
     }), [product, functions, increaseOrderItemCount, decreasOrderItemCount, orderItem])
 
+    const navbar = useMemo(() => (
+        <Navbar title={product?.name} note back />
+    ), [product])
 
     return (
         <>
@@ -154,7 +157,7 @@ function ProductPage() {
                     {product?.name} - منوما
                 </title>
             </Head>
-            <Navbar title={product?.name} note back />
+            {navbar}
             <div className='bg-secondary h-screen pt-[4.5rem] z-10'>
                 <FlexBox direction='column'>
                     <FlexItem
@@ -162,19 +165,19 @@ function ProductPage() {
                     >
                         <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name!} className='inset-0 block object-cover' fill />
                     </FlexItem>
-                    <FlexItem className="mt-[2.1rem] mx-[3.1rem]">
+                    <FlexItem className="mt-[1.1rem] mx-[3.1rem] bg-white/[.5] p-4 pb-10 rounded-[.5rem]" grow>
                         <FlexBox direction='column'>
                             <FlexItem>
-                                <FlexBox alignItems='center' gap={3}>
+                                <FlexBox alignItems='center' gap={2}>
                                     <hr className="border-black/10 w-full" />
-                                    <div className="w-fit text-[1.8rem] font-[600] whitespace-nowrap text-typography">{product?.name}</div>
+                                    <div className="w-fit text-[1.8rem] font-[500] whitespace-nowrap text-typography">{product?.name}</div>
                                     <hr className="border-black/10 w-full" />
                                 </FlexBox>
                             </FlexItem>
-                            <FlexItem className="text-[1rem] font-[300] mt-[.8rem] text-typography md:text-center">
+                            <FlexItem className="text-[1rem] font-[400] mt-[1.5rem] text-typography md:text-center text-justify">
                                 {product?.description}
                             </FlexItem>
-                            <FlexItem className="mt-[3.2rem]">
+                            <FlexItem className="mt-[3rem]">
                                 <FlexBox direction='column' gap={2}>
                                     {prices}
                                 </FlexBox>

@@ -22,7 +22,7 @@ const Section: ISection = ({ children, ...props }) => {
                 >
                     <FlexItem
                         grow={false}
-                        className="text-[1.4rem] text-typography w-fit whitespace-nowrap"
+                        className="text-[1rem] text-typography w-fit whitespace-nowrap font-bold"
                     >
                         {props.title}
                     </FlexItem>

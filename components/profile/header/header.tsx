@@ -62,9 +62,6 @@ export const ProfileHeader: IProfileHeader = (props) => {
           className="text-[1rem] mx-auto font-light text-white text-center">
           {props.address}
         </FlexItem>
-        {/* <div className="mx-auto mt-[1.4rem]">
-          {timeShifts}
-        </div> */}
         <FlexItem className="mx-auto mt-[1.4rem]">
           {socials}
         </FlexItem>

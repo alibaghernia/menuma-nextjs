@@ -1,27 +1,35 @@
 import React, { useMemo } from 'react'
 import { ICategoryCard } from './types'
-import Link from 'next/link'
 import Image from 'next/image'
 import classNames from 'classnames'
 import { twMerge } from 'tailwind-merge'
 
 export const CategoryCard: ICategoryCard = (props) => {
   const element = useMemo(() => (
-    <div className={twMerge(
-      classNames(
-        "rounded-[1.625rem] w-[8.7rem] h-[8.7rem] relative block overflow-hidden cursor-pointer transition-all duration-[.3s]",
-        {
-          "border-4": props.selected,
-          "border-more": props.selected
-        }
-      ),
-      props.className
-    )}
+    <div className={
+      twMerge(
+        classNames(
+          "rounded-[1.625rem] w-[8.7rem] h-[8.7rem] relative block overflow-hidden cursor-pointer transition-all duration-[.2s]",
+          {
+            "border-4": props.selected,
+            "border-more": props.selected
+          }
+        ),
+        props.className
+      )
+    }
       onClick={props.onClick}>
       <Image fill src={props.image} alt={props.title} className='z-0 object-cover' />
       <span className="bg-black/[.4] absolute inset-0 z-0" />
-
-      <div className={twMerge("text-white text-[1.2rem] font-bold text-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20", props.titleClassName)}>{props.title}</div></div>
+      <div className={
+        twMerge(
+          "text-white text-[1.2rem] font-bold text-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20",
+          props.titleClassName
+        )
+      }>
+        {props.title}
+      </div>
+    </div>
   ), [props])
   return props.url ? (
     <a href={props.url}>

@@ -182,22 +182,18 @@ export const Cart: ICart = (props) => {
                     )
                 }>
                 <FlexBox direction='column' className='h-full'>
-                    <FlexItem>
-                        <Container className="top-[1.5rem] right-[2rem]">
-                            <div className="cursor-pointer" onClick={props.onClose}>
-                                <LinedCloseIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />
-                            </div>
-                        </Container>
-                    </FlexItem>
+                    <Container className="top-[1.5rem] right-[2rem]">
+                        <div className="cursor-pointer" onClick={props.onClose}>
+                            <LinedCloseIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />
+                        </div>
+                    </Container>
                     <FlexItem grow={false}>
                         <div className='text-[1.5rem] font-bold text-center w-full'>سفارشات شما</div>
                     </FlexItem>
                     {renderOrderItems.length ? (
-                        <FlexItem grow>
-                            <FlexBox gap={2} direction='column' className="mt-4 overflow-y-auto">
-                                {renderOrderItems}
-                            </FlexBox>
-                        </FlexItem>
+                        <FlexBox gap={2} direction='column' className="mt-4 overflow-y-auto grow">
+                            {renderOrderItems}
+                        </FlexBox>
                     ) : (
                         <FlexItem grow>
                             <Container center>

@@ -18,8 +18,11 @@ declare interface IProfile {
   description: string;
   instagram?: string;
   telegram?: string;
+  whatsapp?: string;
   twitter?: string;
   has_pager?: string;
+  phone_number?: string;
+  email?: string;
 }
 
 declare module "next" {

@@ -158,14 +158,14 @@ function ProductPage() {
                 </title>
             </Head>
             {navbar}
-            <div className='bg-secondary h-screen pt-[4.5rem] z-10'>
+            <div className='bg-secondary h-screen pt-[4.5rem] z-10 px-4'>
                 <FlexBox direction='column'>
                     <FlexItem
-                        className="rounded-[2.4rem] overflow-hidden relative w-[22.4rem] h-[22.4rem] mx-auto bg-white shadow"
+                        className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow"
                     >
                         <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name!} className='inset-0 block object-cover' fill />
                     </FlexItem>
-                    <FlexItem className="mt-[1.1rem] mx-[3.1rem] bg-white/[.5] p-4 pb-10 rounded-[.5rem]" grow>
+                    <FlexItem className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[.5rem]" grow>
                         <FlexBox direction='column'>
                             <FlexItem>
                                 <FlexBox alignItems='center' gap={2}>

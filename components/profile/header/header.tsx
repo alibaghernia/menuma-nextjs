@@ -1,44 +1,43 @@
-import React, { useMemo } from 'react'
-import styles from './header.module.scss'
+import React, { useContext, useMemo } from 'react'
+import coffeeshopImage from '@/assets/images/coffeeshop.jpg'
+import coffeeshopLogo from '@/assets/images/coffeeshopLogo.png'
 import { IProfileHeader } from '../header/types'
-import classnames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Container } from '@/components/common/container/container'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
+import { serverBaseUrl } from '@/utils/axios'
+import { InstagramIcon } from '@/icons/instagram'
+import { TelegramIcon } from '@/icons/telegram'
+import { XIcon } from '@/icons/x'
+import { WhatsappIcon } from '@/icons/whatsapp'
 
 export const ProfileHeader: IProfileHeader = (props) => {
 
+  const { state: { profile: profileData } } = useContext(CoffeeShopProviderContext)
 
-  const timeShifts = useMemo(() => {
-    const elements = props.time_shifts.map((shift, key) => (
-      <FlexItem
-        className="p-2 text-white text-[.9rem] rounded-lg px-[.6rem] py-[.3rem] bg-white/[.20]"
-        key={key}
-      >
-        {shift}
-      </FlexItem>
-    ))
-    return (
-      <FlexBox gap={2}>
-        {elements}
-      </FlexBox>
-    )
-  }, [props])
 
   const socials = useMemo(() => {
-    const elements = props.socials.map((social, key) => (
-      <Link href={social.url} key={key}>
-        {social.icon}
-      </Link>
+    const elements = [
+      (profileData?.instagram ? { icon: <InstagramIcon />, url: profileData.instagram } : undefined),
+      (profileData?.telegram ? { icon: <TelegramIcon />, url: profileData.telegram } : undefined),
+      (profileData?.twitter ? { icon: <XIcon width={20} height={20} />, url: profileData.twitter } : undefined),
+      (profileData?.whatsapp ? { icon: <WhatsappIcon />, url: profileData.whatsapp } : undefined),
+    ].filter(Boolean).map((social: any, key) => (
+      <FlexItem key={key}>
+        <Link href={social.url}>
+          {social.icon}
+        </Link>
+      </FlexItem>
     ))
     return (
       <div className="flex gap-2">
         {elements}
       </div>
     )
-  }, [props])
+  }, [profileData])
 
   return (
     <Container position='relative'>
@@ -49,21 +48,24 @@ export const ProfileHeader: IProfileHeader = (props) => {
         <FlexItem>
           <Image
             fill
-            src={props.image_url} alt={props.title}
+            src={
+              profileData?.banner_path ? `${serverBaseUrl}/storage/${profileData?.banner_path}` : coffeeshopImage.src} alt={profileData.name}
             className='absolute inset-0 -z-20 object-cover'
           />
           <Container className='inset-0 -z-10 bg-black/[.6]' />
         </FlexItem>
         <FlexItem
           className="text-[1.8rem] mx-auto font-bold text-white">
-          {props.title}
+          {profileData?.name}
         </FlexItem>
         <FlexItem
           className="text-[1rem] mx-auto font-light text-white text-center">
-          {props.address}
+          {profileData?.description}
         </FlexItem>
         <FlexItem className="mx-auto mt-[1.4rem]">
-          {socials}
+          <FlexBox gap={2} alignItems='center'>
+            {socials}
+          </FlexBox>
         </FlexItem>
       </FlexBox>
       <Container
@@ -71,8 +73,8 @@ export const ProfileHeader: IProfileHeader = (props) => {
       >
         <Image
           fill
-          src={props.logo_url}
-          alt={props.title}
+          src={profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : coffeeshopLogo.src}
+          alt={profileData.name}
           className='object-cover'
         />
       </Container>

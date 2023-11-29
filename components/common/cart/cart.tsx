@@ -174,7 +174,7 @@ export const Cart: ICart = (props) => {
                 center="horizontal"
                 className={
                     classNames(
-                        "max-w-sm w-full py-[1rem] px-[1.5rem] pb-[3rem] bg-white z-50 rounded-[2.5rem] top-[5rem] bottom-[5rem] overflow-hidden",
+                        "max-w-sm w-full py-[1rem] px-[1.5rem] bg-white z-50 rounded-[2.5rem] top-[5rem] bottom-[5rem] overflow-hidden",
                         {
                             "block": props.open,
                             "hidden": !props.open
@@ -191,9 +191,12 @@ export const Cart: ICart = (props) => {
                         <div className='text-[1.5rem] font-bold text-center w-full'>سفارشات شما</div>
                     </FlexItem>
                     {renderOrderItems.length ? (
-                        <FlexBox gap={2} direction='column' className="mt-4 overflow-y-auto grow">
-                            {renderOrderItems}
-                        </FlexBox>
+                        <FlexItem className='mt-4 relative grow overflow-y-auto'>
+                            <FlexBox gap={2} direction='column' className="overflow-y-auto h-full pb-10">
+                                {renderOrderItems}
+                            </FlexBox>
+                            <Container className='h-10 bg-gradient-to-b from-transparent to-white bottom-0 right-0 left-0' />
+                        </FlexItem>
                     ) : (
                         <FlexItem grow>
                             <Container center>

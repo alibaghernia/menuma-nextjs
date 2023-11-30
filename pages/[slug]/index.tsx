@@ -1,19 +1,9 @@
 import { ProfileHeader } from '@/components/profile/header/header'
-import coffeeshopImage from '@/assets/images/coffeeshop.jpg'
-import coffeeshopLogo from '@/assets/images/coffeeshopLogo.png'
-import mapPlaceholder from '@/assets/images/map-placeholder.png'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
-import { InstagramIcon } from '@/icons/instagram'
-import { TelegramIcon } from '@/icons/telegram'
 import { Section } from '@/components/common/section/section'
-import Image from 'next/image'
 import { Navbar } from '@/components/core/navbar/noSSR'
 import { useRouter } from 'next/router'
-import { ILocation } from '@/components/common/map/types'
 import dynamic from 'next/dynamic'
-import { useQuery } from 'react-query'
-import { useParams } from 'next/navigation'
-import { axios, serverBaseUrl } from '@/utils/axios'
 import { NextPage } from 'next'
 import { ProviderContext } from '@/providers/main/provider'
 import { IProfile } from './types'
@@ -57,7 +47,7 @@ const Profile: NextPage = () => {
             value: profileData.email,
             link: `mailto:${profileData.email}`,
         },
-    ], [profileData, resolvedTailwindConfig])
+    ].filter(item => item.value), [profileData, resolvedTailwindConfig])
 
 
     return (
@@ -114,28 +104,30 @@ const Profile: NextPage = () => {
                         </FlexBox>
 
                     </Section>
-                    <Section
-                        title="تماس با ما"
-                        className="py-[1.6rem]"
-                        contentClassNames='px-[1.7rem]'
-                    >
-                        <FlexBox direction='column' className='px-[1rem]' gap={2}>
-                            {contactInfo.map((contact, key) => (
-                                <FlexItem className='text-typography text-[.9rem] text-justify rounded-[2rem]' key={key}>
-                                    <FlexBox alignItems='center' gap={0}>
-                                        <FlexItem className='bg-typography rounded-tr-[1rem] rounded-br-[1rem]  py-2 px-2'>
-                                            {contact.icon}
-                                        </FlexItem>
-                                        <FlexItem className='text-typography font-bold bg-white/[.4] py-2 px-4 rounded-tl-[1rem] rounded-bl-[1rem] text-[1rem] text-center' grow>
-                                            <Link target='_blank' href={contact.link || "#"}>
-                                                {contact.value}
-                                            </Link>
-                                        </FlexItem>
-                                    </FlexBox>
-                                </FlexItem>
-                            ))}
-                        </FlexBox>
-                    </Section>
+                    {(!!contactInfo.length) && (
+                        <Section
+                            title="تماس با ما"
+                            className="py-[1.6rem]"
+                            contentClassNames='px-[1.7rem]'
+                        >
+                            <FlexBox direction='column' className='px-[1rem]' gap={2}>
+                                {contactInfo.map((contact, key) => (
+                                    <FlexItem className='text-typography text-[.9rem] text-justify rounded-[2rem]' key={key}>
+                                        <FlexBox alignItems='center' gap={0}>
+                                            <FlexItem className='bg-typography rounded-tr-[1rem] rounded-br-[1rem]  py-2 px-2'>
+                                                {contact.icon}
+                                            </FlexItem>
+                                            <FlexItem className='text-typography font-bold bg-white/[.4] py-2 px-4 rounded-tl-[1rem] rounded-bl-[1rem] text-[1rem] text-center' grow>
+                                                <Link target='_blank' href={contact.link || "#"}>
+                                                    {contact.value}
+                                                </Link>
+                                            </FlexItem>
+                                        </FlexBox>
+                                    </FlexItem>
+                                ))}
+                            </FlexBox>
+                        </Section>
+                    )}
                 </div>
             </div>
         </>

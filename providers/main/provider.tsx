@@ -6,7 +6,6 @@ import _ from 'lodash'
 import functions from './functions';
 import coffeeLoadingGIF from '@/assets/images/coffee_animation.gif'
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
 export const ProviderContext = createContext<{
     state: IProviderState,
@@ -17,7 +16,7 @@ export const ProviderContext = createContext<{
     // @ts-ignore
 }>({})
 
-const localStoragekey = "menuma-provider-storage-new-v2.9"
+const localStoragekey = "menuma-provider-storage-new-v3.0"
 
 const Provider: IProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
@@ -34,7 +33,7 @@ const Provider: IProvider = ({ children }) => {
                 console.log("Please check the menuma domain env");
                 process.exit(1)
             }
-            if (domain != menumaDomain && !state.isNotMenuma && !domain.startsWith("localhost") && !domain.startsWith("192.168.")) {
+            if (domain != menumaDomain && !state.isNotMenuma && !domain.startsWith("localhost") && !domain.startsWith("192.168.") && !domain.startsWith("test.")) {
                 dispatch({
                     type: REDUCER_KEYS.UPDATE,
                     data: {

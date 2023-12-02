@@ -1,4 +1,5 @@
 import { ProfileHeader } from '@/components/profile/header/header'
+import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Section } from '@/components/common/section/section'
 import { Navbar } from '@/components/core/navbar/noSSR'
@@ -18,10 +19,11 @@ import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '@/tailwind.config'
 import { MailIcon } from '@/icons/mail'
 import Link from 'next/link'
-import { axios } from '@/utils/axios'
+import { axios, serverBaseUrl } from '@/utils/axios'
 import { QueryClient } from 'react-query'
 import { getSlugFromReq, withCafeeShopProfile } from '@/utils/serverSideUtils'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
+import { MetaTags } from '@/components/common/metatags'
 
 const Profile = () => {
     const { setLoading, state: mainState } = useContext(ProviderContext)
@@ -60,6 +62,20 @@ const Profile = () => {
                     {`${profileData.name + (slug ? ' - منوما' : '')}`}
                 </title>
             </Head>
+            <MetaTags metatags={[
+                {
+                    name: 'og:title',
+                    value: `${profileData.name + (slug ? ' - منوما' : '')}`,
+                },
+                {
+                    name: 'og:description',
+                    value: profileData.description,
+                },
+                {
+                    name: 'og:image',
+                    value: profileData?.banner_path ? `${serverBaseUrl}/storage/${profileData?.banner_path}` : cafeeshopBannelPlaceholder.src,
+                }
+            ]} />
             <div className='bg-secondary min-h-screen'>
                 <Navbar
                     dark

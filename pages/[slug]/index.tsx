@@ -73,7 +73,7 @@ const Profile = () => {
                 },
                 {
                     name: 'og:image',
-                    value: profileData?.banner_path ? `${serverBaseUrl}/storage/${profileData?.banner_path}` : cafeeshopBannelPlaceholder.src,
+                    value: profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : cafeeshopBannelPlaceholder.src,
                 }
             ]} />
             <div className='bg-secondary min-h-screen'>

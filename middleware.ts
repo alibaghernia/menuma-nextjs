@@ -20,6 +20,8 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`${protocol}//${host}/_next`) &&
     !reqUrl.startsWith(`http://localhost`) &&
     !reqUrl.startsWith(`https://localhost`) &&
+    !reqUrl.startsWith(`http://test.`) &&
+    !reqUrl.startsWith(`https://test.`) &&
     !reqUrl.startsWith(`http://192.168.`) &&
     !reqUrl.startsWith(`https://192.168.`)
   ) {

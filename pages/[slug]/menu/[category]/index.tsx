@@ -9,6 +9,8 @@ import CoffeShopProvider from '@/providers/coffee_shop/provider'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Container } from '@/components/common/container/container'
+import { withCafeeShopProfile } from '@/utils/serverSideUtils'
+import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 
 function CategoryPage() {
     const params = useParams()
@@ -78,6 +80,7 @@ function CategoryPage() {
     )
 }
 
-CategoryPage.provider = CoffeShopProvider
 
-export default CategoryPage
+export const getServerSideProps = withCafeeShopProfile()
+
+export default CoffeeShopPageProvider(CategoryPage)

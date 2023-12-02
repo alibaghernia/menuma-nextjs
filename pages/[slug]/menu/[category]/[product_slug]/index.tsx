@@ -14,10 +14,12 @@ import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
+import { withCafeeShopProfile } from '@/utils/serverSideUtils';
+import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 
 function ProductPage() {
-    const { setLoading } = useContext(ProviderContext)
-    const { state, functions } = useContext(ProviderContext)
+    const { setLoading, functions } = useContext(ProviderContext)
+    const { state } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const slug = useSlug(false)
     const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
@@ -33,7 +35,7 @@ function ProductPage() {
         status,
         isError
     } = useQuery({
-        queryKey: `fetch-menu-${slug}`,
+        queryKey: `fetch-menu-${params.slug}-item-${params.product_slug}`,
         queryFn: productFetcher,
         enabled: false,
         retry: 2,
@@ -147,14 +149,14 @@ function ProductPage() {
     }), [product, functions, increaseOrderItemCount, decreasOrderItemCount, orderItem])
 
     const navbar = useMemo(() => (
-        <Navbar title={product?.name} note back />
-    ), [product])
+        <Navbar title={state.profile?.name} note back />
+    ), [state.profile])
 
     return (
         <>
             <Head>
                 <title>
-                    {product?.name} - منوما
+                    {`${state.profile.name + ` - ${product?.name || ""}` + (slug ? ' - منوما' : '')}`}
                 </title>
             </Head>
             {navbar}
@@ -163,7 +165,7 @@ function ProductPage() {
                     <FlexItem
                         className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow"
                     >
-                        <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name!} className='inset-0 block object-cover' fill />
+                        <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name! || "pic"} className='inset-0 block object-cover' fill />
                     </FlexItem>
                     <FlexItem className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[.5rem]" grow>
                         <FlexBox direction='column'>
@@ -192,6 +194,6 @@ function ProductPage() {
 }
 
 
-ProductPage.provider = CoffeShopProvider
+export const getServerSideProps = withCafeeShopProfile()
 
-export default ProductPage
+export default CoffeeShopPageProvider(ProductPage)

@@ -44,8 +44,7 @@ function MenuPage() {
     function menuFetcher(): Promise<APICateogory[]> {
         return axios.get(`/api/cafe-restaurants/${params.slug}/menu`).then(({ data }) => data)
     }
-
-    const { isSuccess, data, refetch, status, isError } = useQuery({ queryKey: `fetch-menu-${slug}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
+    const { isSuccess, data, refetch, status, isError, error } = useQuery({ queryKey: `fetch-menu-${params.slug}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
 
     useEffect(() => {
         if (isError) {
@@ -64,7 +63,7 @@ function MenuPage() {
             setMenuData(data)
             setLoading(false)
         }
-    }, [isSuccess, setLoading, data, status, menuData, params])
+    }, [isSuccess, setLoading, data, menuData])
 
     useEffect(() => {
         const handler = () => {

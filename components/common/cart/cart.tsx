@@ -239,3 +239,5 @@ export const Cart: ICart = (props) => {
         </>
     )
 }
+
+export default Cart

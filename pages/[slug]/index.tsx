@@ -4,7 +4,7 @@ import { Section } from '@/components/common/section/section'
 import { Navbar } from '@/components/core/navbar/noSSR'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
-import { NextPage } from 'next'
+import { GetServerSideProps, NextPage } from 'next'
 import { ProviderContext } from '@/providers/main/provider'
 import { IProfile } from './types'
 import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
@@ -18,15 +18,18 @@ import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '@/tailwind.config'
 import { MailIcon } from '@/icons/mail'
 import Link from 'next/link'
+import { axios } from '@/utils/axios'
+import { QueryClient } from 'react-query'
+import { getSlugFromReq, withCafeeShopProfile } from '@/utils/serverSideUtils'
+import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 
-const Profile: NextPage = () => {
+const Profile = () => {
     const { setLoading, state: mainState } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const profileData: IProfile = state.profile
     const router = useRouter()
     const slug = useSlug()
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
-
     const MapComponent = dynamic(import('@/components/common/map/map'), { ssr: false })
 
     const locationCoordinates: [number, number] = [parseFloat(profileData.location_lat || "0"), parseFloat(profileData.location_long || "0")]
@@ -54,7 +57,7 @@ const Profile: NextPage = () => {
         <>
             <Head>
                 <title>
-                    {profileData.name}{slug && ' - منوما'}
+                    {`${profileData.name + (slug ? ' - منوما' : '')}`}
                 </title>
             </Head>
             <div className='bg-secondary min-h-screen'>
@@ -134,6 +137,6 @@ const Profile: NextPage = () => {
     )
 }
 
-Profile.provider = CoffeShopProvider
+export const getServerSideProps: GetServerSideProps = withCafeeShopProfile()
 
-export default Profile
+export default CoffeeShopPageProvider(Profile)

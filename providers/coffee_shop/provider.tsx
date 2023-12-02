@@ -20,11 +20,19 @@ export const CoffeeShopProviderContext = createContext<{
 }>({})
 
 
-const CoffeShopProvider: IProvider = ({ children }) => {
+const CoffeShopProvider: IProvider = ({ children, profile }) => {
+
+    const getInitialState = () => {
+        if (profile) {
+            return _.merge(INITIAL_STATE, { profile })
+        }
+        return INITIAL_STATE
+    }
+
     const { setLoading, state: mainState, } = useContext(ProviderContext)
     const params = useParams()
     const slug = useSlug(false)
-    const [state, dispatch] = useReducer((state: IProviderState, action: any) => reducer(_.cloneDeep(state), action), INITIAL_STATE)
+    const [state, dispatch] = useReducer((state: IProviderState, action: any) => reducer(_.cloneDeep(state), action), getInitialState())
     const functions = Functions(state, dispatch);
 
     function profileFetcher(): Promise<IProfile> {
@@ -53,11 +61,11 @@ const CoffeShopProvider: IProvider = ({ children }) => {
     }, [isSuccess, data])
 
     useEffect(() => {
-        if (!state.profile || params?.slug != state.profile.slug) {
+        if (!state.profile || params?.slug != state.profile.slug && !profile) {
             setLoading(true)
             refetch()
         }
-    }, [refetch, params, state, setLoading])
+    }, [refetch, params, state, setLoading, profile])
 
     useEffect(() => {
         if (isSuccess)

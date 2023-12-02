@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`https://192.168.`)
   ) {
     const domain_name = host?.split(".") || [];
-    const nginxUrl = `${protocol}//${host}`;
+    // const nginxUrl = `${protocol}//${host}`;
     const nextUrl = `${url.protocol}//${url.host}`;
     const username = (
       domain_name.length > 1
@@ -32,7 +32,13 @@ export function middleware(request: NextRequest) {
         : domain_name.toString()
     ).replace(/:(\d+)/, "");
     const pathname = request.url.replace(nextUrl, "");
-
-    return NextResponse.rewrite(`${nextUrl}/${username}${pathname}`);
+    request.headers.set("isNotMenuma", "1");
+    return NextResponse.rewrite(`${nextUrl}/${username}${pathname}`, {
+      headers: request.headers,
+    });
   }
+  request.headers.set("isNotMenuma", "0");
+  return NextResponse.next({
+    headers: request.headers,
+  });
 }

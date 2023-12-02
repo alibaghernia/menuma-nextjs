@@ -9,8 +9,6 @@ import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '@/tailwind.config'
 import { HomeIcon } from '@/icons/home'
 import { MenuCircleIcon } from '@/icons/menu-circle'
-import { SupportIcon } from '@/icons/support'
-import { Cart } from '@/components/common/cart/cart'
 import { ProviderContext } from '@/providers/main/provider'
 import { useRouter } from 'next/router'
 import { useParams } from 'next/navigation'
@@ -19,8 +17,10 @@ import { useSlug } from '@/providers/main/hooks'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Container } from '@/components/common/container/container'
+import dynamic from 'next/dynamic'
 
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
+    const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
     const router = useRouter()
     const slug = useSlug()
     const { setLoading } = useContext(ProviderContext)

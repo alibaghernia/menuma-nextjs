@@ -27,6 +27,8 @@ import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import classNames from 'classnames'
 import { twMerge } from 'tailwind-merge'
+import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
+import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 
 function MenuPage() {
     const [scrolled, setScrolled] = useState(false)
@@ -158,7 +160,7 @@ function MenuPage() {
         <>
             <Head>
                 <title>
-                    {state.profile?.name} - منو{slug && ' - منوما'}
+                    {`${state.profile.name + " - منو" + (slug ? ' - منوما' : '')}`}
                 </title>
             </Head>
             <div className='bg-secondary min-h-screen'>
@@ -234,6 +236,6 @@ function MenuPage() {
     )
 }
 
-MenuPage.provider = CoffeShopProvider
+export const getServerSideProps = withCafeeShopProfile()
 
-export default MenuPage
+export default CoffeeShopPageProvider(MenuPage)

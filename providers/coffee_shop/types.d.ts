@@ -9,7 +9,11 @@ declare type ICartItem = {
 };
 
 declare type IProviderState = {
-  profile: any
+  profile: any;
 };
 
-declare type IProvider = FC<PropsWithChildren<{}>>;
+declare type IProvider = FC<
+  PropsWithChildren<{
+    profile?: any;
+  }>
+>;

@@ -13,7 +13,7 @@ import { Product } from '@/components/common/product/product';
 import _ from 'lodash'
 import { IProductProps } from '@/components/common/product/types'
 import { SearchField } from '@/components/common/search_field/search_field'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useRouter } from 'next/router'
 import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 import { axios, serverBaseUrl } from '@/utils/axios'
@@ -38,6 +38,7 @@ function MenuPage() {
     const [searchInput, setSearchInput] = useState<string>("")
     const params = useParams()
     const slug = useSlug(false)
+    const rouer = useRouter()
 
     const [selectedCategory, setSelectedCategory] = useState<string | number>()
 
@@ -63,7 +64,7 @@ function MenuPage() {
             setMenuData(data)
             setLoading(false)
         }
-    }, [isSuccess, setLoading, data, menuData])
+    }, [isSuccess, setLoading, data, menuData, rouer])
 
     useEffect(() => {
         const handler = () => {

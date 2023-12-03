@@ -25,16 +25,15 @@ import { getSlugFromReq, withCafeeShopProfile } from '@/utils/serverSideUtils'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 import { MetaTags } from '@/components/common/metatags'
 import _ from 'lodash'
-import moment from 'moment'
 
 const Profile = () => {
-    const WorkingHours = dynamic(import('@/components/profile/working_hours/working_hours'), { ssr: false })
     const { setLoading, state: mainState } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const profileData: IProfile = state.profile
     const router = useRouter()
     const slug = useSlug()
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
+    const WorkingHours = dynamic(import('@/components/profile/working_hours/working_hours'), { ssr: false })
     const MapComponent = dynamic(import('@/components/common/map/map'), { ssr: false })
 
     const locationCoordinates: [number, number] = [parseFloat(profileData.location_lat || "0"), parseFloat(profileData.location_long || "0")]

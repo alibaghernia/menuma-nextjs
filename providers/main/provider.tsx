@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useReducer, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useReducer, useState } from 'react'
 import { IProvider, IProviderState } from './types';
 import reducer from './reducer';
 import { INITIAL_STATE, REDUCER_KEYS } from './constants';
@@ -6,6 +6,7 @@ import _ from 'lodash'
 import functions from './functions';
 import coffeeLoadingGIF from '@/assets/images/coffee_animation.gif'
 import Image from 'next/image';
+import { useParams } from 'next/navigation';
 
 export const ProviderContext = createContext<{
     state: IProviderState,
@@ -16,15 +17,24 @@ export const ProviderContext = createContext<{
     // @ts-ignore
 }>({})
 
-const localStoragekey = "menuma-provider-storage-new-v3.0"
+const localStoragekey = "provider-storage-new-v3.0"
 
 const Provider: IProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
+    const params = useParams()
 
-    function storeReducerState(state: IProviderState): void {
-        localStorage.setItem(localStoragekey, JSON.stringify(state))
-    }
-    function checkAppDomain() {
+    const getLocalStorageKey = useCallback(() => {
+        const slug = params.slug || "menuma"
+        return `${slug}-${localStoragekey}`
+    }, [params.slug])
+
+    const storeReducerState = useCallback((state: IProviderState) => {
+        localStorage.setItem(getLocalStorageKey(), JSON.stringify(state))
+    }, [getLocalStorageKey])
+
+    const [state, dispatch] = useReducer((state: IProviderState, action: any) => reducer(_.cloneDeep(state), action), INITIAL_STATE)
+
+    const checkAppDomain = useCallback(() => {
         if (typeof window != "undefined") {
             const location = window.location
             const domain = location.host
@@ -43,12 +53,9 @@ const Provider: IProvider = ({ children }) => {
                 })
             }
         }
-    }
-
-    const [state, dispatch] = useReducer((state: IProviderState, action: any) => reducer(_.cloneDeep(state), action), INITIAL_STATE)
-
-    function getReducerState() {
-        const data = localStorage.getItem(localStoragekey)
+    }, [state.isNotMenuma])
+    const getReducerState = useCallback(() => {
+        const data = localStorage.getItem(getLocalStorageKey())
         if (!data) {
             dispatch({
                 type: REDUCER_KEYS.SET_RESTORED_DATA,
@@ -63,16 +70,16 @@ const Provider: IProvider = ({ children }) => {
             type: REDUCER_KEYS.RESTORE_DATA,
             data: parsedData
         })
-    }
+    }, [getLocalStorageKey])
     useEffect(() => {
         if (!state.restored) return
         storeReducerState(state)
-    }, [state])
+    }, [state, storeReducerState])
 
     useEffect(() => {
         getReducerState()
         checkAppDomain()
-    }, [])
+    }, [getReducerState, checkAppDomain])
 
     return (
         <>

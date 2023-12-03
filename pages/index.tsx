@@ -5,23 +5,17 @@ import CoffeShopProvider, { CoffeeShopProviderContext } from "@/providers/coffee
 import { useSlug } from "@/providers/main/hooks"
 import { ProviderContext } from "@/providers/main/provider"
 import Head from "next/head"
-import { useContext, useEffect } from "react"
+import { Fragment, useContext, useEffect } from "react"
 
 function Home() {
 
-  const { setLoading } = useContext(ProviderContext)
-  const { state } = useContext(CoffeeShopProviderContext)
-  const slug = useSlug()
-
   useEffect(() => {
-    if (state.profile)
-      setLoading(false)
-  }, [setLoading, state])
+  }, [])
 
   return (
     <>
       <Head>
-        <title>{slug && 'منوما'}</title>
+        <title>{'منوما'}</title>
       </Head>
       <div className="min-h-screen">
         <Container center>
@@ -39,6 +33,6 @@ function Home() {
   )
 }
 
-Home.provider = CoffeShopProvider
+Home.provider = Fragment
 
 export default Home

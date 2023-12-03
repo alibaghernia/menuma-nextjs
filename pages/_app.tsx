@@ -4,11 +4,11 @@ import LocalFont from 'next/font/local'
 import "@/assets/styles/global.scss"
 import "leaflet/dist/leaflet.css";
 import 'react-toastify/dist/ReactToastify.css';
-import Provider from '@/providers/main/provider'
 import { QueryClientProvider, QueryClient } from 'react-query';
 import { Fragment } from 'react';
 import { ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
+import Provider from '@/providers/main/provider';
 
 const vazirMatn = LocalFont({
   src: [
@@ -48,7 +48,7 @@ const vazirMatn = LocalFont({
 export default function App({ Component, pageProps }: AppProps) {
 
   //@ts-ignore
-  const PageProvider = Component.provider || Fragment
+  const PageProvider = Component.provider || Provider
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -62,13 +62,11 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <main className={classNames('z-10', vazirMatn.className)}>
-        <Provider>
+        <PageProvider>
           <QueryClientProvider client={queryClient}>
-            <PageProvider>
-              <Component {...pageProps} />
-            </PageProvider>
+            <Component {...pageProps} />
           </QueryClientProvider>
-        </Provider>
+        </PageProvider>
       </main>
       <ToastContainer className="z-20" rtl />
     </>

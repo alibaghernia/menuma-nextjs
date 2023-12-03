@@ -21,6 +21,7 @@ export const FlexBox: IFlexBox = ({
                         "flex-row": direction == "row",
                         "flex-col": direction == "column",
                     },
+                    `place-items-${alignItems}`,
                     `items-${alignItems}`,
                     `justify-${justify}`,
                     {

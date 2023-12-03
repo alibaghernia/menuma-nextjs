@@ -1,6 +1,6 @@
 import { ProfileHeader } from '@/components/profile/header/header'
 import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg'
-import React, { useContext, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { Section } from '@/components/common/section/section'
 import { Navbar } from '@/components/core/navbar/noSSR'
 import { useRouter } from 'next/router'
@@ -24,8 +24,11 @@ import { QueryClient } from 'react-query'
 import { getSlugFromReq, withCafeeShopProfile } from '@/utils/serverSideUtils'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 import { MetaTags } from '@/components/common/metatags'
+import _ from 'lodash'
+import moment from 'moment'
 
 const Profile = () => {
+    const WorkingHours = dynamic(import('@/components/profile/working_hours/working_hours'), { ssr: false })
     const { setLoading, state: mainState } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const profileData: IProfile = state.profile
@@ -53,6 +56,8 @@ const Profile = () => {
             link: `mailto:${profileData.email}`,
         },
     ].filter(item => item.value), [profileData, resolvedTailwindConfig])
+
+
 
 
     return (
@@ -84,69 +89,72 @@ const Profile = () => {
                 />
                 <div className="z-0">
                     <ProfileHeader />
-                    <Button
-                        onClick={
-                            () => {
-                                router.push(`/${slug}menu`);
-                                setLoading(true);
+                    <div className="mt-[4.3rem]">
+                        <Button
+                            onClick={
+                                () => {
+                                    router.push(`/${slug}menu`);
+                                    setLoading(true);
+                                }
                             }
-                        }
-                        className="py-[.8rem] px-[2.9rem] mt-[4.3rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
-                        rounded
-                    >
-                        مشاهده منوی کافه
-                    </Button>
-                    <Section
-                        title="موقعیت مکانی"
-                        className="mt-[1.6rem]"
-                        append={
-                            <Button
-                                link={`https://www.google.com/maps/search/?api=1&query=${locationCoordinates[0]},${locationCoordinates[1]}`}
-                                className='text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F]'
-                                linkTarget='_blank'
-                                rounded="1rem"
-                            >
-                                مسیریابی
-                            </Button>
-                        }>
-                        <FlexBox direction='column' gap={2} className='mt-2 px-[2.5rem]'>
-                            <FlexItem className='text-typography text-[.9rem] text-justify py-2 rounded-[2rem]'>
-                                {profileData.address}
-                            </FlexItem>
-                            <FlexItem className='mt-2'>
-                                <div className="rounded-[1rem] overflow-hidden h-[12.7rem] relative z-0">
-                                    <MapComponent location={{
-                                        coordinates: locationCoordinates
-                                    }} />
-                                </div>
-                            </FlexItem>
-                        </FlexBox>
-
-                    </Section>
-                    {(!!contactInfo.length) && (
-                        <Section
-                            title="تماس با ما"
-                            className="py-[1.6rem]"
-                            contentClassNames='px-[1.7rem]'
+                            className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
+                            rounded
                         >
-                            <FlexBox direction='column' className='px-[1rem]' gap={2}>
-                                {contactInfo.map((contact, key) => (
-                                    <FlexItem className='text-typography text-[.9rem] text-justify rounded-[2rem]' key={key}>
-                                        <FlexBox alignItems='center' gap={0}>
-                                            <FlexItem className='bg-typography rounded-tr-[1rem] rounded-br-[1rem]  py-2 px-2'>
-                                                {contact.icon}
-                                            </FlexItem>
-                                            <FlexItem className='text-typography font-bold bg-white/[.4] py-2 px-4 rounded-tl-[1rem] rounded-bl-[1rem] text-[1rem] text-center' grow>
-                                                <Link target='_blank' href={contact.link || "#"}>
-                                                    {contact.value}
-                                                </Link>
-                                            </FlexItem>
-                                        </FlexBox>
-                                    </FlexItem>
-                                ))}
+                            مشاهده منوی کافه
+                        </Button>
+                        <WorkingHours data={profileData.working_hours || []} />
+                        <Section
+                            title="موقعیت مکانی"
+                            className="mt-[1.6rem]"
+                            append={
+                                <Button
+                                    link={`https://www.google.com/maps/search/?api=1&query=${locationCoordinates[0]},${locationCoordinates[1]}`}
+                                    className='text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F]'
+                                    linkTarget='_blank'
+                                    rounded="1rem"
+                                >
+                                    مسیریابی
+                                </Button>
+                            }>
+                            <FlexBox direction='column' gap={2} className='mt-2 px-[2.5rem]'>
+                                <FlexItem className='text-typography text-[.9rem] text-justify py-2 rounded-[2rem]'>
+                                    {profileData.address}
+                                </FlexItem>
+                                <FlexItem className='mt-2'>
+                                    <div className="rounded-[1rem] overflow-hidden h-[12.7rem] relative z-0">
+                                        <MapComponent location={{
+                                            coordinates: locationCoordinates
+                                        }} />
+                                    </div>
+                                </FlexItem>
                             </FlexBox>
+
                         </Section>
-                    )}
+                        {(!!contactInfo.length) && (
+                            <Section
+                                title="تماس با ما"
+                                className="py-[1.6rem]"
+                                contentClassNames='px-[1.7rem]'
+                            >
+                                <FlexBox direction='column' className='px-[1rem]' gap={2}>
+                                    {contactInfo.map((contact, key) => (
+                                        <FlexItem className='text-typography text-[.9rem] text-justify rounded-[2rem]' key={key}>
+                                            <FlexBox alignItems='center' gap={0}>
+                                                <FlexItem className='bg-typography rounded-tr-[1rem] rounded-br-[1rem]  py-2 px-2'>
+                                                    {contact.icon}
+                                                </FlexItem>
+                                                <FlexItem className='text-typography font-bold bg-white/[.4] py-2 px-4 rounded-tl-[1rem] rounded-bl-[1rem] text-[1rem] text-center' grow>
+                                                    <Link target='_blank' href={contact.link || "#"}>
+                                                        {contact.value}
+                                                    </Link>
+                                                </FlexItem>
+                                            </FlexBox>
+                                        </FlexItem>
+                                    ))}
+                                </FlexBox>
+                            </Section>
+                        )}
+                    </div>
                 </div>
             </div>
         </>

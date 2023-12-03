@@ -2,7 +2,7 @@ import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Section } from '@/components/common/section/section'
 import moment from 'moment'
-import React, { useMemo } from 'react'
+import React, { Fragment, useMemo } from 'react'
 import _ from 'lodash'
 
 export const WorkingHours = ({ data }: { data: any[] }) => {
@@ -11,8 +11,8 @@ export const WorkingHours = ({ data }: { data: any[] }) => {
         const todayName = moment().format("dddd").toLocaleLowerCase()
         const today = _.groupBy(data, item => item.weekday)
         return today[todayName]?.map((wh, key) => {
-            const time1 = moment(wh.from, "HH:mm:ss")
-            const time2 = moment(wh.to, "HH:mm:ss")
+            const time1 = moment(wh.from, "HH:mm:ss").zone(-210)
+            const time2 = moment(wh.to, "HH:mm:ss").zone(-210)
             return (
                 <FlexItem key={key}>
                     <div className="text-center text-typography">
@@ -20,7 +20,7 @@ export const WorkingHours = ({ data }: { data: any[] }) => {
                             <FlexItem>
                                 <FlexBox alignItems='center' gap={2}>
                                     <FlexItem>
-                                        {key == 0 ? 'صبح' : 'بعد از ظهر'}
+                                        {time1.hour() < 12 ? 'صبح' : 'بعد از ظهر'}
                                     </FlexItem>
                                     <FlexItem className='bg-white/[.5] px-4 py-1 rounded-full'>
                                         {time1.format('HH:mm')}
@@ -42,21 +42,20 @@ export const WorkingHours = ({ data }: { data: any[] }) => {
                 </FlexItem>
             )
         }) || (
-                <div className="text-center text-typography bg-white/[.5] px-4 py-1 rounded-full">
+                <div className="text-center text-typography  px-4 py-1 rounded-full border-[1px] border-black/[.2]">
                     امروز تعطیل است
                 </div>
             )
 
     }, [data])
 
-    return (
-
+    return data?.length ? (
         <Section title='ساعات کاری'>
             <FlexBox gap={2} direction='column' alignItems='end' justify='center' className='px-[1.6rem] w-fit mx-auto'>
                 {renderWorkingHours}
             </FlexBox>
         </Section>
-    )
+    ) : Fragment
 }
 
 export default WorkingHours

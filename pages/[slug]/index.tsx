@@ -102,10 +102,12 @@ const Profile = () => {
                         >
                             مشاهده منوی کافه
                         </Button>
-                        <WorkingHours data={profileData.working_hours || []} />
+                        <div className="mt-[1rem]">
+                            <WorkingHours data={profileData.working_hours || []} />
+                        </div>
                         <Section
                             title="موقعیت مکانی"
-                            className="mt-[1.6rem]"
+                            className="mt-[1rem]"
                             append={
                                 <Button
                                     link={`https://www.google.com/maps/search/?api=1&query=${locationCoordinates[0]},${locationCoordinates[1]}`}

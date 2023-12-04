@@ -34,8 +34,10 @@ export const WorkingHours: FC<any> = ({ data }) => {
             )
         }) || (
                 <tr>
-                    <td className="text-center text-typography  px-4 py-1 rounded-full border-[1px] border-black/[.2]">
-                        امروز تعطیل است
+                    <td>
+                        <div className="text-center text-red-500 font-bold  px-4 py-1 rounded-full border-[1px] border-red-200">
+                            بسته است
+                        </div>
                     </td>
                 </tr>
             )
@@ -43,7 +45,7 @@ export const WorkingHours: FC<any> = ({ data }) => {
     }, [data])
 
     return data?.length ? (
-        <Section title='ساعات کاری'>
+        <Section title='ساعات کاری امروز'>
             <table className='px-[1.6rem] w-fit mx-auto'>
                 <tbody>
                     {renderWorkingHours}

@@ -19,8 +19,8 @@ import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Container } from '@/components/common/container/container'
 import dynamic from 'next/dynamic'
 
+const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
-    const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
     const router = useRouter()
     const slug = useSlug()
     const { setLoading } = useContext(ProviderContext)
@@ -83,6 +83,16 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
             router.back()
         }
     }
+
+    const cart = useMemo(() => (
+        <Cart
+            open={cartOpen}
+            onClose={() => {
+                setCartOpen(false)
+                setOverlay(false)
+            }} />
+    ), [cartOpen, Cart])
+
 
     return (
         <Container
@@ -230,12 +240,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                     </FlexItem>
                 </FlexBox>
             </Container>
-            <Cart
-                open={cartOpen}
-                onClose={() => {
-                    setCartOpen(false)
-                    setOverlay(false)
-                }} />
+            {cart}
         </Container>
     )
 }

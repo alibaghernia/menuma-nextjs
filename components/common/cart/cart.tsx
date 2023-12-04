@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import { ICart } from './types'
 import classNames from 'classnames'
 import { LinedCloseIcon } from '@/icons/lined_close'
@@ -47,7 +47,7 @@ export const Cart: ICart = (props) => {
     }, [functions])
 
 
-    const renderOrderItems = orderItems.map((orderItem, key) => {
+    const renderOrderItems = useMemo(() => orderItems.map((orderItem, key) => {
         const productSlug = params && orderItem.product ? `/${slug}menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
 
 
@@ -56,7 +56,7 @@ export const Cart: ICart = (props) => {
                 <FlexBox direction='column' gap={2} className='border border-black/[0.05] p-[1rem] rounded-[1.5rem]'>
                     <FlexItem>
                         <FlexBox gap="1rem" className="">
-                            <FlexItem className='relative bg-white rounded-[1rem] overflow-hidden w-[6rem] h-[6rem]'>
+                            <FlexItem className='relative bg-white rounded-[1rem] overflow-hidden w-[6rem] h-[6rem] shrink-0'>
                                 <Link href={productSlug}>
                                     <Image fill src={orderItem.image || sperso.src} alt='' className='object-cover' />
                                 </Link>
@@ -64,20 +64,13 @@ export const Cart: ICart = (props) => {
                             <FlexItem grow>
                                 <FlexBox direction='column' gap={'.5rem'} className="w-full">
                                     <FlexItem>
-                                        <FlexBox alignItems='center' justify='between'>
-                                            <FlexItem>
-                                                <Link href={productSlug}>
-                                                    <FlexBox direction='column' gap={1}>
-                                                        <FlexItem>
-                                                            {orderItem.type ? `${orderItem.title} - ${orderItem.type}` : orderItem.title}
-                                                        </FlexItem>
-                                                    </FlexBox>
-                                                </Link>
-                                            </FlexItem>
-                                        </FlexBox>
-                                    </FlexItem>
-                                    <FlexItem className='text-[.8rem] text-typography text-justify'>
-                                        {orderItem.product.descriptions}
+                                        <Link href={productSlug}>
+                                            <FlexBox direction='column' gap={1}>
+                                                <FlexItem>
+                                                    {orderItem.type ? `${orderItem.title} - ${orderItem.type}` : orderItem.title}
+                                                </FlexItem>
+                                            </FlexBox>
+                                        </Link>
                                     </FlexItem>
                                 </FlexBox>
                             </FlexItem>
@@ -105,10 +98,10 @@ export const Cart: ICart = (props) => {
                         </FlexBox>
                     </FlexItem>
                     <FlexItem className='mt-2'>
-                        <FlexBox className='w-full'>
-                            <FlexItem grow>
+                        <FlexBox justify='center' className='w-full'>
+                            <FlexItem>
                                 <FlexBox gap={2} alignItems='center'>
-                                    <FlexItem className="relative w-14 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none" onClick={_.throttle(() => increaseOrderItemCount(orderItem.product, orderItem.id.split("-")[1]), 500)}>
+                                    <FlexItem className="relative w-14 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none text-typography" onClick={_.throttle(() => increaseOrderItemCount(orderItem.product, orderItem.id.split("-")[1]), 500)}>
                                         <Container center>
                                             +
                                         </Container>
@@ -118,38 +111,28 @@ export const Cart: ICart = (props) => {
                                             {orderItem.count}
                                         </Container>
                                     </FlexItem>
-                                    <FlexItem className={classNames("relative w-14 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none", {
-                                        "opacity-[.5] pointer-events-none": orderItem.count < 2
-                                    })}
+                                    <FlexItem className={classNames("relative w-14 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none")}
                                         onClick={() => {
-                                            decreasOrderItemCount(orderItem.product, orderItem.id.split("-")[1])
+                                            if (orderItem.count > 1)
+                                                decreasOrderItemCount(orderItem.product, orderItem.id.split("-")[1])
+                                            else
+                                                setDismissModal({
+                                                    open: true,
+                                                    title: "هشدار",
+                                                    content: "آیا از حذف این مورد اطمینان دارید؟",
+                                                    confirmText: "بله",
+                                                    onClose: () => setDismissModal(undefined),
+                                                    onConfirm: () => {
+                                                        functions.cart.removeItem(orderItem.id);
+                                                        setDismissModal(undefined)
+                                                    },
+                                                })
                                         }}>
                                         <Container center>
-                                            -
+                                            {orderItem.count < 2 ? (
+                                                <Trash1Icon width={20} height={20} color={resolvedTailwindConfig.theme?.colors!['typography'].toString()} />
+                                            ) : (<>-</>)}
                                         </Container>
-                                    </FlexItem>
-                                </FlexBox>
-                            </FlexItem>
-                            <FlexItem grow={false} className="cursor-pointer transition-all duration-[.2s] active:bg-red-200 px-2 py-1 rounded-full" onClick={(e) => {
-                                e.preventDefault();
-                                setDismissModal({
-                                    open: true,
-                                    title: "هشدار",
-                                    content: "آیا از حذف این مورد اطمینان دارید؟",
-                                    confirmText: "بله",
-                                    onClose: () => setDismissModal(undefined),
-                                    onConfirm: () => {
-                                        functions.cart.removeItem(orderItem.id);
-                                        setDismissModal(undefined)
-                                    },
-                                })
-                            }}>
-                                <FlexBox alignItems='center' gap={2}>
-                                    <FlexItem className='text-[.8rem] font-bold text-red-600'>
-                                        حذف
-                                    </FlexItem>
-                                    <FlexItem>
-                                        <Trash1Icon width={20} height={20} color={colors.red[500]} />
                                     </FlexItem>
                                 </FlexBox>
                             </FlexItem>
@@ -158,7 +141,7 @@ export const Cart: ICart = (props) => {
                 </FlexBox>
             </FlexItem>
         )
-    })
+    }), [orderItems, decreasOrderItemCount, increaseOrderItemCount, functions.cart, params, resolvedTailwindConfig.theme, slug])
 
     const getCartSum = () => {
         const prices = orderItems.map(orderItem => orderItem.price * orderItem.count)
@@ -174,7 +157,7 @@ export const Cart: ICart = (props) => {
                 center="horizontal"
                 className={
                     classNames(
-                        "max-w-sm w-full py-[1rem] px-[1.5rem] bg-white z-50 rounded-[2.5rem] top-[5rem] bottom-[5rem] overflow-hidden",
+                        "max-w-sm xs:max-w-xs  w-full py-[1rem] px-[1.5rem] bg-white z-50 rounded-[2.5rem] top-[5rem] bottom-[5rem] overflow-hidden",
                         {
                             "block": props.open,
                             "hidden": !props.open
@@ -240,4 +223,4 @@ export const Cart: ICart = (props) => {
     )
 }
 
-export default Cart
+export default React.memo(Cart)

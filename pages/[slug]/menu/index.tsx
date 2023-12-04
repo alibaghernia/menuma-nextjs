@@ -155,7 +155,6 @@ function MenuPage() {
     const navbar = useMemo(() => (
         <Navbar title={state?.profile?.name} note back />
     ), [state.profile])
-
     return (
         <>
             <Head>

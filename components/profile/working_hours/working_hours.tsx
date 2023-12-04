@@ -13,46 +13,42 @@ export const WorkingHours: FC<any> = ({ data }) => {
             const time1 = moment(wh.from, "HH:mm:ss").zone(-210)
             const time2 = moment(wh.to, "HH:mm:ss").zone(-210)
             return (
-                <FlexItem key={key}>
-                    <div className="text-center text-typography">
-                        <FlexBox gap={2}>
-                            <FlexItem>
-                                <FlexBox alignItems='center' gap={2}>
-                                    <FlexItem>
-                                        {time1.hour() < 12 ? 'صبح' : 'بعد از ظهر'}
-                                    </FlexItem>
-                                    <FlexItem className='bg-white/[.5] px-4 py-1 rounded-full'>
-                                        {time1.format('HH:mm')}
-                                    </FlexItem>
-                                </FlexBox>
-                            </FlexItem>
-                            <FlexItem>
-                                <FlexBox alignItems='center' gap={2}>
-                                    <FlexItem>
-                                        تا
-                                    </FlexItem>
-                                    <FlexItem className='bg-white/[.5] px-4 py-1 rounded-full'>
-                                        {time2.format('HH:mm')}
-                                    </FlexItem>
-                                </FlexBox>
-                            </FlexItem>
-                        </FlexBox>
-                    </div>
-                </FlexItem>
+                <tr key={key} className='py-2'>
+                    <td className='text-center px-2 pb-2'>
+                        {time1.hour() < 12 ? 'صبح' : 'عصر'}
+                    </td>
+                    <td className='pb-2'>
+                        <div className="bg-white/[.5] px-4 py-1 rounded-full">
+                            {time1.format('HH:mm')}
+                        </div>
+                    </td>
+                    <td className='px-2 pb-2'>
+                        تا
+                    </td>
+                    <td className='pb-2'>
+                        <div className="bg-white/[.5] px-4 py-1 rounded-full ">
+                            {time2.format('HH:mm')}
+                        </div>
+                    </td>
+                </tr >
             )
         }) || (
-                <div className="text-center text-typography  px-4 py-1 rounded-full border-[1px] border-black/[.2]">
-                    امروز تعطیل است
-                </div>
+                <tr>
+                    <td className="text-center text-typography  px-4 py-1 rounded-full border-[1px] border-black/[.2]">
+                        امروز تعطیل است
+                    </td>
+                </tr>
             )
 
     }, [data])
 
     return data?.length ? (
         <Section title='ساعات کاری'>
-            <FlexBox gap={2} direction='column' alignItems='end' justify='center' className='px-[1.6rem] w-fit mx-auto'>
-                {renderWorkingHours}
-            </FlexBox>
+            <table className='px-[1.6rem] w-fit mx-auto'>
+                <tbody>
+                    {renderWorkingHours}
+                </tbody>
+            </table>
         </Section>
     ) : <></>
 }

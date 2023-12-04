@@ -103,4 +103,4 @@ const Provider: IProvider = ({ children }) => {
     )
 }
 
-export default Provider;
+export default React.memo(Provider);

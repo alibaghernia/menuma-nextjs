@@ -142,7 +142,8 @@ export const Product: IProduct = (props) => {
                 "absolute !h-[12rem] right-[0]": !mono,
                 "relative h-full": mono,
             })}>
-                <Image fill src={props.image!} alt={props.title} className='z-0 object-cover' />
+
+                <Image fill src={props.image!} alt={props.title} className='z-0 object-cover relative' />
                 {props.single_mode && (
                     <>
                         <span className="z-10 absolute inset-0" style={{
@@ -153,8 +154,12 @@ export const Product: IProduct = (props) => {
                         </div>
                     </>
                 )}
+                <Badge
+                    type='جدید'
+                />
 
             </Link>
+
         )
     }, [props, productSlug])
 
@@ -195,14 +200,13 @@ export const Product: IProduct = (props) => {
                         {props.fullWidth && (
                             <FlexItem>
                                 {renderImage(true)}
+
                             </FlexItem>
                         )}
                         <FlexItem grow>
                             <FlexBox direction='column' gap={2}>
                                 <FlexItem>
-                                    <Badge
-                                        title='جدید'
-                                    />
+
                                     <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
                                         {props.title}
                                     </Link>

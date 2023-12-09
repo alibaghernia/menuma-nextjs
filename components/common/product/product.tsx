@@ -155,7 +155,7 @@ export const Product: IProduct = (props) => {
                     </>
                 )}
                 <Badge
-                    type='جدید'
+                    type='hot'
                 />
 
             </Link>

@@ -13,6 +13,7 @@ import { useSlug } from '@/providers/main/hooks'
 import { Container } from '../container/container'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
+import { Badge } from '@/components/common/badge/badge'
 
 export const Product: IProduct = (props) => {
     const router = useRouter()
@@ -199,9 +200,13 @@ export const Product: IProduct = (props) => {
                         <FlexItem grow>
                             <FlexBox direction='column' gap={2}>
                                 <FlexItem>
+                                    <Badge
+                                        title='جدید'
+                                    />
                                     <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
                                         {props.title}
                                     </Link>
+
                                 </FlexItem>
                                 <FlexItem>
                                     <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">

@@ -154,10 +154,6 @@ export const Product: IProduct = (props) => {
                         </div>
                     </>
                 )}
-                <Badge
-                    type='hot'
-                />
-
             </Link>
 
         )
@@ -170,12 +166,23 @@ export const Product: IProduct = (props) => {
         </div>)
     }
 
+    const renderTags = useCallback(() => {
+        return props.tags.map((tag, idx) => (
+            <FlexItem key={idx}>
+                <Badge
+                    type={tag.type}
+                />
+            </FlexItem>
+        ))
+    }, [props.tags])
+
     return (
-        <div className={classNames({ "w-full": props.fullWidth }, props.className)}>
+        <div className={classNames("relative", { "w-full": props.fullWidth }, props.className)}>
             <FlexBox
                 className={
                     classNames(
                         "relative",
+                        "z-0",
                         {
                             "w-full": props.fullWidth,
                             "pr-[7.25rem]": !props.fullWidth,
@@ -230,6 +237,15 @@ export const Product: IProduct = (props) => {
                     </FlexBox>
                 )}
             </FlexBox>
+
+            {props.tags?.length && (
+                <Container position='absolute' className='z-10 top-[1rem] right-[2.5rem]'>
+                    <FlexBox gap={2} justify='center' direction='column'>
+                        {renderTags()}
+                    </FlexBox>
+                </Container>
+            )
+            }
         </div>
     )
 }

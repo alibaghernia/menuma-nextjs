@@ -8,12 +8,15 @@ declare interface IProductProps {
   single_mode?: boolean;
   fullWidth?: boolean;
   special?: boolean;
-  className?: string
-  categoryId?: string | number
+  className?: string;
+  categoryId?: string | number;
   prices: {
     id: string;
     title: stirng;
     price: string;
+  }[];
+  tags: {
+    type: "new" | "hot" | "soldout";
   }[];
 }
 

@@ -139,6 +139,7 @@ function MenuPage() {
                 fullWidth
                 className='px-5 max-w-lg'
                 categoryId={product.category_id}
+                tags={product.tags}
             />
         )
         )

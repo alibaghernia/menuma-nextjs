@@ -5,7 +5,7 @@ declare interface ICategoryCardProps {
   className?: string;
   title: string;
   url?: string;
-  image: string;
+  image?: string;
   selected?: boolean;
   onClick?: () => void;
 }

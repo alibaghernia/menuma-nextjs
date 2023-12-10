@@ -107,7 +107,7 @@ function MenuPage() {
                                 )
                             }
                             image={
-                                category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : noImage.src} title={category.name}
+                                category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : undefined} title={category.name}
                             onClick={() => {
                                 setSelectedCategory(category.id); setSearchInput(""); window.document.getElementById(`category-${category.id}`)?.scrollIntoView({
                                     behavior: 'smooth'

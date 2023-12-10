@@ -19,8 +19,10 @@ export const CategoryCard: ICategoryCard = (props) => {
       )
     }
       onClick={props.onClick}>
-      <Image fill src={props.image} alt={props.title} className='z-0 object-cover' />
-      <span className="bg-black/[.4] absolute inset-0 z-0" />
+      {props.image && (
+        <Image fill src={props.image} alt={props.title} className='z-0 object-cover' />
+      )}
+      <span className={classNames("absolute inset-0 z-0", { "bg-black/[.4]": props.image, "bg-black/[.7]": !props.image, })} />
       <div className={
         twMerge(
           "text-white text-[1.2rem] font-bold text-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20",

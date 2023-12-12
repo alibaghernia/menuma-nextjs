@@ -60,7 +60,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         if (tab_num) {
             setTableNumber(+tab_num)
             localStorage.setItem(tableNumberStorageKey, tab_num)
-            router.push(router.asPath.substring(0, router.asPath.indexOf('?')), undefined, { shallow: true })
+            router.push((mainState.isNotMenuma ? `/${state.profile.slug}` : '') + router.asPath.substring(0, router.asPath.indexOf('?')), undefined, { shallow: true })
         }
     }, [searchParams, setTableNumber])
 
@@ -120,11 +120,6 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         setCancelGarsonCallButton(false)
     }
 
-    useEffect(() => {
-        console.log({
-            tableNumber
-        });
-    }, [tableNumber])
     const handleCallGarson = () => {
 
         const handle = (tableNumber: number) => {

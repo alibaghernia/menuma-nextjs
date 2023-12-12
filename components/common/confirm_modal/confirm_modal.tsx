@@ -49,7 +49,8 @@ export const ConfirmModal: IConfirmModal = ({
                                     <FlexItem className={classNames(
                                         'px-2 py-2 text-center rounded-[2rem] cursor-pointer',
                                         {
-                                            "bg-red-100 text-red-600": dangerConfirm
+                                            "bg-red-100 text-red-600": dangerConfirm,
+                                            "bg-green-100 text-green-600": !dangerConfirm,
                                         }
                                     )}
                                         onClick={onConfirm}

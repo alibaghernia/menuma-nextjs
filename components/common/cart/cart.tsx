@@ -19,6 +19,7 @@ import { Container } from '../container/container'
 import { IConfirmModalProps } from '../confirm_modal/types'
 import { ConfirmModal } from '../confirm_modal/confirm_modal'
 import _ from 'lodash'
+import { CallGarson } from '../call_garson/call_garson'
 
 export const Cart: ICart = (props) => {
     const params = useParams()
@@ -26,7 +27,7 @@ export const Cart: ICart = (props) => {
     const [dismissModal, setDismissModal] = useState<IConfirmModalProps | undefined>(undefined)
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
     const { state, functions } = useContext(ProviderContext)
-    const { state: coffeeShopState } = useContext(CoffeeShopProviderContext)
+    const { state: coffeeShopState, handleCallGarson, cancelGarsonCallButton } = useContext(CoffeeShopProviderContext)
 
     const orderItems = state.cart
 
@@ -206,9 +207,8 @@ export const Cart: ICart = (props) => {
                     </FlexItem>
                     <FlexItem grow={false} className="mt-[1.5rem]">
                         {Boolean(parseInt(coffeeShopState.profile.has_pager)) && (
-                            <div className="px-[2rem] py-[.8rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold">
-                                صدا زدن گارسون
-                            </div>
+                            <CallGarson onClick={handleCallGarson} isCancel={cancelGarsonCallButton} size='large' />
+
                         )}
                     </FlexItem>
                 </FlexBox>

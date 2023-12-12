@@ -18,13 +18,14 @@ import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Container } from '@/components/common/container/container'
 import dynamic from 'next/dynamic'
+import { CallGarson } from '@/components/common/call_garson/call_garson'
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
     const router = useRouter()
     const slug = useSlug()
     const { setLoading } = useContext(ProviderContext)
-    const { state: coffeShopState } = useContext(CoffeeShopProviderContext)
+    const { state: coffeShopState, handleCallGarson, cancelGarsonCallButton } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const { state } = useContext(ProviderContext)
     const [menuOpen, setMenuOpen] = useState(false)
@@ -146,9 +147,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                     <FlexBox alignItems='center' gap=".5rem">
                         {callPager && Boolean(parseInt(coffeShopState.profile.has_pager)) && (
                             <FlexItem>
-                                <div className="px-[1rem] py-[.2rem] text-[.9rem] w-full text-center text-typography bg-more/[.1] active:bg-more/[.2] active:scale-[.99] active:text-more transition-colors duration-[.1s] select-none border border-more rounded-[1rem] font-bold whitespace-nowrap">
-                                    صدا زدن گارسون
-                                </div>
+                                <CallGarson onClick={handleCallGarson} isCancel={cancelGarsonCallButton} size='small' />
                             </FlexItem>
                         )}
                         {props.note && (

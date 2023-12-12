@@ -4,9 +4,10 @@ import reducer from './reducer';
 import { INITIAL_STATE, REDUCER_KEYS } from './constants';
 import _ from 'lodash'
 import functions from './functions';
-import coffeeLoadingGIF from '@/assets/images/coffee_animation.gif'
-import Image from 'next/image';
 import { useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+
+const Loading = dynamic(() => import('@/components/common/loading/loading'), { ssr: false })
 
 export const ProviderContext = createContext<{
     state: IProviderState,
@@ -93,11 +94,7 @@ const Provider: IProvider = ({ children }) => {
                 {children}
             </ProviderContext.Provider>
             {
-                loading && (
-                    <div className="fixed inset-0 bg-white z-50 ">
-                        <Image width={coffeeLoadingGIF.width} height={coffeeLoadingGIF.height} alt='Loading' src={coffeeLoadingGIF.src} className='mx-auto absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]' />
-                    </div>
-                )
+                loading && <Loading />
             }
         </>
     )

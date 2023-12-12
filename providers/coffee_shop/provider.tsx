@@ -41,10 +41,6 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         }
         return INITIAL_STATE
     }
-    const [cancelGarsonCallButton, setCancelGarsonCallButton] = useState(false)
-    let cancelGarsonCallButtonInterval = useRef<NodeJS.Timeout>()
-    const [tableNumber, setTableNumber] = useState(1)
-    const [callGarsonModal, setCallGarsonModal] = useState<IConfirmModalProps>()
 
     const { setLoading, state: mainState, } = useContext(ProviderContext)
     const params = useParams()
@@ -54,19 +50,23 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     const [state, dispatch] = useReducer((state: IProviderState, action: any) => reducer(_.cloneDeep(state), action), getInitialState())
     const functions = Functions(state, dispatch);
 
+    // garson call
+    const [cancelGarsonCallButton, setCancelGarsonCallButton] = useState(false)
+    let cancelGarsonCallButtonInterval = useRef<NodeJS.Timeout>()
+    const [tableID, setTableID] = useState<string>("")
+    const [callGarsonModal, setCallGarsonModal] = useState<IConfirmModalProps>()
+    const tableIDStorageKey = `${state.profile.id}${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`
+
     useEffect(() => {
-        const tableNumberStorageKey = `${state.profile.id}${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`
-        const tab_num = searchParams.get('tab_num')
-        if (tab_num) {
-            setTableNumber(+tab_num)
-            localStorage.setItem(tableNumberStorageKey, tab_num)
+
+        const tab_id = searchParams.get('tab_id')
+        if (tab_id) {
+            setTableID(tab_id)
+            localStorage.setItem(tableIDStorageKey, tab_id)
             const path = router.asPath.substring(0, router.asPath.indexOf('?'))
-            console.log({
-                path
-            });
             router.push(path, undefined)
         }
-    }, [searchParams, setTableNumber])
+    }, [searchParams, setTableID])
 
     function profileFetcher(): Promise<IProfile> {
         return axios.get<IProfile>(`/api/cafe-restaurants/${params.slug}`).then(({ data }) => data)
@@ -116,7 +116,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         setCancelGarsonCallButton(true)
         cancelGarsonCallButtonInterval.current = setInterval(() => {
             setCancelGarsonCallButton(false)
-        }, 1000)
+        }, 60000)
     }
 
     const disbleCancelGarsonCallInterval = () => {
@@ -126,44 +126,44 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
 
     const handleCallGarson = () => {
 
-        const handle = (tableNumber: number) => {
+        const handle = (tableID: string) => {
             setLoading(true)
             if (!cancelGarsonCallButton) {
-                functions.services.callGarson(0)
+                functions.services.callGarson(tableID)
                     .then(() => {
                         enableCancelGarsonCallInterval()
+                        setCallGarsonModal(undefined);
                     })
                     .finally(() => {
                         setLoading(false)
                     })
             } else {
-                functions.services.cancelCallGarson(0)
+                functions.services.cancelCallGarson(tableID)
                     .then(() => {
                         disbleCancelGarsonCallInterval()
+                        setCallGarsonModal(undefined);
                     })
                     .finally(() => {
                         setLoading(false)
                     })
             }
         }
-
-        const tableNumberStorageKey = `${state.profile.id}${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`
-        const storageTableNumber = localStorage.getItem(tableNumberStorageKey)
-        if (storageTableNumber) {
+        const storageTableID = localStorage.getItem(tableIDStorageKey)
+        if (storageTableID) {
             setCallGarsonModal({
                 open: true,
-                title: 'تایید درخواست گارسون',
+                title: cancelGarsonCallButton ? 'لغو درخواست گارسون' : 'تایید درخواست گارسون',
                 content: (
                     <div className="text-center">
                         آیا مطمئن هستید؟
                     </div>
                 ),
-                dangerConfirm: false,
+                dangerConfirm: cancelGarsonCallButton,
                 onClose() {
                     setCallGarsonModal(undefined);
                 },
                 onConfirm() {
-                    handle(+storageTableNumber)
+                    handle(storageTableID)
                 },
             })
         }
@@ -178,15 +178,15 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                         </FlexItem>
                         <FlexItem className='mt-2'>
                             <input
-                                type="number"
-                                value={tableNumber}
-                                onChange={({ target: { value } }) => { setTableNumber(Number(value)) }}
+                                type="text"
+                                value={tableID}
+                                onChange={({ target: { value } }) => { setTableID(value) }}
                                 className={
                                     classNames(
                                         'outline-none bg-transparent placeholder:text-[.8rem] w-full text-typography  border rounded-full px-4 py-2 text-center',
                                     )
                                 }
-                                placeholder='شماره میز...'
+                                placeholder='شناسه میز...'
                             />
                         </FlexItem>
                     </FlexBox>
@@ -196,7 +196,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                     setCallGarsonModal(undefined);
                 },
                 onConfirm() {
-                    handle(tableNumber)
+                    handle(tableID)
                 },
             })
         }

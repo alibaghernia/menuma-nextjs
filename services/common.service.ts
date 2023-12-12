@@ -7,7 +7,14 @@ export class CommonService {
 
   constructor(private axios: AxiosInstance) {}
 
-  callGarson(tableNum: number) {
-    return this.axios.post(`/{path}`);
+  callGarson(cafe_slug: string, tableID: string) {
+    return this.axios.post(
+      `/api/cafe-restaurants/${cafe_slug}/waiter_pager/${tableID}/call`
+    );
+  }
+  cancelCallGarson(cafe_slug: string, tableID: string) {
+    return this.axios.post(
+      `/api/cafe-restaurants/${cafe_slug}/waiter_pager/${tableID}/cancel`
+    );
   }
 }

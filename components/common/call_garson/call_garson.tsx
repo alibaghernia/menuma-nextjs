@@ -20,7 +20,7 @@ export const CallGarson: ICallGarson = ({ onClick, isCancel, size: buttonSize })
             }
         )} onClick={onClick}>
             {
-                isCancel ? 'لغو درخواست' : 'صدا زدن گارسون'
+                isCancel ? 'لغو درخواست گارسون' : 'صدا زدن گارسون'
             }
         </div>
     )

@@ -32,11 +32,11 @@ export default function functions(
       },
     },
     services: {
-      callGarson: (tableNum: number) => {
-        return commonService.callGarson(tableNum);
+      callGarson: (tableID: string) => {
+        return commonService.callGarson(state.profile.slug, tableID);
       },
-      cancelCallGarson: (tableNum: number) => {
-        return commonService.callGarson(tableNum);
+      cancelCallGarson: (tableID: string) => {
+        return commonService.cancelCallGarson(state.profile.slug, tableID);
       },
     },
   };

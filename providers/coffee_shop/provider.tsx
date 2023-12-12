@@ -60,11 +60,11 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         if (tab_num) {
             setTableNumber(+tab_num)
             localStorage.setItem(tableNumberStorageKey, tab_num)
-            const path = (!router.asPath.startsWith(`/${state.profile.slug}`) ? `/${state.profile.slug}` : '') + router.asPath.substring(0, router.asPath.indexOf('?'))
+            const path = router.asPath.substring(0, router.asPath.indexOf('?'))
             console.log({
                 path
             });
-            router.push(path, undefined, { shallow: true })
+            router.push(path, undefined)
         }
     }, [searchParams, setTableNumber])
 

@@ -170,33 +170,20 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         else {
             setCallGarsonModal({
                 open: true,
-                title: 'تایید درخواست گارسون',
+                title: 'درخواست گارسون',
                 content: (
-                    <FlexBox direction='column'>
-                        <FlexItem className='text-center'>
-                            در صورت اطمینان لطفا شماره میز را  در فیلد زیر وارد نمایید وارد نمایید
-                        </FlexItem>
-                        <FlexItem className='mt-2'>
-                            <input
-                                type="text"
-                                value={tableID}
-                                onChange={({ target: { value } }) => { setTableID(value) }}
-                                className={
-                                    classNames(
-                                        'outline-none bg-transparent placeholder:text-[.8rem] w-full text-typography  border rounded-full px-4 py-2 text-center',
-                                    )
-                                }
-                                placeholder='شناسه میز...'
-                            />
-                        </FlexItem>
-                    </FlexBox>
+                    <div className="text-center">
+                        برای استفاده از این قابلیت لطفا ابتدا QRCode روی میز را اسکن کنید
+                    </div>
                 ),
                 dangerConfirm: false,
+                confirmText: 'باشه',
+                dismissButton: false,
                 onClose() {
                     setCallGarsonModal(undefined);
                 },
                 onConfirm() {
-                    handle(tableID)
+                    setCallGarsonModal(undefined);
                 },
             })
         }

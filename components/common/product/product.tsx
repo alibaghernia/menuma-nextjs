@@ -238,7 +238,7 @@ export const Product: IProduct = (props) => {
                 )}
             </FlexBox>
 
-            {props.tags?.length && (
+            {!!props.tags?.length && (
                 <Container position='absolute' className='z-10 top-[1rem] right-[2.5rem]'>
                     <FlexBox gap={2} justify='center' direction='column'>
                         {renderTags()}

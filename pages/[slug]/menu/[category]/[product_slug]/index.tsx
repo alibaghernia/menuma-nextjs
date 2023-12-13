@@ -1,5 +1,18 @@
 import { Navbar } from '@/components/core/navbar/noSSR'
 import noImage from '@/assets/images/no-image.jpg'
+
+
+
+import sperso from '@/assets/images/sperso.png'
+import warmDrink from '@/assets/images/warm-drink.png'
+import styles from '@/assets/styles/pages/menu/menu.module.scss'
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+
+
+
+
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image';
 import { ProviderContext } from '@/providers/main/provider';
@@ -17,7 +30,21 @@ import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 
+
+import { Section } from '@/components/common/section/section';
+import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
+import { Product } from '@/components/common/product/product';
+import { EffectCoverflow, Pagination } from 'swiper/modules';
+import { twMerge } from 'tailwind-merge'
+import classNames from 'classnames'
+import { IProduct } from '@/components/common/product/types'
+
+
+
 function ProductPage() {
+    const [scrolled, setScrolled] = useState(false)
+
+
     const { setLoading, functions } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const params = useParams()
@@ -61,6 +88,94 @@ function ProductPage() {
         }
     }, [isSuccess, setLoading, data, status, params])
 
+
+
+    const renderProducts = () => {
+        const prductArray = [
+            {
+                id: '1',
+                title: "اسپرسو",
+                description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+                image: sperso.src,
+                prices: [{ id: '1', title: 'small', price: '9000' }],
+                fullWidth: true,
+                className: 'px-5 max-w-lg',
+                categoryId: 1,
+                tags: [],
+                single_mode: true,
+            },
+            {
+                id: '2',
+                title: "کاپوچینو",
+                description: "کاپوچینو یکی از پرمصرف ترین به شمار می رود",
+                image: warmDrink.src,
+                prices: [{ id: '1', title: 'small', price: '9000' }],
+                fullWidth: true,
+                className: 'px-5 max-w-lg',
+                categoryId: 1,
+                tags: [],
+                single_mode: true,
+            },
+            {
+                id: '3',
+                title: "آماکیتو",
+                description: "آماکیتو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+                image: sperso.src,
+                prices: [{ id: '1', title: 'small', price: '9000' }],
+                fullWidth: true,
+                className: 'px-5 max-w-lg',
+                categoryId: 1,
+                tags: [],
+                single_mode: true,
+            },
+            {
+                id: '3',
+                title: "ماکتیل",
+                description: "ماکتیل یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+                image: warmDrink.src,
+                prices: [{ id: '1', title: 'small', price: '9000' }],
+                fullWidth: true,
+                className: 'px-5 max-w-lg',
+                categoryId: 1,
+                tags: [],
+                single_mode: true,
+            },
+            {
+                id: '4',
+                title: "اسپرسو",
+                description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+                image: sperso.src,
+                prices: [{ id: '1', title: 'small', price: '9000' }],
+                fullWidth: true,
+                className: 'px-5 max-w-lg',
+                categoryId: 1,
+                tags: [],
+                single_mode: true,
+            }
+        ]
+        return (
+            <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit'>
+                {prductArray?.map((product, key) => (
+                    <div key={key}>
+                        <Product
+                            id={product.id}
+                            title={product.title}
+                            descriptions={product.description}
+                            image={product.image}
+                            prices={product.prices}
+                            fullWidth
+                            className='px-5 max-w-lg'
+                            categoryId={product.categoryId}
+                            tags={product.tags}
+                            single_mode={product.single_mode}
+                        />
+                    </div>
+                ))
+                }
+            </SwiperSlide>
+        )
+
+    }
     const orderItem = useCallback((price: any) => {
         const key = `${product?.id}-${price.id}`
         functions.cart.addItem({
@@ -96,7 +211,6 @@ function ProductPage() {
         } else
             functions.cart.decreaseCount(key)
     }, [functions, product?.id])
-
     const prices = useMemo(() => product?.prices?.map((price: any, key: number) => {
 
         const order = functions.cart.getItem(`${product.id}-${price.id}`);
@@ -160,7 +274,7 @@ function ProductPage() {
                 </title>
             </Head>
             {navbar}
-            <div className='bg-secondary h-screen pt-[4.5rem] z-10 px-4'>
+            <div className='bg-secondary pt-[4.5rem] z-10 px-4'>
                 <FlexBox direction='column'>
                     <FlexItem
                         className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow"
@@ -184,16 +298,66 @@ function ProductPage() {
                                     {prices}
                                 </FlexBox>
                             </FlexItem>
+
                         </FlexBox>
 
                     </FlexItem>
+                </FlexBox>
+
+            </div>
+            <div className='bg-secondary pt-[4.5rem] z-10 px-4'>
+                <FlexBox direction='column'>
+                    <FlexItem>
+                        <FlexBox
+                            direction='column'
+                            gap={2}
+                            className="pt-[4.5rem]"
+                        >
+                            <Section key={0} id={`category-123`} className="mt-[1.125rem] pb-5 scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title='پیشنهادات روز'>
+                            </Section>
+                            <FlexItem className="px-2">
+                                <Swiper
+                                    slidesPerView={"auto"}
+                                    spaceBetween={8}
+                                    grabCursor={true}
+                                    scrollbar
+                                    pagination={{
+                                        clickable: true,
+                                        el: "#swiper-pagination",
+                                        bulletActiveClass: styles['swiper-pagination-bullet']
+                                    }}
+                                    breakpoints={{
+                                        768: {
+                                            centerInsufficientSlides: true
+                                        }
+                                    }}
+                                    modules={[Pagination]}
+                                >
+
+                                    {renderProducts()}
+
+                                </Swiper>
+
+                            </FlexItem>
+                            <FlexItem
+                                id="swiper-pagination" className={
+                                    twMerge(
+                                        classNames(
+                                            'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
+                                            {
+                                                '!hidden': scrolled
+                                            }
+                                        )
+                                    )}
+                            />
+                        </FlexBox>
+                    </FlexItem>
+
                 </FlexBox>
             </div>
         </>
     )
 }
-
-
 export const getServerSideProps = withCafeeShopProfile()
 
 export default CoffeeShopPageProvider(ProductPage)

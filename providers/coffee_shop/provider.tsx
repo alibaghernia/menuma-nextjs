@@ -56,9 +56,8 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     const [tableID, setTableID] = useState<string>("")
     const [callGarsonModal, setCallGarsonModal] = useState<IConfirmModalProps>()
     const tableIDStorageKey = `${state.profile.id}${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`
-
+    const [table, setTable] = useState<TableType>()
     useEffect(() => {
-
         const tab_id = searchParams.get('tab_id')
         if (tab_id) {
             setTableID(tab_id)
@@ -124,8 +123,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         setCancelGarsonCallButton(false)
     }
 
-    const handleCallGarson = () => {
-
+    const handleCallGarson = async () => {
         const handle = (tableID: string) => {
             setLoading(true)
             if (!cancelGarsonCallButton) {
@@ -150,22 +148,45 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
         }
         const storageTableID = localStorage.getItem(tableIDStorageKey)
         if (storageTableID) {
-            setCallGarsonModal({
-                open: true,
-                title: cancelGarsonCallButton ? 'لغو درخواست گارسون' : 'تایید درخواست گارسون',
-                content: (
-                    <div className="text-center">
-                        آیا مطمئن هستید؟
-                    </div>
-                ),
-                dangerConfirm: cancelGarsonCallButton,
-                onClose() {
-                    setCallGarsonModal(undefined);
-                },
-                onConfirm() {
-                    handle(storageTableID)
-                },
-            })
+            setTableID(storageTableID)
+            const showModal = (table: TableType) => {
+                setCallGarsonModal({
+                    open: true,
+                    title: cancelGarsonCallButton ? 'لغو درخواست گارسون' : 'تایید درخواست گارسون',
+                    content: (
+                        <FlexBox direction='column'>
+                            <FlexItem className="text-center">
+                                آیا مطمئن هستید؟
+                            </FlexItem>
+                            <FlexItem className="text-center">
+                                میز: {table.code}
+                            </FlexItem>
+                        </FlexBox>
+                    ),
+                    dangerConfirm: cancelGarsonCallButton,
+                    onClose() {
+                        setCallGarsonModal(undefined);
+                    },
+                    onConfirm() {
+                        handle(storageTableID)
+                    },
+                })
+            }
+            if (table) showModal(table)
+            else {
+                setLoading(true)
+                functions.services.geTable(storageTableID)
+                    .then(({ data: table }) => {
+                        showModal(table)
+                        setTable(table)
+                    })
+                    .catch(() => {
+                        toast.error('خطا در دریافت اطلاعات میز')
+                    })
+                    .finally(() => {
+                        setLoading(false)
+                    })
+            }
         }
         else {
             setCallGarsonModal({

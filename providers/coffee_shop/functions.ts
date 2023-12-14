@@ -38,6 +38,9 @@ export default function functions(
       cancelCallGarson: (tableID: string) => {
         return commonService.cancelCallGarson(state.profile.slug, tableID);
       },
+      geTable: (tableID: string) => {
+        return commonService.getTable(state.profile.slug, tableID);
+      },
     },
   };
 }

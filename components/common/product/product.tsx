@@ -161,7 +161,7 @@ export const Product: IProduct = (props) => {
 
     const renderSingleModePrice = () => {
 
-        return (<div className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s]" onClick={() => router.push(productSlug)}>
+        return (<div className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s]" onClick={() => orderItem(props.prices[0])}>
             سفارش
         </div>)
     }
@@ -211,23 +211,27 @@ export const Product: IProduct = (props) => {
                             </FlexItem>
                         )}
                         <FlexItem grow>
-                            <FlexBox direction='column' gap={2}>
+                            <FlexBox direction='column' gap={2} justify='between' className='h-full !justify-between'>
                                 <FlexItem>
+                                    <FlexBox direction='column' className='h-full'>
+                                        <FlexItem>
+                                            <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
+                                                {props.title}
+                                            </Link>
 
-                                    <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
-                                        {props.title}
-                                    </Link>
-
+                                        </FlexItem>
+                                        <FlexItem>
+                                            <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
+                                                {props.descriptions}
+                                            </div>
+                                        </FlexItem>
+                                    </FlexBox>
                                 </FlexItem>
+
                                 <FlexItem>
-                                    <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
-                                        {props.descriptions}
-                                    </div>
+                                    {props.single_mode && renderSingleModePrice()}
                                 </FlexItem>
                             </FlexBox>
-                        </FlexItem>
-                        <FlexItem>
-                            {props.single_mode && renderSingleModePrice()}
                         </FlexItem>
                     </FlexBox>
                 </FlexItem>

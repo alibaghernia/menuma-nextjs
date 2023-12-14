@@ -153,27 +153,23 @@ function ProductPage() {
                 single_mode: true,
             }
         ]
-        return (
-            <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit'>
-                {prductArray?.map((product, key) => (
-                    <div key={key}>
-                        <Product
-                            id={product.id}
-                            title={product.title}
-                            descriptions={product.description}
-                            image={product.image}
-                            prices={product.prices}
-                            fullWidth
-                            className='px-5 max-w-lg'
-                            categoryId={product.categoryId}
-                            tags={product.tags}
-                            single_mode={product.single_mode}
-                        />
-                    </div>
-                ))
-                }
-            </SwiperSlide>
-        )
+        return prductArray?.map((product, key) => (
+            <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit' key={key}>
+                <Product
+                    id={product.id}
+                    title={product.title}
+                    descriptions={product.description}
+                    image={product.image}
+                    prices={product.prices}
+                    fullWidth
+                    className='px-5 max-w-lg'
+                    categoryId={product.categoryId}
+                    tags={product.tags}
+                    single_mode={product.single_mode}
+                />
+            </SwiperSlide >
+        ))
+
 
     }
     const orderItem = useCallback((price: any) => {
@@ -304,21 +300,18 @@ function ProductPage() {
                     </FlexItem>
                 </FlexBox>
 
-            </div>
-            <div className='bg-secondary pt-[4.5rem] z-10 px-4'>
-                <FlexBox direction='column'>
+                <FlexBox direction='column' className='mt-[1rem]'>
                     <FlexItem>
                         <FlexBox
                             direction='column'
                             gap={2}
-                            className="pt-[4.5rem]"
+                            className=" mb-[1.25rem]"
                         >
-                            <Section key={0} id={`category-123`} className="mt-[1.125rem] pb-5 scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title='پیشنهادات روز'>
+                            <Section key={0} id={`category-123`} className="scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title='پیشنهادات روز'>
                             </Section>
                             <FlexItem className="px-2">
                                 <Swiper
                                     slidesPerView={"auto"}
-                                    spaceBetween={8}
                                     grabCursor={true}
                                     scrollbar
                                     pagination={{

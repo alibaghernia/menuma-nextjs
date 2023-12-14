@@ -7,7 +7,7 @@ export const Button: IButton = (props) => {
 
     const button = useMemo(() => (
         <div
-            className={classNames(
+            className={twMerge(classNames(
                 twMerge('text-[1rem] px-[.8rem] py-[.3rem] text-typography bg-white cursor-pointer whitespace-nowrap  w-fit', props.className),
                 {
                     [`rounded-[${props.rounded}]`]: typeof props.rounded == "string",
@@ -15,7 +15,7 @@ export const Button: IButton = (props) => {
                     [`shadow-[${props.shadow}]`]: typeof props.shadow == "string",
                     [`shadow`]: typeof props.shadow == "boolean",
                 }
-            )}
+            ))}
             onClick={props.onClick}
         >
             {props.children}

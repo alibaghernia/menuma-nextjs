@@ -1,10 +1,9 @@
+import { Button } from "@/components/common/button"
 import { Container } from "@/components/common/container/container"
 import { FlexBox } from "@/components/common/flex_box/flex_box"
 import { FlexItem } from "@/components/common/flex_item/flex_item"
-import CoffeShopProvider, { CoffeeShopProviderContext } from "@/providers/coffee_shop/provider"
-import { useSlug } from "@/providers/main/hooks"
-import { ProviderContext } from "@/providers/main/provider"
 import Head from "next/head"
+import Link from "next/link"
 import { Fragment, useContext, useEffect } from "react"
 
 function Home() {
@@ -25,6 +24,13 @@ function Home() {
             </FlexItem>
             <FlexItem className="text-[1.5rem] text-gray-600">
               در حال توسعه هستیم
+            </FlexItem>
+            <FlexItem className="text-[1.5rem] text-gray-600 mt-5">
+              <Button rounded className="bg-gray-400 text-white shadow-2xl">
+                <Link href={{ pathname: '/demo' }}>
+                  مشاهده دمو
+                </Link>
+              </Button>
             </FlexItem>
           </FlexBox>
         </Container>

@@ -63,7 +63,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
             setTableID(tab_id)
             localStorage.setItem(tableIDStorageKey, tab_id)
             const path = router.asPath.substring(0, router.asPath.indexOf('?'))
-            router.push(path, undefined)
+            router.replace(path, undefined)
         }
     }, [searchParams, setTableID])
 

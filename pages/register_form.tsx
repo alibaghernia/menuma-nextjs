@@ -9,7 +9,7 @@ function TanksForRegister() {
             <Head>
                 <title>{'منوما'}</title>
             </Head>
-            <section className="bg-gray-50 ddd:bg-gray-900  h-full">
+            <section className="bg-gray-50 ddd:bg-gray-900  h-[1vh]">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <div className="mx-auto mb-7 text-[2rem] text-gray-800">
                         <Link href={{ pathname: '/' }}>
@@ -83,7 +83,7 @@ function RegisterForm() {
             <Head>
                 <title>{'منوما'}</title>
             </Head>
-            <section className="bg-gray-50 ddd:bg-gray-900">
+            <section className="bg-gray-50 ddd:bg-gray-900 h-[1vh]">
                 <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                     <div className="mx-auto mb-7 text-[2rem] text-gray-800">
                         <Link href={{ pathname: '/' }}>

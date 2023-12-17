@@ -236,7 +236,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                     <FlexItem
                         className="text-gray-300 font-bold w-full text-center py-3" >
 
-                        <Link href={{ pathname: '/' }}>
+                        <Link href="https://menuma.online">
                             <span className='hover:underline'>
                                 قدرت گرفته از <span className='text-blue-400'>منوما</span>
                             </span>

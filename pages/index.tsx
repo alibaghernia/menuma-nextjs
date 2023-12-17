@@ -8,35 +8,38 @@ import { Fragment, useContext, useEffect } from "react"
 
 function Home() {
 
-  useEffect(() => {
-  }, [])
+    useEffect(() => {
+    }, [])
 
-  return (
-    <>
-      <Head>
-        <title>{'منوما'}</title>
-      </Head>
-      <div className="min-h-screen">
-        <Container center>
-          <FlexBox alignItems="center" gap={3} direction="column">
-            <FlexItem className="text-[5rem] text-gray-400">
-              منوما
-            </FlexItem>
-            <FlexItem className="text-[1.5rem] text-gray-600">
-              در حال توسعه هستیم
-            </FlexItem>
-            <FlexItem className="text-[1.5rem] text-gray-600 mt-5">
-              <Button rounded className="bg-gray-400 text-white shadow-2xl">
-                <Link href={{ pathname: '/demo' }}>
-                  مشاهده دمو
-                </Link>
-              </Button>
-            </FlexItem>
-          </FlexBox>
-        </Container>
-      </div>
-    </>
-  )
+    return (
+        <>
+            <Head>
+                <title>{'منوما'}</title>
+            </Head>
+            <div className="flex flex-col">
+                <div className="mx-auto mt-7 text-[2rem] text-gray-800">
+                    <Link href={{ pathname: '/' }}>
+                        منوما
+                    </Link>
+                </div>
+                <div className="mx-auto">
+                    منو آنلاین <span className="text-[#035dcf]">رایگان</span> برای کافه شما
+                </div>
+
+                <Button className="bg-gray-400a border-2 border-[#035dcf] mx-auto mt-5 text-[#035dcf] shadow-2xlx rounded-xl">
+                    <Link href={{ pathname: '/demo' }}>
+                        مشاهده دمو
+                    </Link>
+                </Button>
+                <Button className="bg-[#035dcf] mx-auto mt-2 text-white shadow-lg rounded-xl">
+                    <Link href={{ pathname: '/register_form' }}>
+                        دریافت منو رایگان
+                    </Link>
+                </Button>
+
+            </div>
+        </>
+    )
 }
 
 Home.provider = Fragment

@@ -23,7 +23,7 @@ function TanksForRegister() {
                                 درخواست شما ثبت شد
                             </h1>
                             <p className="text-xs text-gray-500">
-                            کارشناسان ما زودی با شما تماس خواهند گرفت
+                                کارشناسان ما به زودی با شما تماس خواهند گرفت
                             </p>
                             <Link href={{ pathname: '/' }}>
                                 <button
@@ -66,7 +66,7 @@ function RegisterForm() {
         event.preventDefault();
 
 
-        const res = await axios.post('/menu-request', {
+        const res = await axios.post('/api/menu-request', {
             name: inputName,
             mobile: inputMobile,
         })

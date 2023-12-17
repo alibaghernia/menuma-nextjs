@@ -26,12 +26,12 @@ function Home() {
                     منو آنلاین <span className="text-[#035dcf]">رایگان</span> برای کافه شما
                 </div>
 
-                <Button className="bg-gray-400a border-2 border-[#035dcf] mx-auto mt-5 text-[#035dcf] shadow-2xlx rounded-xl">
+                <Button className="border-2 border-[#035dcf] mx-auto mt-5 text-[#035dcf] shadow-2xlx rounded-xl w-full text-center max-w-xs">
                     <Link href={{ pathname: '/demo' }}>
                         مشاهده دمو
                     </Link>
                 </Button>
-                <Button className="bg-[#035dcf] mx-auto mt-2 text-white shadow-lg rounded-xl">
+                <Button className="bg-[#035dcf] mx-auto mt-2 text-white shadow-lg rounded-xl border-[#035dcf] w-full text-center max-w-xs">
                     <Link href={{ pathname: '/register_form' }}>
                         دریافت منو رایگان
                     </Link>

@@ -19,6 +19,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Container } from '@/components/common/container/container'
 import dynamic from 'next/dynamic'
 import { CallGarson } from '@/components/common/call_garson/call_garson'
+import Link from 'next/link'
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
@@ -233,9 +234,14 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                         </FlexBox>
                     </FlexItem>
                     <FlexItem
-                        className="text-gray-300 font-bold w-full text-center py-3"
-                    >
-                        قدرت گرفته از منوما
+                        className="text-gray-300 font-bold w-full text-center py-3" >
+
+                        <Link href={{ pathname: '/' }}>
+                            <span className='hover:underline'>
+                                قدرت گرفته از <span className='text-blue-400'>منوما</span>
+                            </span>
+                        </Link>
+
                     </FlexItem>
                 </FlexBox>
             </Container>

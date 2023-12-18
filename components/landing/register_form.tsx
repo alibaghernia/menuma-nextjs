@@ -43,7 +43,7 @@ function TanksForRegister() {
         </>
     )
 }
-function RegisterForm() {
+export const RegisterForm = () => {
 
     useEffect(() => {
     }, [])
@@ -147,6 +147,4 @@ function RegisterForm() {
     )
 }
 
-RegisterForm.provider = Fragment
 
-export default RegisterForm

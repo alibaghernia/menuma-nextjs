@@ -6,6 +6,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { Fragment, useContext, useEffect } from "react"
 
+
 function Home() {
 
     useEffect(() => {
@@ -31,8 +32,10 @@ function Home() {
                         مشاهده دمو
                     </Link>
                 </Button>
-                <Button className="bg-[#035dcf] mx-auto mt-2 text-white shadow-lg rounded-xl border-[#035dcf] w-full text-center max-w-xs">
-                    <Link href={{ pathname: '/register_form' }}>
+                <Button className="bg-[#035dcf] mx-auto mt-2 text-white shadow-lg rounded-xl border-[#035dcf] w-full text-center max-w-xs"
+
+                >
+                    <Link href={{ pathname: '/landing' }}>
                         دریافت منو رایگان
                     </Link>
                 </Button>

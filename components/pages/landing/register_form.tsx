@@ -115,7 +115,7 @@ export const RegisterForm = () => {
                                 focus:border-red-600 block w-full p-2.5 
                                 ddd:bg-gray-700 ddd:border-gray-600
                                 ddd:placeholder-gray-400 ddd:text-white
-                                ddd:focus:ring-blue-500 ddd:focus:border-blue-500"
+                                ddd:focus:ring-blue-500 ddd:focus:border-blue-500 flex-row text-left"
                                         type="text"
                                         name="name"
                                         onChange={() => (e: any) => setInput({
@@ -124,6 +124,7 @@ export const RegisterForm = () => {
                                         })}
                                         required
                                         placeholder=""
+
                                     />
                                 </div>
                                 <Button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded justify-center text-center"

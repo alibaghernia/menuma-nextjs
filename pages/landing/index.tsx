@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react'
 import {
     RegisterForm
-} from '@/components/landing'
+} from '@/components/pages/landing'
 
 function Landing() {
     return (

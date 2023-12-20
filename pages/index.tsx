@@ -35,7 +35,7 @@ function Home() {
                 <Button className="bg-[#035dcf] mx-auto mt-2 text-white shadow-lg rounded-xl border-[#035dcf] w-full text-center max-w-xs"
 
                 >
-                    <Link href={{ pathname: '/landing' }}>
+                    <Link href={{ pathname: '/register_form' }}>
                         دریافت منو رایگان
                     </Link>
                 </Button>

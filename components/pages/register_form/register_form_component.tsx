@@ -9,7 +9,7 @@ import { Button } from "@/components/common/button"
 import { Label } from "@/components/common/label"
 import { TextField } from "@/components/common/text_field"
 
-export const RegisterForm = () => {
+export const RegisterFormComponent = () => {
     useEffect(() => {
     }, [])
     const [input, setInput] = useState({

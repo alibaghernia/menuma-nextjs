@@ -18,10 +18,10 @@ export const RegisterFormComponent = () => {
     })
     const [formSubmited, setFormSubmited] = useState(false);
     const handleSubmit = async () => {
-        // const res = await axios.post('/api/menu-request', {
-        //     name: input.name,
-        //     mobile: input.mobile,
-        // })
+        const res = await axios.post('/api/menu-request', {
+            name: input.name,
+            mobile: input.mobile,
+        })
         setFormSubmited(true)
     }
     return (

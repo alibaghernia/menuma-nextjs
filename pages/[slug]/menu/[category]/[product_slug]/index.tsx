@@ -1,17 +1,3 @@
-import { Navbar } from '@/components/core/navbar/noSSR'
-import noImage from '@/assets/images/no-image.jpg'
-
-
-
-import sperso from '@/assets/images/sperso.png'
-import warmDrink from '@/assets/images/warm-drink.png'
-import styles from '@/assets/styles/pages/menu/menu.module.scss'
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
-
-
-
 
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image';
@@ -23,6 +9,10 @@ import { axios, serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
 import { toast } from 'react-toastify';
 import _ from 'lodash'
+import { Navbar } from '@/components/core/navbar/noSSR'
+import noImage from '@/assets/images/no-image.jpg'
+import sperso from '@/assets/images/sperso.png'
+import warmDrink from '@/assets/images/warm-drink.png'
 import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -30,14 +20,7 @@ import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 
-
-import { Section } from '@/components/common/section/section';
-import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react'
-import { Product } from '@/components/common/product/product';
-import { EffectCoverflow, Pagination } from 'swiper/modules';
-import { twMerge } from 'tailwind-merge'
-import classNames from 'classnames'
-import { IProduct } from '@/components/common/product/types'
+import { OrderBox } from '@/components/menu/order-box'
 
 
 
@@ -88,90 +71,68 @@ function ProductPage() {
         }
     }, [isSuccess, setLoading, data, status, params])
 
-
-
-    const renderProducts = () => {
-        const prductArray = [
-            {
-                id: '1',
-                title: "اسپرسو",
-                description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-                image: sperso.src,
-                prices: [{ id: '1', title: 'small', price: '9000' }],
-                fullWidth: true,
-                className: 'px-5 max-w-lg',
-                categoryId: 1,
-                tags: [],
-                single_mode: true,
-            },
-            {
-                id: '2',
-                title: "کاپوچینو",
-                description: "کاپوچینو یکی از پرمصرف ترین به شمار می رود",
-                image: warmDrink.src,
-                prices: [{ id: '1', title: 'small', price: '9000' }],
-                fullWidth: true,
-                className: 'px-5 max-w-lg',
-                categoryId: 1,
-                tags: [],
-                single_mode: true,
-            },
-            {
-                id: '3',
-                title: "آماکیتو",
-                description: "آماکیتو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-                image: sperso.src,
-                prices: [{ id: '1', title: 'small', price: '9000' }],
-                fullWidth: true,
-                className: 'px-5 max-w-lg',
-                categoryId: 1,
-                tags: [],
-                single_mode: true,
-            },
-            {
-                id: '3',
-                title: "ماکتیل",
-                description: "ماکتیل یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-                image: warmDrink.src,
-                prices: [{ id: '1', title: 'small', price: '9000' }],
-                fullWidth: true,
-                className: 'px-5 max-w-lg',
-                categoryId: 1,
-                tags: [],
-                single_mode: true,
-            },
-            {
-                id: '4',
-                title: "اسپرسو",
-                description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-                image: sperso.src,
-                prices: [{ id: '1', title: 'small', price: '9000' }],
-                fullWidth: true,
-                className: 'px-5 max-w-lg',
-                categoryId: 1,
-                tags: [],
-                single_mode: true,
-            }
-        ]
-        return prductArray?.map((product, key) => (
-            <SwiperSlide className='!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit' key={key}>
-                <Product
-                    id={product.id}
-                    title={product.title}
-                    descriptions={product.description}
-                    image={product.image}
-                    prices={product.prices}
-                    fullWidth
-                    className='px-5 max-w-lg'
-                    categoryId={product.categoryId}
-                    tags={product.tags}
-                    single_mode={product.single_mode}
-                />
-            </SwiperSlide >
-        ))
-
-
-    }
+    const productArray = [
+        {
+            id: '1',
+            title: "اسپرسو",
+            description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: sperso.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '2',
+            title: "کاپوچینو",
+            description: "کاپوچینو یکی از پرمصرف ترین به شمار می رود",
+            image: warmDrink.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '3',
+            title: "آماکیتو",
+            description: "آماکیتو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: sperso.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '3',
+            title: "ماکتیل",
+            description: "ماکتیل یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: warmDrink.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '4',
+            title: "اسپرسو",
+            description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: sperso.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        }
+    ]
     const orderItem = useCallback((price: any) => {
         const key = `${product?.id}-${price.id}`
         functions.cart.addItem({
@@ -307,41 +268,12 @@ function ProductPage() {
                             gap={2}
                             className=" mb-[1.25rem]"
                         >
-                            <Section key={0} id={`category-123`} className="scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title='پیشنهادات روز'>
-                            </Section>
-                            <FlexItem className="px-2">
-                                <Swiper
-                                    slidesPerView={"auto"}
-                                    grabCursor={true}
-                                    scrollbar
-                                    pagination={{
-                                        clickable: true,
-                                        el: "#swiper-pagination",
-                                        bulletActiveClass: styles['swiper-pagination-bullet']
-                                    }}
-                                    breakpoints={{
-                                        768: {
-                                            centerInsufficientSlides: true
-                                        }
-                                    }}
-                                    modules={[Pagination]}
-                                >
-
-                                    {renderProducts()}
-
-                                </Swiper>
-
-                            </FlexItem>
-                            <FlexItem
-                                id="swiper-pagination" className={
-                                    twMerge(
-                                        classNames(
-                                            'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
-                                            {
-                                                '!hidden': scrolled
-                                            }
-                                        )
-                                    )}
+                            <OrderBox
+                                title="پیشنهادات روز"
+                                scrolled={scrolled}
+                                productArray={productArray}
+                                classNameSection="scroll-mt-[20rem]"
+                                contentClassNamesSection='flex flex-col gap-[1rem] items-center'
                             />
                         </FlexBox>
                     </FlexItem>

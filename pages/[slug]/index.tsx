@@ -99,7 +99,7 @@ const Profile = () => {
                             className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
                             rounded
                         >
-                            مشاهده منوی کافه
+                            مشاهده مـنـو
                         </Button>
                         <div className="mt-[1rem]">
                             <WorkingHours data={profileData.working_hours || []} />

@@ -1,4 +1,7 @@
 
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
 import React, { useMemo } from 'react'
 import { IOrderBox } from './types'
 import { Section } from '@/components/common/section/section';
@@ -9,12 +12,10 @@ import { Product } from '@/components/common/product/product';
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
 import styles from '@/assets/styles/pages/menu/menu.module.scss';
 import { Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
+
 export const OrderBox: IOrderBox = (props) => {
     const element = useMemo(() => (
-        <>
+        <div>
             <Section className={
                 twMerge(
                     classNames(),
@@ -34,7 +35,7 @@ export const OrderBox: IOrderBox = (props) => {
                     scrollbar
                     pagination={{
                         clickable: true,
-                        el: "#swiper-pagination",
+                        el: `#${props.idPagination}`,
                         bulletActiveClass: styles['swiper-pagination-bullet']
                     }}
                     breakpoints={{
@@ -68,7 +69,7 @@ export const OrderBox: IOrderBox = (props) => {
 
             </FlexItem>
             <FlexItem
-                id="swiper-pagination" className={
+                id={props.idPagination} className={
                     twMerge(
                         classNames(
                             'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
@@ -79,7 +80,7 @@ export const OrderBox: IOrderBox = (props) => {
                     )}
             />
 
-        </>
+        </div>
     ), [props])
     return (
         element

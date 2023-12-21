@@ -274,6 +274,7 @@ function ProductPage() {
                                 productArray={productArray}
                                 classNameSection="scroll-mt-[20rem]"
                                 contentClassNamesSection='flex flex-col gap-[1rem] items-center'
+                                idPagination='swiper-pagination-order'
                             />
                         </FlexBox>
                     </FlexItem>

@@ -1,6 +1,10 @@
 import { Navbar } from '@/components/core/navbar/navbar'
 import { CategoryCard } from '@/components/menu/category-card'
 import noImage from '@/assets/images/no-image.jpg'
+
+import sperso from '@/assets/images/sperso.png'
+import warmDrink from '@/assets/images/warm-drink.png'
+
 import styles from '@/assets/styles/pages/menu/menu.module.scss'
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -29,6 +33,7 @@ import classNames from 'classnames'
 import { twMerge } from 'tailwind-merge'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
+import { OrderBox } from '@/components/menu/order-box';
 
 function MenuPage() {
     const [scrolled, setScrolled] = useState(false)
@@ -85,6 +90,72 @@ function MenuPage() {
             window.removeEventListener('scroll', _.throttle(handler, 50))
         }
     }, [scrolled])
+
+
+    const productArray = [
+        {
+            id: '1',
+            title: "اسپرسو",
+            description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: sperso.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '2',
+            title: "کاپوچینو",
+            description: "کاپوچینو یکی از پرمصرف ترین به شمار می رود",
+            image: warmDrink.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '3',
+            title: "آماکیتو",
+            description: "آماکیتو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: sperso.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '3',
+            title: "ماکتیل",
+            description: "ماکتیل یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: warmDrink.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        },
+        {
+            id: '4',
+            title: "اسپرسو",
+            description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
+            image: sperso.src,
+            prices: [{ id: '1', title: 'small', price: '9000' }],
+            fullWidth: true,
+            className: 'px-5 max-w-lg',
+            categoryId: 1,
+            tags: [],
+            single_mode: true,
+        }
+    ]
+
+
 
     const categoriesSwiperSlides = useMemo(() => {
         return _.chunk(menuData, 2).map((categories, key1) => (
@@ -181,6 +252,7 @@ function MenuPage() {
                                     gap={2}
                                     className="pt-[4.5rem]"
                                 >
+
                                     <FlexItem className="px-2">
                                         <Swiper
                                             slidesPerView={"auto"}
@@ -226,6 +298,28 @@ function MenuPage() {
                             </FlexItem>
                         </FlexBox>
                     </Container>
+                    <FlexBox direction='column' className='mt-[1rem] '>
+                        <FlexItem>
+                            <FlexBox
+                                direction='column'
+                                gap={2}
+                                className=" mb-[1.25rem] "
+                            >
+                                <OrderBox
+                                    title="پیشنهادات روز"
+                                    scrolled={scrolled}
+                                    productArray={productArray}
+                                    classNameSection="scroll-mt-[20rem]"
+                                    contentClassNamesSection='flex flex-col gap-[1rem] items-center'
+                                    idPagination='swiper-pagination-order'
+
+                                />
+
+                            </FlexBox>
+                        </FlexItem>
+
+                    </FlexBox>
+
                     <FlexItem className="z-10 relative">
                         {renderCategorySections()}
                     </FlexItem>

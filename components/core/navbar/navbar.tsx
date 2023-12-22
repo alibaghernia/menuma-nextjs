@@ -38,12 +38,12 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
 
     const menuItems = useMemo(() => [
         {
-            title: "پروفایل کافه",
+            title: "پروفایل",
             icon: <HomeIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
             url: `/${slug}`,
         },
         {
-            title: "منوی کافه",
+            title: "منو",
             icon: <MenuCircleIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
             url: `/${slug}menu`
         },

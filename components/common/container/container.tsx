@@ -7,6 +7,9 @@ export const Container: IContainer = ({
     children,
     position = "absolute",
     className,
+    center,
+    centerHorizontal,
+    centerVertical,
     ...props
 }) => {
     return (
@@ -16,9 +19,9 @@ export const Container: IContainer = ({
                     classNames(
                         position,
                         {
-                            "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]": typeof props.center == "boolean",
-                            "left-[50%] translate-x-[-50%]": typeof props.center == "string" && props.center == "horizontal",
-                            "top-[50%] translate-y-[-50%]": typeof props.center == "string" && props.center == "vertical",
+                            "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]": typeof center == "boolean",
+                            "left-[50%] translate-x-[-50%]": centerHorizontal,
+                            "top-[50%] translate-y-[-50%]": centerVertical,
                         },
                     ),
                     className

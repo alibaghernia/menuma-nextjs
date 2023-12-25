@@ -10,8 +10,6 @@ import { Label } from "@/components/common/label"
 import { TextField } from "@/components/common/text_field"
 
 export const RegisterFormComponent = () => {
-    useEffect(() => {
-    }, [])
     const [input, setInput] = useState({
         name: '',
         mobile: ''
@@ -35,7 +33,6 @@ export const RegisterFormComponent = () => {
                         <FlexBox className="flex flex-col items-center justify-center px-6 mx-auto lg:py-0">
                             <FlexItem className="mx-auto mb-7 text-[2rem] text-gray-800">
                                 <Link href={{ pathname: '/' }}>
-                                    منوما
                                 </Link>
                             </FlexItem>
                         </FlexBox>
@@ -96,10 +93,12 @@ export const RegisterFormComponent = () => {
                                 ddd:focus:ring-blue-500 ddd:focus:border-blue-500"
                                         type="text"
                                         name="name"
-                                        onChange={(e: any) => setInput({
-                                            ...input,
-                                            name: e.target.value
-                                        })}
+                                        onChange={(e: any) => {
+                                            setInput(input => ({
+                                                ...input,
+                                                name: e.target.value
+                                            }))
+                                        }}
                                         required
                                         placeholder=""
                                     />
@@ -118,12 +117,12 @@ export const RegisterFormComponent = () => {
                                 ddd:focus:ring-blue-500 ddd:focus:border-blue-500 flex-row text-left"
                                         type="text"
                                         name="name"
-                                        onChange={() => (e: any) => setInput({
-                                            ...input,
-                                            mobile: e.target.value
-                                        })}
-                                        required
-                                        placeholder=""
+                                        onChange={(e: any) => {
+                                            setInput(input => ({
+                                                ...input,
+                                                mobile: e.target.value
+                                            }))
+                                        }}
 
                                     />
                                 </div>
@@ -137,7 +136,7 @@ export const RegisterFormComponent = () => {
 
                     </div>
                 }
-            </Container >
+            </Container>
         </Fragment>
     )
 }

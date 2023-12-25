@@ -9,7 +9,7 @@ export const TextField: ITextField = (props) => {
             type="text"
             name="name"
             id="name"
-            onChange={() => props.onChange}
+            onChange={props.onChange!}
             className={twMerge(classNames(
                 twMerge('block mb-2 text-sm font-medium text-gray-900 ddd:text-white', props?.className)
             ))}

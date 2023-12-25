@@ -155,7 +155,7 @@ export const Cart: ICart = (props) => {
         <>
             <Container
                 position='fixed'
-                center="horizontal"
+                centerHorizontal
                 className={
                     classNames(
                         "max-w-sm xs:max-w-xs  w-full py-[1rem] px-[1.5rem] bg-white z-50 rounded-[2.5rem] top-[5rem] bottom-[5rem] overflow-hidden",

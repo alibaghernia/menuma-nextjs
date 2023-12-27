@@ -8,14 +8,14 @@ declare type ICartItem = {
   type: string;
   count: number;
   price: number;
-  product: IProductProps
+  product: ProductType;
 };
 
 declare type IProviderState = {
   isNotMenuma: boolean;
   restored: boolean;
   cart: ICartItem[];
-  profile: any
+  profile: any;
 };
 
 declare type IProvider = FC<PropsWithChildren<{}>>;

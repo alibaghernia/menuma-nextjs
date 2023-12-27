@@ -29,43 +29,39 @@ import classNames from 'classnames'
 import { twMerge } from 'tailwind-merge'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
-import { useCustomRouter, useLoadings } from '@/utils/hooks';
+import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
+import { CategoryService } from '@/services/category/category.service';
 
 function MenuPage() {
     const [addL, removeL] = useLoadings()
+    const message = useMessage()
     const [scrolled, setScrolled] = useState(false)
-    const [menuData, setMenuData] = useState<APICateogory[]>([])
+    const [menuData, setMenuData] = useState<GetCategoriesTypes['categories']>()
     const { state } = useContext(CoffeeShopProviderContext)
     const [searchInput, setSearchInput] = useState<string>("")
     const params = useParams()
     const slug = useSlug(false)
     const rouer = useCustomRouter()
+    const categoryService = CategoryService.init(params.slug as string)
 
-    const [selectedCategory, setSelectedCategory] = useState<string | number>()
 
-    function menuFetcher(): Promise<APICateogory[]> {
-        return axios.get(`/api/cafe-restaurants/${params.slug}/menu`).then(({ data }) => data)
-    }
-    const { isSuccess, data, refetch, status, isError, error } = useQuery({ queryKey: `fetch-menu-${params.slug}`, queryFn: menuFetcher, enabled: false, retry: 2, cacheTime: 5 * 60 * 1000 })
-
-    useEffect(() => {
-        if (isError) {
-            toast.error("خطا در ارتباط با سرور")
-        }
-    }, [isError])
-    useEffect(() => {
-        if (!params) return
+    function menuFetcher() {
         addL('fetch-menu')
-        refetch()
-    }, [refetch, params])
+        categoryService.get(true)
+            .then(({ data }) => {
+                setMenuData(data?.categories)
+            })
+            .catch(() => {
+                message.error('خطا در دریافت اطلاعات')
+            })
+            .finally(() => {
+                removeL('fetch-menu')
+            })
+    }
 
     useEffect(() => {
-        if (isSuccess && menuData) {
-            setSelectedCategory(data[0]?.id)
-            setMenuData(data)
-            removeL('fetch-menu')
-        }
-    }, [isSuccess, data, menuData, rouer])
+        menuFetcher()
+    }, [])
 
     useEffect(() => {
         const handler = () => {
@@ -108,9 +104,12 @@ function MenuPage() {
                                 )
                             }
                             image={
-                                category.background_path ? `${serverBaseUrl}/storage/${category.background_path}` : undefined} title={category.name}
+                                category.image
+                                    ? `${serverBaseUrl}/files/${category.image}`
+                                    : undefined}
+                            title={category.title}
                             onClick={() => {
-                                setSelectedCategory(category.id); setSearchInput(""); window.document.getElementById(`category-${category.id}`)?.scrollIntoView({
+                                setSearchInput(""); window.document.getElementById(`category-${category.uuid}`)?.scrollIntoView({
                                     behavior: 'smooth'
                                 })
                             }} />
@@ -119,36 +118,30 @@ function MenuPage() {
             </SwiperSlide>
         )
         )
-    }, [menuData, setSelectedCategory, scrolled])
+    }, [menuData, scrolled])
 
-    const renderProducts = useCallback((category: APICateogory) => {
-        const categoryItems = category?.items || []
-        const filtred = categoryItems.filter(product => product.name.includes(searchInput!))
+    const renderProducts = useCallback((category: CategoryType) => {
+        const categoryItems = category?.products || []
+        const filtred = categoryItems.filter(product => product.title.includes(searchInput!))
         if (!filtred.length) return (
             <div className="w-full text-gray-400 text-[1rem] text-center">
                 آیتمی یافت نشد
             </div>
         )
-        return categoryItems.filter(product => product.name.includes(searchInput!))?.map((product, key1) => (
+        return categoryItems.filter(product => product.title.includes(searchInput!))?.map((product, key1) => (
             <Product
                 key={key1}
-                id={product.id}
-                title={product.name}
-                descriptions={product.description}
-                image={product.image_path ? `${serverBaseUrl}/storage/${product.image_path}` : noImage.src}
-                prices={product.prices || []}
+                {...product}
                 fullWidth
                 className='px-5 max-w-lg'
-                categoryId={product.category_id}
-                tags={product.tags}
             />
         )
         )
     }, [searchInput])
 
     const renderCategorySections = () => {
-        return menuData.filter(category => category.items.filter(product => product.name.includes(searchInput!)).length).map((category, key) => (
-            <Section key={key} id={`category-${category.id}`} className="mt-[1.125rem] pb-5 scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title={category.name}>
+        return menuData?.filter(category => category.products?.filter(product => product.title.includes(searchInput!)).length).map((category, key) => (
+            <Section key={key} id={`category-${category.uuid}`} className="mt-[1.125rem] pb-5 scroll-mt-[20rem]" contentClassNames='flex flex-col gap-[1rem] items-center' title={category.title}>
                 {renderProducts(category)}
             </Section>
         ))

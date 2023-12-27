@@ -7,7 +7,6 @@ import noImage from '@/assets/images/no-image.jpg'
 import { ProviderContext } from '@/providers/main/provider';
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import _ from 'lodash'
 import { useSlug } from '@/providers/main/hooks'
 import { Container } from '../container/container'
@@ -15,6 +14,7 @@ import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Badge } from '@/components/common/badge/badge'
 import { useCustomRouter } from '@/utils/hooks'
+import { serverBaseUrl } from '@/utils/axios'
 
 export const Product: IProduct = (props) => {
     const router = useCustomRouter()
@@ -22,45 +22,45 @@ export const Product: IProduct = (props) => {
     const slug = useSlug()
     const { functions } = useContext(ProviderContext)
 
-    const productSlug = useMemo(() => params ? `/${slug}menu/${props.categoryId}/${props.id}` : "#", [params, props, slug])
+    const productSlug = useMemo(() => params ? `/${slug}menu/${props.category_uuid}/${props.uuid}` : "#", [params, props, slug])
 
 
 
     const orderItem = useCallback((price: any) => {
-        const key = `${props.id}-${price.id}`
+        const key = `${props.uuid}-${price.value}`
         functions.cart.addItem({
             id: key,
-            image: props.image || noImage.src,
+            image: noImage.src,
             title: props.title,
             count: 1,
-            price: price.price,
+            price: price.value,
             type: price.title,
             product: props
         })
     }, [functions, props])
 
     const increaseOrderItemCount = useCallback((price: any) => {
-        const key = `${props.id}-${price.id}`
+        const key = `${props.uuid}-${price.value}`
         functions.cart.increaseCount(key)
-    }, [functions, props.id])
+    }, [functions, props.uuid])
 
     const decreasOrderItemCount = useCallback((price: any) => {
-        const key = `${props.id}-${price.id}`
+        const key = `${props.uuid}-${price.value}`
         const item = functions.cart.getItem(key)
         if (item!.count == 1) {
             functions.cart.removeItem(key)
         } else
             functions.cart.decreaseCount(key)
-    }, [functions, props.id])
+    }, [functions, props.uuid])
 
 
     const renderPrices = useCallback(() => props.prices.map((price, key) => {
-        const itemId = `${props.id}-${price.id}`
+        const itemId = `${props.uuid}-${price.value}`
         const order = functions.cart.getItem(itemId)
         return (
             <div className={classNames("w-full relative bg-white h-[5rem] mt-[-2rem] rounded-bl-[2rem] rounded-br-[2rem] overflow-hidden border border-white")} style={{
                 zIndex: ~key
-            }} key={price.id}>
+            }} key={price.value}>
                 <span className="absolute inset-0 bg-typography/[.20] z-0 pointer-events-none"></span>
                 <Container className='bottom-0 left-0 right-0 py-[.5rem] px-[1.7rem] z-10'>
                     <FlexBox alignItems='center' justify='between'>
@@ -95,7 +95,7 @@ export const Product: IProduct = (props) => {
                             >
                                 <FlexItem>
                                     <div className="text-[1rem] font-[500] text-typography">
-                                        {`${parseInt(price.price).toLocaleString("IR-fa")} ت`}
+                                        {`${price.value.toLocaleString("IR-fa")} ت`}
                                     </div>
                                 </FlexItem>
                                 <FlexItem>
@@ -144,14 +144,14 @@ export const Product: IProduct = (props) => {
                 "relative h-full": mono,
             })}>
 
-                <Image fill src={props.image!} alt={props.title} className='z-0 object-cover relative' />
+                <Image fill src={props.images[0] ? `${serverBaseUrl}/files/${props.images[0]}` : noImage.src} alt={props.title} className='z-0 object-cover relative' />
                 {props.single_mode && (
                     <>
                         <span className="z-10 absolute inset-0" style={{
                             background: "linear-gradient(180deg, rgba(255, 255, 255, 0.00) 40%, rgba(224, 224, 224, 0.75) 100%)"
                         }}></span>
                         <div className="text-[1.2rem] text-typography absolute bottom-[.3rem] left-[50%] translate-x-[-50%] font-bold z-20">
-                            {`${parseInt(props.prices[0].price).toLocaleString("IR-fa")} ت`}
+                            {`${props.prices[0].value.toLocaleString("IR-fa")} ت`}
                         </div>
                     </>
                 )}
@@ -222,7 +222,7 @@ export const Product: IProduct = (props) => {
                                 </FlexItem>
                                 <FlexItem>
                                     <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
-                                        {props.descriptions}
+                                        {props.description}
                                     </div>
                                 </FlexItem>
                             </FlexBox>

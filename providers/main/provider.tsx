@@ -7,8 +7,6 @@ import functions from './functions';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 
-const Loading = dynamic(() => import('@/components/common/loading/loading'), { ssr: false })
-
 export const ProviderContext = createContext<{
     state: IProviderState,
     dispatch: (action: any) => void,

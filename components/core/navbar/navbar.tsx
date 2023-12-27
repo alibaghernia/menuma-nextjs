@@ -25,7 +25,6 @@ const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
     const router = useRouter()
     const slug = useSlug()
-    const { setLoading } = useContext(ProviderContext)
     const { state: coffeShopState, handleCallGarson, cancelGarsonCallButton } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const { state } = useContext(ProviderContext)
@@ -64,7 +63,6 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                     if (menuItem.url) {
                         setOverlay(false)
                         setMenuOpen(false)
-                        setLoading(true)
                         router.push(menuItem.url)
                     }
                 }}>
@@ -76,7 +74,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 </FlexItem>
             </FlexBox>
         ))
-    }, [menuItems, router, setLoading])
+    }, [menuItems, router])
 
     function handleBack() {
         if (props.backUrl) {
@@ -146,11 +144,13 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 </FlexItem>
                 <FlexItem>
                     <FlexBox alignItems='center' gap=".5rem">
-                        {callPager && Boolean(parseInt(coffeShopState.profile.has_pager)) && (
-                            <FlexItem>
-                                <CallGarson onClick={handleCallGarson} isCancel={cancelGarsonCallButton} size='small' />
-                            </FlexItem>
-                        )}
+                        {callPager
+                            //  && Boolean(parseInt(coffeShopState.profile.has_pager))
+                            && (
+                                <FlexItem>
+                                    <CallGarson onClick={handleCallGarson} isCancel={cancelGarsonCallButton} size='small' />
+                                </FlexItem>
+                            )}
                         {props.note && (
                             <FlexItem>
                                 <div className="cursor-pointer relative" onClick={() => { setCartOpen(true); setOverlay(true) }}>

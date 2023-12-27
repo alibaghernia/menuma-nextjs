@@ -13,15 +13,12 @@ export const ProviderContext = createContext<{
     state: IProviderState,
     dispatch: (action: any) => void,
     functions: ReturnType<typeof functions>
-    loading: boolean,
-    setLoading: (state: boolean) => void
     // @ts-ignore
 }>({})
 
 const localStoragekey = "provider-storage-new-v3.0"
 
 const Provider: IProvider = ({ children }) => {
-    const [loading, setLoading] = useState(true)
     const params = useParams()
 
     const getLocalStorageKey = useCallback(() => {
@@ -88,14 +85,9 @@ const Provider: IProvider = ({ children }) => {
                 state,
                 dispatch,
                 functions: functions(state, dispatch),
-                loading,
-                setLoading
             }}>
                 {children}
             </ProviderContext.Provider>
-            {
-                loading && <Loading />
-            }
         </>
     )
 }

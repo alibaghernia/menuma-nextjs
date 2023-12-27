@@ -25,22 +25,18 @@ import { getSlugFromReq, withCafeeShopProfile } from '@/utils/serverSideUtils'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 import { MetaTags } from '@/components/common/metatags'
 import _ from 'lodash'
+import { useCustomRouter } from '@/utils/hooks'
 
 const Profile = () => {
-    const { setLoading, state: mainState } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
-    const profileData: IProfile = state.profile
-    const router = useRouter()
+    const profileData: BusinessType = state.profile
+    const router = useCustomRouter()
     const slug = useSlug()
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)
     const WorkingHours = dynamic(import('@/components/profile/working_hours/working_hours'), { ssr: false })
     const MapComponent = dynamic(import('@/components/common/map/map'), { ssr: false })
 
     const locationCoordinates: [number, number] = [parseFloat(profileData.location_lat || "0"), parseFloat(profileData.location_long || "0")]
-
-    useEffect(() => {
-        if (Object.keys(profileData).length) setLoading(false)
-    }, [setLoading, state.profile, profileData, router])
 
 
     const contactInfo = useMemo(() => [
@@ -55,8 +51,6 @@ const Profile = () => {
             link: `mailto:${profileData.email}`,
         },
     ].filter(item => item.value), [profileData, resolvedTailwindConfig])
-
-
 
 
     return (
@@ -77,7 +71,7 @@ const Profile = () => {
                 },
                 {
                     name: 'og:image',
-                    value: profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : cafeeshopBannelPlaceholder.src,
+                    value: profileData?.logo ? `${serverBaseUrl}/files/${profileData?.logo}` : cafeeshopBannelPlaceholder.src,
                 }
             ]} />
             <div className='bg-secondary min-h-screen'>
@@ -93,7 +87,6 @@ const Profile = () => {
                             onClick={
                                 () => {
                                     router.push(`/${slug}menu`);
-                                    setLoading(true);
                                 }
                             }
                             className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"

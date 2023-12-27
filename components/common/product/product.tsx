@@ -14,12 +14,13 @@ import { Container } from '../container/container'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Badge } from '@/components/common/badge/badge'
+import { useCustomRouter } from '@/utils/hooks'
 
 export const Product: IProduct = (props) => {
-    const router = useRouter()
+    const router = useCustomRouter()
     const params = useParams()
     const slug = useSlug()
-    const { functions, setLoading } = useContext(ProviderContext)
+    const { functions } = useContext(ProviderContext)
 
     const productSlug = useMemo(() => params ? `/${slug}menu/${props.categoryId}/${props.id}` : "#", [params, props, slug])
 
@@ -138,7 +139,7 @@ export const Product: IProduct = (props) => {
 
     const renderImage = useCallback((mono: boolean) => {
         return (
-            <Link href={productSlug} onClick={() => setLoading(true)} className={classNames("flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]", {
+            <Link href={productSlug} className={classNames("flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]", {
                 "absolute !h-[12rem] right-[0]": !mono,
                 "relative h-full": mono,
             })}>
@@ -214,7 +215,7 @@ export const Product: IProduct = (props) => {
                             <FlexBox direction='column' gap={2}>
                                 <FlexItem>
 
-                                    <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" onClick={() => setLoading(true)}>
+                                    <Link href={productSlug} className="text-[1.2rem] font-[500] text-typography w-full" >
                                         {props.title}
                                     </Link>
 

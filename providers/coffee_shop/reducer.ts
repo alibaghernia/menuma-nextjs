@@ -8,8 +8,8 @@ export default function reducer(state: IProviderState, action: any) {
       return state;
     }
     case REDUCER_KEYS.profile.UPDATE: {
-      const { key, value } = action.data
-      state.profile[key] = value
+      const { key, value } = action.data;
+      state.profile[key as keyof typeof state.profile] = value;
       return state;
     }
     default: {

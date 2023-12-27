@@ -9,6 +9,7 @@ import { Fragment } from 'react';
 import { ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 import Provider from '@/providers/main/provider';
+import { GeneralProvider } from '@/providers/general/provider';
 
 const vazirMatn = LocalFont({
   src: [
@@ -63,9 +64,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <main className={classNames('z-10', vazirMatn.className)}>
         <PageProvider>
-          <QueryClientProvider client={queryClient}>
-            <Component {...pageProps} />
-          </QueryClientProvider>
+          <GeneralProvider>
+            <QueryClientProvider client={queryClient}>
+              <Component {...pageProps} />
+            </QueryClientProvider>
+          </GeneralProvider>
         </PageProvider>
       </main>
       <ToastContainer className="z-20" rtl />

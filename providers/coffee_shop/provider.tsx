@@ -16,11 +16,14 @@ import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import classNames from 'classnames';
-import { ConfirmModal } from '@/components/common/confirm_modal/confirm_modal';
 import { useRouter } from 'next/router';
+import { useLoadings } from '@/utils/hooks';
+import dynamic from 'next/dynamic';
 
 export const TABLE_NUMBER_METADATA_STORAGE_KEY = '-table-number-key-'
-
+const ConfirmModal = dynamic(() => import('@/components/common/confirm_modal/confirm_modal'), {
+    ssr: false
+})
 export const CoffeeShopProviderContext = createContext<{
     state: IProviderState,
     dispatch: (action: any) => void,
@@ -34,15 +37,15 @@ export const CoffeeShopProviderContext = createContext<{
 
 
 const CoffeShopProvider: IProvider = ({ children, profile }) => {
-
-    const getInitialState = () => {
+    const [addL, removeL] = useLoadings()
+    const getInitialState = (): any => {
         if (profile) {
             return _.merge(INITIAL_STATE, { profile })
         }
         return INITIAL_STATE
     }
 
-    const { setLoading, state: mainState, } = useContext(ProviderContext)
+    const { state: mainState, } = useContext(ProviderContext)
     const params = useParams()
     const searchParams = useSearchParams()
     const router = useRouter()
@@ -55,7 +58,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     let cancelGarsonCallButtonInterval = useRef<NodeJS.Timeout>()
     const [tableID, setTableID] = useState<string>("")
     const [callGarsonModal, setCallGarsonModal] = useState<IConfirmModalProps>()
-    const tableIDStorageKey = `${state.profile.id}${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`
+    const tableIDStorageKey = `${state.profile?.uuid}${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`
     const [table, setTable] = useState<TableType>()
     useEffect(() => {
         const tab_id = searchParams.get('tab_id')
@@ -93,18 +96,6 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     }, [isSuccess, data])
 
     useEffect(() => {
-        // if (!state.profile || params?.slug != state.profile.slug && !profile) {
-        //     setLoading(true)
-        //     refetch()
-        // }
-    }, [refetch, params, state, setLoading, profile])
-
-    useEffect(() => {
-        if (isSuccess)
-            setLoading(false)
-    }, [setLoading, isFetched, isSuccess])
-
-    useEffect(() => {
         if (isError) {
             toast.error("خطا در ارتباط با سرور")
         }
@@ -125,7 +116,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
 
     const handleCallGarson = async () => {
         const handle = (tableID: string) => {
-            setLoading(true)
+            addL('call-garson')
             if (!cancelGarsonCallButton) {
                 functions.services.callGarson(tableID)
                     .then(() => {
@@ -133,7 +124,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                         setCallGarsonModal(undefined);
                     })
                     .finally(() => {
-                        setLoading(false)
+                        removeL('call-garson')
                     })
             } else {
                 functions.services.cancelCallGarson(tableID)
@@ -142,7 +133,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                         setCallGarsonModal(undefined);
                     })
                     .finally(() => {
-                        setLoading(false)
+                        removeL('call-garson')
                     })
             }
         }
@@ -174,7 +165,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
             }
             if (table) showModal(table)
             else {
-                setLoading(true)
+                addL('call-garson')
                 functions.services.geTable(storageTableID)
                     .then(({ data: table }) => {
                         showModal(table)
@@ -184,7 +175,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                         toast.error('خطا در دریافت اطلاعات میز')
                     })
                     .finally(() => {
-                        setLoading(false)
+                        removeL('call-garson')
                     })
             }
         }

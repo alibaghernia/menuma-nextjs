@@ -33,13 +33,13 @@ export default function functions(
     },
     services: {
       callGarson: (tableID: string) => {
-        return commonService.callGarson(state.profile.slug, tableID);
+        return commonService.callGarson(state.profile?.slug!, tableID);
       },
       cancelCallGarson: (tableID: string) => {
-        return commonService.cancelCallGarson(state.profile.slug, tableID);
+        return commonService.cancelCallGarson(state.profile?.slug!, tableID);
       },
       geTable: (tableID: string) => {
-        return commonService.getTable(state.profile.slug, tableID);
+        return commonService.getTable(state.profile?.slug!, tableID);
       },
     },
   };

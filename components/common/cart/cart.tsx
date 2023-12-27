@@ -17,10 +17,10 @@ import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Container } from '../container/container'
 import { IConfirmModalProps } from '../confirm_modal/types'
-import { ConfirmModal } from '../confirm_modal/confirm_modal'
 import _ from 'lodash'
 import { CallGarson } from '../call_garson/call_garson'
-
+import dynamic from 'next/dynamic'
+const ConfirmModal = dynamic(() => import('@/components/common/confirm_modal/confirm_modal'), { ssr: false })
 export const Cart: ICart = (props) => {
     const params = useParams()
     const slug = useSlug()

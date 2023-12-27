@@ -29,16 +29,17 @@ import classNames from 'classnames'
 import { twMerge } from 'tailwind-merge'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
+import { useCustomRouter, useLoadings } from '@/utils/hooks';
 
 function MenuPage() {
+    const [addL, removeL] = useLoadings()
     const [scrolled, setScrolled] = useState(false)
     const [menuData, setMenuData] = useState<APICateogory[]>([])
     const { state } = useContext(CoffeeShopProviderContext)
-    const { setLoading, state: mainState } = useContext(ProviderContext)
     const [searchInput, setSearchInput] = useState<string>("")
     const params = useParams()
     const slug = useSlug(false)
-    const rouer = useRouter()
+    const rouer = useCustomRouter()
 
     const [selectedCategory, setSelectedCategory] = useState<string | number>()
 
@@ -54,17 +55,17 @@ function MenuPage() {
     }, [isError])
     useEffect(() => {
         if (!params) return
-        setLoading(true)
+        addL('fetch-menu')
         refetch()
-    }, [refetch, setLoading, params])
+    }, [refetch, params])
 
     useEffect(() => {
         if (isSuccess && menuData) {
             setSelectedCategory(data[0]?.id)
             setMenuData(data)
-            setLoading(false)
+            removeL('fetch-menu')
         }
-    }, [isSuccess, setLoading, data, menuData, rouer])
+    }, [isSuccess, data, menuData, rouer])
 
     useEffect(() => {
         const handler = () => {

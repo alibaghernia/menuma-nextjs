@@ -18,14 +18,15 @@ export const ProfileHeader: IProfileHeader = (props) => {
 
   const { state: { profile: profileData } } = useContext(CoffeeShopProviderContext)
 
+  const social_logo: Record<string, any> = {
+    instagram: <InstagramIcon />,
+    telegram: <TelegramIcon />,
+    twitter_x: <XIcon />,
+    whatsapp: <WhatsappIcon />,
+  }
 
   const socials = useMemo(() => {
-    const elements = [
-      (profileData?.instagram ? { icon: <InstagramIcon />, url: profileData.instagram } : undefined),
-      (profileData?.telegram ? { icon: <TelegramIcon />, url: profileData.telegram } : undefined),
-      (profileData?.twitter ? { icon: <XIcon width={20} height={20} />, url: profileData.twitter } : undefined),
-      (profileData?.whatsapp ? { icon: <WhatsappIcon />, url: profileData.whatsapp } : undefined),
-    ].filter(Boolean).map((social: any, key) => (
+    const elements = profileData?.socials.map(social => ({ url: social.link, icon: social_logo[social.type] })).filter(Boolean).map((social: any, key) => (
       <FlexItem key={key}>
         <Link href={social.url}>
           {social.icon}
@@ -49,7 +50,9 @@ export const ProfileHeader: IProfileHeader = (props) => {
           <Image
             fill
             src={
-              profileData?.banner_path ? `${serverBaseUrl}/storage/${profileData?.banner_path}` : coffeeshopImage.src} alt={profileData.name}
+              profileData?.banner
+                ? `${serverBaseUrl}/files/${profileData?.banner}`
+                : coffeeshopImage.src} alt={profileData?.name!}
             className='absolute inset-0 -z-20 object-cover'
           />
           <Container className='inset-0 -z-10 bg-black/[.6]' />
@@ -73,8 +76,8 @@ export const ProfileHeader: IProfileHeader = (props) => {
       >
         <Image
           fill
-          src={profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : coffeeshopLogo.src}
-          alt={profileData.name}
+          src={profileData?.logo ? `${serverBaseUrl}/files/${profileData?.logo}` : coffeeshopLogo.src}
+          alt={profileData?.name!}
           className='object-cover'
         />
       </Container>

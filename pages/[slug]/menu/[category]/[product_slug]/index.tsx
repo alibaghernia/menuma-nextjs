@@ -16,9 +16,11 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
+import { useLoadings } from '@/utils/hooks';
 
 function ProductPage() {
-    const { setLoading, functions } = useContext(ProviderContext)
+    const [addL, removeL] = useLoadings()
+    const { functions } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const slug = useSlug(false)
@@ -50,16 +52,16 @@ function ProductPage() {
 
     useEffect(() => {
         if (!params) return
-        setLoading(true)
+        addL('fetch-menu-item')
         refetch()
-    }, [refetch, setLoading, params])
+    }, [refetch, params])
 
     useEffect(() => {
         if (isSuccess) {
             setProduct(data)
-            setLoading(false)
+            removeL('fetch-menu-item')
         }
-    }, [isSuccess, setLoading, data, status, params])
+    }, [isSuccess, data, status, params])
 
     const orderItem = useCallback((price: any) => {
         const key = `${product?.id}-${price.id}`

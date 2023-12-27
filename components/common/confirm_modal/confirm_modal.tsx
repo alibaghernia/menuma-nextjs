@@ -76,3 +76,4 @@ export const ConfirmModal: IConfirmModal = ({
     )
 
 }
+export default ConfirmModal

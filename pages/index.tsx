@@ -2,15 +2,14 @@ import { Button } from "@/components/common/button"
 import { Container } from "@/components/common/container/container"
 import { FlexBox } from "@/components/common/flex_box/flex_box"
 import { FlexItem } from "@/components/common/flex_item/flex_item"
+import { usePageLoading } from "@/utils/hooks"
 import Head from "next/head"
 import Link from "next/link"
 import { Fragment, useContext, useEffect } from "react"
 
 
 function Home() {
-
-    useEffect(() => {
-    }, [])
+    usePageLoading()
 
     return (
         <>

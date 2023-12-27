@@ -9,7 +9,7 @@ declare type ICartItem = {
 };
 
 declare type IProviderState = {
-  profile: any;
+  profile: BusinessType;
 };
 
 declare type IProvider = FC<

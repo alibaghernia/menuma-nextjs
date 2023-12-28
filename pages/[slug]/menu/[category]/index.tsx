@@ -27,12 +27,7 @@ function CategoryPage() {
             <FlexItem
                 key={key}>
                 <Product
-                    id={product.id}
-                    title={product.title}
-                    descriptions={product.descriptions}
-                    image={product.image}
-                    prices={product.prices}
-                    special={product.special}
+                    {...product}
                     fullWidth
                 />
             </FlexItem>

@@ -178,7 +178,7 @@ export const Product: IProduct = (props) => {
     }, [props.tags])
 
     return (
-        <div className={classNames("relative", { "w-full": props.fullWidth }, props.className)}>
+        <div className={classNames("relative ", { "w-full": props.fullWidth }, props.className)}>
             <FlexBox
                 className={
                     classNames(
@@ -198,7 +198,7 @@ export const Product: IProduct = (props) => {
                     <FlexBox
                         className={
                             classNames(
-                                "bg-white h-[12.9rem] rounded-[2rem] border border-black/[.05]",
+                                "bg-white h-[12.9rem] rounded-[2rem] border border-black/[.05] shadow",
                                 {
                                     "w-[16.3rem] pr-[5.6rem] flex-col  py-[1.1rem] pl-[1.4rem]  items-center  justify-between": !props.fullWidth,
                                     "w-full p-[1rem] gap-[1.4rem] z-10": props.fullWidth,

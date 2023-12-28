@@ -32,16 +32,15 @@ export const Cart: ICart = (props) => {
     const orderItems = state.cart
 
 
-    const increaseOrderItemCount = useCallback((product: any, price: any) => {
-        const key = `${product?.id}-${price}`
+    const increaseOrderItemCount = useCallback((product: ProductType, price: number) => {
+        const key = `${product?.uuid}-${price}`
         functions.cart.increaseCount(key)
     }, [functions])
 
-    const decreasOrderItemCount = useCallback((product: any, price: any) => {
-        const key = `${product?.id}-${price}`
+    const decreasOrderItemCount = useCallback((product: ProductType, price: number) => {
+        const key = `${product?.uuid}-${price}`
         const item = functions.cart.getItem(key)
         if (item!.count == 1) {
-            console.log("delete");
             functions.cart.removeItem(key)
         } else
             functions.cart.decreaseCount(key)
@@ -49,7 +48,7 @@ export const Cart: ICart = (props) => {
 
 
     const renderOrderItems = useMemo(() => orderItems.map((orderItem, key) => {
-        const productSlug = params && orderItem.product ? `/${slug}menu/${orderItem.product.categoryId}/${orderItem.product?.id}` : "#";
+        const productSlug = params && orderItem.product ? `/${slug}menu/${orderItem.product.category_uuid}/${orderItem.product?.uuid}` : "#";
 
 
         return (
@@ -102,7 +101,7 @@ export const Cart: ICart = (props) => {
                         <FlexBox justify='center' className='w-full'>
                             <FlexItem>
                                 <FlexBox gap={2} alignItems='center'>
-                                    <FlexItem className="relative w-14 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none text-typography" onClick={_.throttle(() => increaseOrderItemCount(orderItem.product, orderItem.id.split("-")[1]), 500)}>
+                                    <FlexItem className="relative w-14 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none text-typography" onClick={_.throttle(() => increaseOrderItemCount(orderItem.product, orderItem.price), 500)}>
                                         <Container center>
                                             +
                                         </Container>
@@ -115,7 +114,7 @@ export const Cart: ICart = (props) => {
                                     <FlexItem className={classNames("relative w-14 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none")}
                                         onClick={() => {
                                             if (orderItem.count > 1)
-                                                decreasOrderItemCount(orderItem.product, orderItem.id.split("-")[1])
+                                                decreasOrderItemCount(orderItem.product, orderItem.price)
                                             else
                                                 setDismissModal({
                                                     open: true,

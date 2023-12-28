@@ -16,92 +16,76 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
-import { useLoadings } from '@/utils/hooks';
+import { useLoadings, useMessage, usePageLoading } from '@/utils/hooks';
+import { ProductService } from '@/services/product/product.service';
 
 function ProductPage() {
+    usePageLoading()
     const [addL, removeL] = useLoadings()
+    const message = useMessage()
     const { functions } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const slug = useSlug(false)
-    const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
-    const [product, setProduct] = useState<APIProduct>()
-    function productFetcher(): Promise<APIProduct> {
-        return axios.get(`/api/cafe-restaurants/${params.slug}/menu/items/${params.product_slug}`).then(({ data }) => data)
+    const productService = ProductService.init(params.slug as string);
+    const [product, setProduct] = useState<ProductType>()
+    function fetchProduct() {
+        addL('fetch-product')
+        productService.getOne(params.product_slug as string)
+            .then(({ data }) => {
+                setProduct(data)
+            })
+            .catch(() => {
+                message.error('مشکلی در دریافت اطلاعات آیتم وجود دارد.')
+            })
+            .finally(() => {
+                removeL('fetch-product')
+            })
     }
 
-    const {
-        isSuccess,
-        data,
-        refetch,
-        status,
-        isError
-    } = useQuery({
-        queryKey: `fetch-menu-${params.slug}-item-${params.product_slug}`,
-        queryFn: productFetcher,
-        enabled: false,
-        retry: 2,
-        cacheTime: 5 * 60 * 1000
-    })
-
     useEffect(() => {
-        if (isError) {
-            toast.error("خطا در ارتباط با سرور")
-        }
-    }, [isError])
+        fetchProduct()
+    }, [])
 
-    useEffect(() => {
-        if (!params) return
-        addL('fetch-menu-item')
-        refetch()
-    }, [refetch, params])
-
-    useEffect(() => {
-        if (isSuccess) {
-            setProduct(data)
-            removeL('fetch-menu-item')
-        }
-    }, [isSuccess, data, status, params])
-
-    const orderItem = useCallback((price: any) => {
-        const key = `${product?.id}-${price.id}`
+    const orderItem = useCallback((price: ProductPrice) => {
+        const key = `${product?.uuid}-${price.value}`
         functions.cart.addItem({
             id: key,
-            image: product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src,
-            title: product?.name!,
+            image: product?.images[0] ? `${serverBaseUrl}/files/${product?.images[0]}` : noImage.src,
+            title: product?.title!,
             count: 1,
-            price: price.price,
+            price: price.value,
             type: price.title,
             product: {
-                id: product?.id!,
-                title: product?.name!,
+                uuid: product?.uuid!,
+                title: product?.title!,
                 descriptions: product?.description!,
                 //@ts-ignore
                 prices: product?.prices,
-                categoryId: product?.category_id,
-                image: product?.image_path ? `${serverBaseUrl}/storage/${product.image_path}` : noImage.src
+                categoryId: product?.category_uuid,
+                image: product?.images[0] ? `${serverBaseUrl}/files/${product?.images[0]}` : noImage.src
             }
         })
     }, [functions, product])
 
-    const increaseOrderItemCount = useCallback((price: any) => {
-        const key = `${product?.id}-${price.id}`
+    const increaseOrderItemCount = useCallback((price: ProductPrice) => {
+        const key = `${product?.uuid}-${price.value}`
         functions.cart.increaseCount(key)
-    }, [functions, product?.id])
+    }, [functions, product?.uuid])
 
-    const decreasOrderItemCount = useCallback((price: any) => {
-        const key = `${product?.id}-${price.id}`
+    const decreasOrderItemCount = useCallback((price: ProductPrice) => {
+        const key = `${product?.uuid}-${price.value}`
         const item = functions.cart.getItem(key)
         if (item!.count == 1) {
             console.log("delete");
             functions.cart.removeItem(key)
         } else
             functions.cart.decreaseCount(key)
-    }, [functions, product?.id])
+    }, [functions, product?.uuid])
 
-    const prices = useMemo(() => product?.prices?.map((price: any, key: number) => {
+    const prices = useMemo(() => product?.prices?.map((price: ProductPrice, key: number) => {
 
-        const order = functions.cart.getItem(`${product.id}-${price.id}`);
+        const order = functions.cart.getItem(`${product.uuid}-${price.value}`);
 
         return (
             <FlexItem key={key}>
@@ -118,7 +102,7 @@ function ProductPage() {
                                 </FlexItem>
                             )}
                             <FlexItem>
-                                {parseInt(price.price).toLocaleString("IR-fa")}
+                                {price.value.toLocaleString("IR-fa")}
                             </FlexItem>
                         </FlexBox>
                     </FlexItem>
@@ -158,7 +142,7 @@ function ProductPage() {
         <>
             <Head>
                 <title>
-                    {`${state.profile.name + ` - ${product?.name || ""}` + (slug ? ' - منوما' : '')}`}
+                    {`${state.profile.name + ` - ${product?.title || ""}` + (slug ? ' - منوما' : '')}`}
                 </title>
             </Head>
             {navbar}
@@ -167,14 +151,14 @@ function ProductPage() {
                     <FlexItem
                         className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow"
                     >
-                        <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name! || "pic"} className='inset-0 block object-cover' fill />
+                        <Image src={product?.images[0] ? `${serverBaseUrl}/files/${product?.images[0]}` : noImage.src} alt={product?.title! || "pic"} className='inset-0 block object-cover' fill />
                     </FlexItem>
-                    <FlexItem className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[.5rem]" grow>
+                    <FlexItem className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[.5rem] shadow" grow>
                         <FlexBox direction='column'>
                             <FlexItem>
                                 <FlexBox alignItems='center' gap={2}>
                                     <hr className="border-black/10 w-full" />
-                                    <div className="w-fit text-[1.8rem] font-[500] whitespace-nowrap text-typography">{product?.name}</div>
+                                    <div className="w-fit text-[1.8rem] font-[500] whitespace-nowrap text-typography">{product?.title}</div>
                                     <hr className="border-black/10 w-full" />
                                 </FlexBox>
                             </FlexItem>

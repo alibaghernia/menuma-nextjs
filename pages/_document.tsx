@@ -5,7 +5,7 @@ import type { DocumentContext } from 'next/document';
 const MyDocument = () => (
   <Html lang="en" dir='rtl'>
     <Head />
-    <body>
+    <body className='h-screen'>
       <Main />
       <NextScript />
     </body>

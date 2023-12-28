@@ -9,7 +9,7 @@ export const CategoryCard: ICategoryCard = (props) => {
     <div className={
       twMerge(
         classNames(
-          "rounded-[1.625rem] w-[8.7rem] h-[8.7rem] relative block overflow-hidden cursor-pointer transition-all duration-[.2s]",
+          "rounded-[1.625rem] w-[8.7rem] h-[8.7rem] relative block overflow-hidden cursor-pointer transition-all duration-[.2s] shadow",
           {
             "border-4": props.selected,
             "border-more": props.selected

@@ -12,13 +12,13 @@ export const SearchField: ISearchField = (props) => {
             gap={2}
             className={
                 classNames(
-                    "rounded-full p-[.3rem] bg-white overflow-hidden",
+                    "rounded-full p-[.3rem] bg-white overflow-hidden shadow",
                     props.className
                 )
             }
         >
             <FlexItem
-                className="p-[.4rem] px-2 bg-black/[15%] rounded-tr-2xl rounded-br-2xl rounded-tl-lg rounded-bl-lg cursor-pointer"
+                className="p-[.4rem] px-2 bg-black/[15%] rounded-tr-2xl rounded-br-2xl rounded-tl-lg rounded-bl-lg cursor-pointer "
                 onClick={() => props.onSearch(props.value)}
             >
                 <SearchIcon

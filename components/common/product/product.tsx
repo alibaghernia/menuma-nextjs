@@ -16,15 +16,12 @@ import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Badge } from '@/components/common/badge/badge'
 
 export const Product: IProduct = (props) => {
+    const foundTagSoldOut = !!props.tags?.find(tag => tag.type === 'soldout');
     const router = useRouter()
     const params = useParams()
     const slug = useSlug()
     const { functions, setLoading } = useContext(ProviderContext)
-
     const productSlug = useMemo(() => params ? `/${slug}menu/${props.categoryId}/${props.id}` : "#", [params, props, slug])
-
-
-
     const orderItem = useCallback((price: any) => {
         const key = `${props.id}-${price.id}`
         functions.cart.addItem({
@@ -117,15 +114,19 @@ export const Product: IProduct = (props) => {
                                                     e.stopPropagation();
                                                     increaseOrderItemCount(price);
                                                 }, 500)}>
+
                                                 <Container
                                                     center
                                                 >
                                                     +
                                                 </Container>
+
+
                                             </FlexItem>
                                         </FlexBox>
                                     ) : (
-                                        <LinedAddIcon color='#434343' />
+
+                                        !foundTagSoldOut && <LinedAddIcon color='#434343' />
                                     )}
                                 </FlexItem>
                             </FlexBox>
@@ -143,7 +144,8 @@ export const Product: IProduct = (props) => {
                 "relative h-full": mono,
             })}>
 
-                <Image fill src={props.image!} alt={props.title} className='z-0 object-cover relative' />
+                <Image fill src={props.image!} alt={props.title} className={`z-0 object-cover relative ${foundTagSoldOut && 'grayscale'}`} />
+
                 {props.single_mode && (
                     <>
                         <span className="z-10 absolute inset-0" style={{
@@ -167,6 +169,7 @@ export const Product: IProduct = (props) => {
     }
 
     const renderTags = useCallback(() => {
+
         return props.tags?.map((tag, idx) => (
             <FlexItem key={idx}>
                 <Badge

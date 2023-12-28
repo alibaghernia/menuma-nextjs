@@ -121,6 +121,7 @@ function MenuPage() {
     }, [menuData, setSelectedCategory, scrolled])
 
     const renderProducts = useCallback((category: APICateogory) => {
+
         const categoryItems = category?.items || []
         const filtred = categoryItems.filter(product => product.name.includes(searchInput!))
         if (!filtred.length) return (

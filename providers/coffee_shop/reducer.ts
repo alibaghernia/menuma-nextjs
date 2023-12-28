@@ -9,7 +9,8 @@ export default function reducer(state: IProviderState, action: any) {
     }
     case REDUCER_KEYS.profile.UPDATE: {
       const { key, value } = action.data;
-      state.profile[key as keyof typeof state.profile] = value;
+      //@ts-ignore
+      state.profile[key] = value;
       return state;
     }
     default: {

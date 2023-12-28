@@ -59,6 +59,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     const [tableID, setTableID] = useState<string>("")
     const [callGarsonModal, setCallGarsonModal] = useState<IConfirmModalProps>()
     const tableIDStorageKey = `${state.profile?.uuid}${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`
+    const pagerRequestStorageKey = `${state.profile?.uuid}-pager_request`
     const [table, setTable] = useState<TableType>()
     useEffect(() => {
         const tab_id = searchParams.get('tab_id')
@@ -102,24 +103,33 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     }, [isError])
 
 
-    const enableCancelGarsonCallInterval = () => {
+    const enableCancelGarsonCallInterval = (sec: number = 60000) => {
         setCancelGarsonCallButton(true)
         cancelGarsonCallButtonInterval.current = setInterval(() => {
             setCancelGarsonCallButton(false)
-        }, 60000)
+        }, sec)
     }
 
     const disbleCancelGarsonCallInterval = () => {
         clearInterval(cancelGarsonCallButtonInterval.current)
         setCancelGarsonCallButton(false)
     }
-
+    const getPagerRequestStoredInfo = () => {
+        let callGarsonObj = localStorage.getItem(pagerRequestStorageKey)
+        if (!callGarsonObj) return
+        const parsedCallGarsonObj: { request_uuid: string, request_time: number } = JSON.parse(callGarsonObj as string);
+        return parsedCallGarsonObj
+    }
     const handleCallGarson = async () => {
         const handle = (tableID: string) => {
             addL('call-garson')
             if (!cancelGarsonCallButton) {
                 functions.services.callGarson(tableID)
-                    .then(() => {
+                    .then(({ data }) => {
+                        localStorage.setItem(pagerRequestStorageKey, JSON.stringify({
+                            request_uuid: data?.request_uuid,
+                            request_time: moment().unix()
+                        }))
                         enableCancelGarsonCallInterval()
                         setCallGarsonModal(undefined);
                     })
@@ -127,10 +137,13 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                         removeL('call-garson')
                     })
             } else {
-                functions.services.cancelCallGarson(tableID)
+                const request_info = getPagerRequestStoredInfo()
+                if (!request_info) return
+                functions.services.cancelCallGarson(request_info.request_uuid)
                     .then(() => {
                         disbleCancelGarsonCallInterval()
                         setCallGarsonModal(undefined);
+                        localStorage.removeItem(pagerRequestStorageKey)
                     })
                     .finally(() => {
                         removeL('call-garson')
@@ -159,7 +172,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                         setCallGarsonModal(undefined);
                     },
                     onConfirm() {
-                        handle(storageTableID)
+                        handle(table.uuid)
                     },
                 })
             }
@@ -168,7 +181,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
                 addL('call-garson')
                 functions.services.geTable(storageTableID)
                     .then(({ data: table }) => {
-                        showModal(table)
+                        showModal(table!)
                         setTable(table)
                     })
                     .catch(() => {
@@ -204,6 +217,19 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
 
 
     }
+
+    const checkCallGarsonStatus = () => {
+        const request_info = getPagerRequestStoredInfo()
+        if (!request_info) return
+        const request_time = request_info.request_time
+        const diffSec = moment().unix() - request_time;
+        if (diffSec < 60)
+            enableCancelGarsonCallInterval(diffSec * 1000)
+    }
+
+    useEffect(() => {
+        checkCallGarsonStatus()
+    }, [])
 
     return (
         <>

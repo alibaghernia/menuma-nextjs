@@ -3,12 +3,15 @@ import { REDUCER_KEYS } from "./constants";
 import { IProviderState } from "./types";
 import { type ICartItem } from "./types";
 import { axios } from "@/utils/axios";
+import { BusinessService } from "@/services/business/business.service";
+import { useParams } from "next/navigation";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
 export default function functions(
   state: IProviderState,
   dispatch: (action: any) => void
 ) {
-  const commonService = CommonService.init(axios);
+  const businessService = BusinessService.init().pager(state.profile?.uuid);
 
   return {
     setProfile: (profile: any) => {
@@ -33,13 +36,13 @@ export default function functions(
     },
     services: {
       callGarson: (tableID: string) => {
-        return commonService.callGarson(state.profile?.slug!, tableID);
+        return businessService.requestPager(tableID);
       },
       cancelCallGarson: (tableID: string) => {
-        return commonService.cancelCallGarson(state.profile?.slug!, tableID);
+        return businessService.cancelRequestPager(tableID);
       },
-      geTable: (tableID: string) => {
-        return commonService.getTable(state.profile?.slug!, tableID);
+      geTable: (tableCode: string) => {
+        return businessService.getTable(tableCode);
       },
     },
   };

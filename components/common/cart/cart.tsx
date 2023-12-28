@@ -56,7 +56,7 @@ export const Cart: ICart = (props) => {
                 <FlexBox direction='column' gap={2} className='border border-black/[0.05] p-[1rem] rounded-[1.5rem]'>
                     <FlexItem>
                         <FlexBox gap="1rem" className="">
-                            <FlexItem className='relative bg-white rounded-[1rem] overflow-hidden w-[6rem] h-[6rem] shrink-0'>
+                            <FlexItem className='relative bg-white rounded-[1rem] overflow-hidden w-[6rem] h-[6rem] shrink-0 shadow'>
                                 <Link href={productSlug}>
                                     <Image fill src={orderItem.image || sperso.src} alt='' className='object-cover' />
                                 </Link>
@@ -205,7 +205,7 @@ export const Cart: ICart = (props) => {
                         </FlexBox>
                     </FlexItem>
                     <FlexItem grow={false} className="mt-[1.5rem]">
-                        {Boolean(parseInt(coffeeShopState.profile.has_pager)) && (
+                        {Boolean(coffeeShopState.profile.pager) && (
                             <CallGarson onClick={handleCallGarson} isCancel={cancelGarsonCallButton} size='large' />
 
                         )}

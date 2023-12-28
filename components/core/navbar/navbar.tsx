@@ -145,7 +145,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 <FlexItem>
                     <FlexBox alignItems='center' gap=".5rem">
                         {callPager
-                            //  && Boolean(parseInt(coffeShopState.profile.has_pager))
+                            && Boolean(coffeShopState.profile.pager)
                             && (
                                 <FlexItem>
                                     <CallGarson onClick={handleCallGarson} isCancel={cancelGarsonCallButton} size='small' />

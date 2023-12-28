@@ -3,6 +3,7 @@ declare type BusinessType = {
   name: string;
   slug: string;
   status: string;
+  pager: boolean;
   address: any;
   description: any;
   location_lat: any;
@@ -21,4 +22,11 @@ declare type BusinessType = {
 declare type Social = {
   type: string;
   link: string;
+};
+
+declare type TableType = {
+  uuid: string;
+  code: string;
+  createdAt: string;
+  updatedAt: string;
 };

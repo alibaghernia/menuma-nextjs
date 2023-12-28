@@ -30,7 +30,7 @@ export const Product: IProduct = (props) => {
         const key = `${props.uuid}-${price.value}`
         functions.cart.addItem({
             id: key,
-            image: noImage.src,
+            image: props.images[0] ? `${serverBaseUrl}/files/${props.images[0]}` : noImage.src,
             title: props.title,
             count: 1,
             price: price.value,

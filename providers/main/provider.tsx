@@ -39,7 +39,14 @@ const Provider: IProvider = ({ children }) => {
                 console.log("Please check the menuma domain env");
                 process.exit(1)
             }
-            if (domain != menumaDomain && !state.isNotMenuma && !domain.startsWith("localhost") && !domain.startsWith("192.168.") && !domain.startsWith("test.")) {
+            if (
+                domain != menumaDomain &&
+                !state.isNotMenuma &&
+                !domain.startsWith("localhost") &&
+                !domain.startsWith("192.168.") &&
+                !domain.startsWith("127.0.") &&
+                !domain.startsWith("test.")
+            ) {
                 dispatch({
                     type: REDUCER_KEYS.UPDATE,
                     data: {

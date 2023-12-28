@@ -21,18 +21,11 @@ export const withCafeeShopProfile = (
     const slug = getSlugFromReq(context);
     const queryClient = new QueryClient();
     const businessService = BusinessService.init();
-    function profileFetcher() {
+    function fetchProfile() {
       return businessService
         .get(context.params?.slug as string)
         .then(({ data }) => data);
     }
-
-    const fetchProfileKey = `fetch-profile-${slug}`;
-
-    const profile = await queryClient.fetchQuery({
-      queryKey: fetchProfileKey,
-      queryFn: profileFetcher,
-    });
 
     let getServerSidePropsRes;
     if (serverSidePropsFunc) {
@@ -45,7 +38,7 @@ export const withCafeeShopProfile = (
     return _.merge(
       {
         props: {
-          profile,
+          profile: await fetchProfile(),
         },
       },
       getServerSidePropsRes

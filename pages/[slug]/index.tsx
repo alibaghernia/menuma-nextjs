@@ -89,7 +89,7 @@ const Profile = () => {
                                     router.push(`/${slug}menu`);
                                 }
                             }
-                            className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
+                            className="py-[.8rem] px-[2.9rem] mx-auto w-fit font-bold shadow"
                             rounded
                         >
                             مشاهده مـنـو
@@ -132,7 +132,7 @@ const Profile = () => {
                             >
                                 <FlexBox direction='column' className='px-[1rem]' gap={2}>
                                     {contactInfo.map((contact, key) => (
-                                        <FlexItem className='text-typography text-[.9rem] text-justify rounded-[2rem]' key={key}>
+                                        <FlexItem className='text-typography text-[.9rem] text-justify rounded-[2rem] shadow' key={key}>
                                             <FlexBox alignItems='center' gap={0}>
                                                 <FlexItem className='bg-typography rounded-tr-[1rem] rounded-br-[1rem]  py-2 px-2'>
                                                     {contact.icon}

@@ -18,7 +18,7 @@ const config: Config = {
       },
       colors: {
         typography: "#434343",
-        secondary: "#fcfcfc",
+        secondary: "#f7f7f7",
         more: "#EEB33F",
       },
     },

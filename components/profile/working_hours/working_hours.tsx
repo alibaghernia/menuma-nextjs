@@ -7,18 +7,18 @@ import _ from 'lodash'
 
 export const WorkingHours: FC<any> = ({ data }) => {
     const renderWorkingHours = useMemo(() => {
-        const todayName = moment().format("dddd").toLocaleLowerCase()
-        const today = _.groupBy(data, item => item.weekday)
-        return today[todayName]?.map((wh, key) => {
-            const time1 = moment(wh.from, "HH:mm:ss").zone(-210)
-            const time2 = moment(wh.to, "HH:mm:ss").zone(-210)
+        const dayNum = moment().day()
+        const today = _.groupBy(data, item => item.day)
+        return today[dayNum]?.map((wh, key) => {
+            const time1 = moment(wh.from)
+            const time2 = moment(wh.to)
             return (
                 <tr key={key} className='py-2'>
                     <td className='text-center px-2 pb-2'>
                         {time1.hour() < 12 ? 'صبح' : 'عصر'}
                     </td>
                     <td className='pb-2'>
-                        <div className="bg-white/[.5] px-4 py-1 rounded-full">
+                        <div className="bg-white/[.5] px-4 py-1 rounded-full shadow">
                             {time1.format('HH:mm')}
                         </div>
                     </td>
@@ -26,7 +26,7 @@ export const WorkingHours: FC<any> = ({ data }) => {
                         تا
                     </td>
                     <td className='pb-2'>
-                        <div className="bg-white/[.5] px-4 py-1 rounded-full ">
+                        <div className="bg-white/[.5] px-4 py-1 rounded-full shadow">
                             {time2.format('HH:mm')}
                         </div>
                     </td>

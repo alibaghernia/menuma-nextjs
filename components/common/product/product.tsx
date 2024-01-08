@@ -170,7 +170,7 @@ export const Product: IProduct = (props) => {
 
     const renderTags = useCallback(() => {
 
-        return props.tags?.map((tag, idx) => (
+        return props.tags?.map((tag: string, idx: number) => (
             <FlexItem key={idx}>
                 <Badge
                     type={tag}

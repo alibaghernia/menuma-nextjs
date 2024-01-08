@@ -15,8 +15,11 @@ declare interface IProductProps {
     title: stirng;
     price: string;
   }[];
-  tags?: "new" | "hot" | "sold_out";
+  // tags?: {
+  //   type: "new" | "hot" | "soldout";
+  // }[];
+  // tags?: "new" | "hot" | "sold_out" | undefined[];
+  tags?: any;
 }
-
 
 declare type IProduct = FC<IProductProps>;

@@ -1,8 +1,12 @@
 import { FC, PropsWithChildren } from "react";
 
 declare interface IBadgeProps {
-  type?: any
-  // type?: "new" | "hot" | "sold_out";
+  type?: TagType;
+}
+enum TagType {
+  new = "new",
+  hot = "hot",
+  sold_out = "sold_out"
 }
 
 declare type IBadge = FC<PropsWithChildren<IBadgeProps>>;

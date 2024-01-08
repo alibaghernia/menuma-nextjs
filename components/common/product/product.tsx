@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useMemo } from 'react'
 import { IProduct } from './types'
+import { TagType } from '@/components/common/badge/types'
 import Image from 'next/image'
 import classNames from 'classnames'
 import { LinedAddIcon } from '@/icons/lined_add'
@@ -170,7 +171,7 @@ export const Product: IProduct = (props) => {
 
     const renderTags = useCallback(() => {
 
-        return props.tags?.map((tag: string, idx: number) => (
+        return props.tags?.map((tag: TagType, idx: number) => (
             <FlexItem key={idx}>
                 <Badge
                     type={tag}

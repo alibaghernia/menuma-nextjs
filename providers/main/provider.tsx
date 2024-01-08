@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useReducer, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { IProvider, IProviderState } from './types';
 import reducer from './reducer';
 import { INITIAL_STATE, REDUCER_KEYS } from './constants';
@@ -23,11 +23,30 @@ const localStoragekey = "provider-storage-new-v3.0"
 const Provider: IProvider = ({ children }) => {
     const [loading, setLoading] = useState(true)
     const params = useParams()
+    // const setLoading = (loading: boolean) => {
+    //     if (loading) {
+    //         _setLoading(loadings => {
+    //             const _loadings = [...loadings, 'loading']
 
+    //             console.log({
+    //                 _loadings
+    //             });
+    //             return _loadings
+    //         })
+    //     } else {
+    //         _setLoading(loadings => {
+    //             loadings.shift()
+    //             console.log({
+    //                 loadings
+    //             });
+    //             return loadings
+    //         })
+    //     }
+    // }
     const getLocalStorageKey = useCallback(() => {
         const slug = params.slug || "menuma"
         return `${slug}-${localStoragekey}`
-    }, [params.slug])
+    }, [params?.slug])
 
     const storeReducerState = useCallback((state: IProviderState) => {
         localStorage.setItem(getLocalStorageKey(), JSON.stringify(state))
@@ -82,22 +101,22 @@ const Provider: IProvider = ({ children }) => {
         checkAppDomain()
     }, [getReducerState, checkAppDomain])
 
+    const loadingMem = useMemo(() => loading && <Loading />, [loading])
+
     return (
         <>
             <ProviderContext.Provider value={{
                 state,
                 dispatch,
                 functions: functions(state, dispatch),
-                loading,
+                loading: loading,
                 setLoading
             }}>
                 {children}
             </ProviderContext.Provider>
-            {
-                loading && <Loading />
-            }
+            {loadingMem}
         </>
     )
 }
 
-export default React.memo(Provider);
+export default Provider;

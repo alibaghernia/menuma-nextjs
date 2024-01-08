@@ -80,7 +80,7 @@ const Profile = () => {
                     value: profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : cafeeshopBannelPlaceholder.src,
                 }
             ]} />
-            <div className='bg-secondary min-h-screen'>
+            <div className='bg-background min-h-screen'>
                 <Navbar
                     dark
                     background={false}
@@ -98,6 +98,7 @@ const Profile = () => {
                             }
                             className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
                             rounded
+                            color='#fff'
                         >
                             مشاهده مـنـو
                         </Button>

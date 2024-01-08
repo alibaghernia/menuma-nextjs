@@ -164,13 +164,13 @@ function MenuPage() {
                     {`${state.profile.name + " - منو" + (slug ? ' - منوما' : '')}`}
                 </title>
             </Head>
-            <div className='bg-secondary min-h-screen'>
+            <div className='bg-background min-h-screen'>
                 {navbar}
                 <FlexBox direction='column'>
                     <Container
                         position='sticky'
                         id='category-bar'
-                        className={twMerge(classNames("top-0 bg-secondary z-20", {
+                        className={twMerge(classNames("top-0 bg-background z-20", {
                             "pb-[1.125rem]": !scrolled,
                             "pb-[1rem]": scrolled,
                         }))}

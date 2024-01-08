@@ -16,7 +16,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Badge } from '@/components/common/badge/badge'
 
 export const Product: IProduct = (props) => {
-    const foundTagSoldOut = !!props.tags?.find(tag => tag.type === 'soldout');
+    const foundTagSoldOut = !!props.tags?.find((tag: string) => tag === 'sold_out');
     const router = useRouter()
     const params = useParams()
     const slug = useSlug()
@@ -81,13 +81,13 @@ export const Product: IProduct = (props) => {
                                 alignItems='center'
                                 gap={2}
                                 className={
-                                    classNames('px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] cursor-pointer transition-all duration-[.3s]',
+                                    classNames(`px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] ${!foundTagSoldOut && 'cursor-pointer'}  transition-all duration-[.3s]`,
                                         {
                                             "active:scale-[.8]": !order
                                         }
                                     )
                                 }
-                                onClick={() => orderItem(price)}
+                                onClick={() => !foundTagSoldOut && orderItem(price)}
                             >
                                 <FlexItem>
                                     <div className="text-[1rem] font-[500] text-typography">
@@ -100,7 +100,7 @@ export const Product: IProduct = (props) => {
                                             <FlexItem className='relative w-6 h-6 bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none'
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    decreasOrderItemCount(price);
+                                                    !foundTagSoldOut && decreasOrderItemCount(price);
                                                 }}>
                                                 <Container
                                                     center
@@ -173,7 +173,7 @@ export const Product: IProduct = (props) => {
         return props.tags?.map((tag, idx) => (
             <FlexItem key={idx}>
                 <Badge
-                    type={tag.type}
+                    type={tag}
                 />
             </FlexItem>
         ))

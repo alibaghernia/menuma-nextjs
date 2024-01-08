@@ -20,6 +20,7 @@ import { Container } from '@/components/common/container/container'
 import dynamic from 'next/dynamic'
 import { CallGarson } from '@/components/common/call_garson/call_garson'
 import Link from 'next/link'
+import { UserGroupIcon } from '@/icons/user-group'
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
@@ -46,6 +47,11 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
             title: "منو",
             icon: <MenuCircleIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
             url: `/${slug}menu`
+        },
+        {
+            title: "باشگاه مشتریان",
+            icon: <UserGroupIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
+            url: `/${slug}customer-club/register`
         },
         // {
         //     title: "پشتیبانی",

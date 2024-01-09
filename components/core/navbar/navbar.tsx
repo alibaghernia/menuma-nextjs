@@ -110,7 +110,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 justify='between'
                 className={
                     classNames(
-                        "relative px-[1.6rem] z-20 left-0 right-0 py-[1.2rem]",
+                        "relative px-[1.6rem] z-20 left-0 right-0 py-[1rem]",
                         { "bg-background": background }
                     )
                 }

@@ -114,6 +114,7 @@ const Profile = () => {
                                     className='text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F]'
                                     linkTarget='_blank'
                                     rounded="1rem"
+                                    color='secondary'
                                 >
                                     مسیریابی
                                 </Button>

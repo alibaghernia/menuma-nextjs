@@ -16,12 +16,14 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import provider, { ProviderContext } from "@/providers/main/provider"
-import { axios } from "@/utils/axios"
+import { axios, serverBaseUrl } from "@/utils/axios"
 import { CoffeeShopPageProvider } from "@/providers/coffee_shop/page_provider"
+import { SearchBusinessBox } from "@/components/common/search_business_box/search_business_box"
 
 
 function Home() {
     const { setLoading } = useContext(ProviderContext)
+    const [searchField, setSearchField] = useState("")
     const [pinBusinesses, setPinBusinesses] = useState<{
         slug: string,
         logo: string,
@@ -34,30 +36,13 @@ function Home() {
         axios.get(`/api/cafe-restaurants/search?pin=1`)
             .finally(() => setLoading(false))
             .then(({ data }) => {
-                console.log({
-                    data
-                });
                 setPinBusinesses(data?.map((business: any) => ({
                     title: business.name,
                     slug: business.slug,
-                    logo: business.logo_path ? '' : noImage.src
+                    logo: business.logo_path ? `${serverBaseUrl}/storage/${business.logo_path}` : noImage.src
                 })))
             })
     }
-
-    const searchBox = useMemo(() => {
-
-        return (
-            <div className="flex items-center border p-[.5rem] border-1 gap-[.5rem] rounded-[.63rem]">
-                <SearchIcon color="#959595" />
-                <input className="bg-none border-none outline-none" placeholder="جستجوی اسم کافه..." />
-                <Button >
-                    جستجو
-                </Button>
-            </div>
-        )
-
-    }, [])
 
 
     const businessesSlides = useMemo(() => {
@@ -76,8 +61,14 @@ function Home() {
     }, [pinBusinesses])
 
     useEffect(() => {
-        fetchPinBusinesses()
+        // fetchPinBusinesses()
     }, [])
+
+    const handleSearchBusiness = (searchPhrase: string) => {
+        console.log({
+            searchPhrase
+        });
+    }
 
     return (
         <>
@@ -87,7 +78,7 @@ function Home() {
                     کافه ای که میخوای را پیدا کن
                 </div>
                 <div className="mt-[2.12rem]">
-                    {searchBox}
+                    <SearchBusinessBox value={searchField} onChange={setSearchField} onSearch={handleSearchBusiness} />
                 </div>
                 <div className="mt-[1rem]">
                     <Button color="secondary" className="py-[.5rem] px-[.8rem] flex items-center">

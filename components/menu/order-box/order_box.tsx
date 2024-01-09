@@ -15,7 +15,6 @@ import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 export const OrderBox: IOrderBox = (props) => {
-    console.log({ props })
     const element = useMemo(() => (
         <>
             <Section className={
@@ -61,7 +60,7 @@ export const OrderBox: IOrderBox = (props) => {
                                     image={product.image_path ? `${serverBaseUrl}/storage/${product.image_path}` : noImage.src}
                                     prices={product.prices || []}
                                     fullWidth
-                                    className='px-5'
+                                    className='px-5 w-96'
                                     categoryId={product.categoryId}
                                     tags={product.tags}
                                     single_mode

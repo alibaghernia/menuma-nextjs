@@ -18,7 +18,7 @@ import { Badge } from '@/components/common/badge/badge'
 export const Product: IProduct = (props) => {
     const foundTagSoldOut = !!props.tags?.find(tag => tag.type === 'soldout');
     const router = useRouter()
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug()
     const { functions, setLoading } = useContext(ProviderContext)
     const productSlug = useMemo(() => params ? `/${slug}menu/${props.categoryId}/${props.id}` : "#", [params, props, slug])

@@ -13,7 +13,6 @@ import { withCafeeShopProfile } from '@/utils/serverSideUtils'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 
 function CategoryPage() {
-    const params = useParams()
     const [searchInput, setSearchInput] = useState<string>()
     const category = {
         title: "ویژه ها",

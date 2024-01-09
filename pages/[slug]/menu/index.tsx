@@ -36,7 +36,7 @@ function MenuPage() {
     const { state } = useContext(CoffeeShopProviderContext)
     const { setLoading, state: mainState } = useContext(ProviderContext)
     const [searchInput, setSearchInput] = useState<string>("")
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug(false)
     const rouer = useRouter()
 

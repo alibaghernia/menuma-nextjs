@@ -16,11 +16,12 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
+import { useRouter } from 'next/router';
 
 function ProductPage() {
     const { setLoading, functions } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug(false)
     const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
     const [product, setProduct] = useState<APIProduct>()

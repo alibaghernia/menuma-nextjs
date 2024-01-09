@@ -43,7 +43,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     }
 
     const { setLoading, state: mainState, } = useContext(ProviderContext)
-    const params = useParams()
+    const { query: params } = useRouter()
     const searchParams = useSearchParams()
     const router = useRouter()
     const slug = useSlug(false)

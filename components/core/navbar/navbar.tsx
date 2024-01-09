@@ -27,7 +27,6 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
     const slug = useSlug()
     const { setLoading } = useContext(ProviderContext)
     const { state: coffeShopState, handleCallGarson, cancelGarsonCallButton } = useContext(CoffeeShopProviderContext)
-    const params = useParams()
     const { state } = useContext(ProviderContext)
     const [menuOpen, setMenuOpen] = useState(false)
     const [cartOpen, setCartOpen] = useState(false)

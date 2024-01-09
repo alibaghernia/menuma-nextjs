@@ -20,9 +20,10 @@ import { IConfirmModalProps } from '../confirm_modal/types'
 import { ConfirmModal } from '../confirm_modal/confirm_modal'
 import _ from 'lodash'
 import { CallGarson } from '../call_garson/call_garson'
+import { useRouter } from 'next/router'
 
 export const Cart: ICart = (props) => {
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug()
     const [dismissModal, setDismissModal] = useState<IConfirmModalProps | undefined>(undefined)
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)

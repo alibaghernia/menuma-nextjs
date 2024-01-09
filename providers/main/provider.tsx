@@ -6,6 +6,7 @@ import _ from 'lodash'
 import functions from './functions';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 
 const Loading = dynamic(() => import('@/components/common/loading/loading'), { ssr: false })
 
@@ -21,28 +22,8 @@ export const ProviderContext = createContext<{
 const localStoragekey = "provider-storage-new-v3.0"
 
 const Provider: IProvider = ({ children }) => {
-    const [loading, setLoading] = useState(true)
-    const params = useParams()
-    // const setLoading = (loading: boolean) => {
-    //     if (loading) {
-    //         _setLoading(loadings => {
-    //             const _loadings = [...loadings, 'loading']
-
-    //             console.log({
-    //                 _loadings
-    //             });
-    //             return _loadings
-    //         })
-    //     } else {
-    //         _setLoading(loadings => {
-    //             loadings.shift()
-    //             console.log({
-    //                 loadings
-    //             });
-    //             return loadings
-    //         })
-    //     }
-    // }
+    const [loading, setLoading] = useState(false)
+    const { query: params } = useRouter()
     const getLocalStorageKey = useCallback(() => {
         const slug = params.slug || "menuma"
         return `${slug}-${localStoragekey}`

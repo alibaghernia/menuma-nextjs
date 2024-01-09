@@ -26,18 +26,16 @@ import { OrderBox } from '@/components/menu/order-box'
 
 function ProductPage() {
     const [scrolled, setScrolled] = useState(false)
-
-
     const { setLoading, functions } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
     const params = useParams()
     const slug = useSlug(false)
     const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
     const [product, setProduct] = useState<APIProduct>()
+    const [order, setOrder] = useState<APIProduct>()
     function productFetcher(): Promise<APIProduct> {
         return axios.get(`/api/cafe-restaurants/${params.slug}/menu/items/${params.product_slug}`).then(({ data }) => data)
     }
-
     const {
         isSuccess,
         data,
@@ -52,87 +50,64 @@ function ProductPage() {
         cacheTime: 5 * 60 * 1000
     })
 
+    function productOrder(): Promise<APIProduct> {
+        return axios.get(`/api/cafe-restaurants/${params.slug}/menu/day-offers`).then(({ data }) => data)
+    }
+    const {
+        isSuccess: isSuccessOrder,
+        data: dataOrder,
+        refetch: refreshOrder,
+        status: statusOrder,
+        isError: isErrorOrder
+    } = useQuery({
+        queryKey: `fetch-order-${params.slug}`,
+        queryFn: productOrder,
+        enabled: false,
+        retry: 2,
+        cacheTime: 5 * 60 * 1000
+    })
+
     useEffect(() => {
         if (isError) {
             toast.error("خطا در ارتباط با سرور")
         }
-    }, [isError])
+        if (isErrorOrder) {
+            toast.error("خطا در ارتباط با سرور")
+        }
+    }, [isError, isErrorOrder])
 
     useEffect(() => {
         if (!params) return
         setLoading(true)
         refetch()
-    }, [refetch, setLoading, params])
+        refreshOrder()
+    }, [
+        refetch,
+        refreshOrder,
+        setLoading,
+        params
+    ])
+
 
     useEffect(() => {
         if (isSuccess) {
             setProduct(data)
             setLoading(false)
         }
-    }, [isSuccess, setLoading, data, status, params])
-
-    const productArray = [
-        {
-            id: '1',
-            title: "اسپرسو",
-            description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-            image: sperso.src,
-            prices: [{ id: '1', title: 'small', price: '9000' }],
-            fullWidth: true,
-            className: 'px-5 max-w-lg',
-            categoryId: 1,
-            tags: [],
-            single_mode: true,
-        },
-        {
-            id: '2',
-            title: "کاپوچینو",
-            description: "کاپوچینو یکی از پرمصرف ترین به شمار می رود",
-            image: warmDrink.src,
-            prices: [{ id: '1', title: 'small', price: '9000' }],
-            fullWidth: true,
-            className: 'px-5 max-w-lg',
-            categoryId: 1,
-            tags: [],
-            single_mode: true,
-        },
-        {
-            id: '3',
-            title: "آماکیتو",
-            description: "آماکیتو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-            image: sperso.src,
-            prices: [{ id: '1', title: 'small', price: '9000' }],
-            fullWidth: true,
-            className: 'px-5 max-w-lg',
-            categoryId: 1,
-            tags: [],
-            single_mode: true,
-        },
-        {
-            id: '3',
-            title: "ماکتیل",
-            description: "ماکتیل یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-            image: warmDrink.src,
-            prices: [{ id: '1', title: 'small', price: '9000' }],
-            fullWidth: true,
-            className: 'px-5 max-w-lg',
-            categoryId: 1,
-            tags: [],
-            single_mode: true,
-        },
-        {
-            id: '4',
-            title: "اسپرسو",
-            description: "اسپرسو یکی از پرمصرف ترین نوع قهوه ها به شمار می رود",
-            image: sperso.src,
-            prices: [{ id: '1', title: 'small', price: '9000' }],
-            fullWidth: true,
-            className: 'px-5 max-w-lg',
-            categoryId: 1,
-            tags: [],
-            single_mode: true,
+        if (isSuccessOrder) {
+            setOrder(dataOrder)
+            setLoading(false)
         }
-    ]
+    }, [
+        isSuccess,
+        isSuccessOrder,
+        setLoading,
+        data,
+        dataOrder,
+        status,
+        statusOrder,
+        params
+    ])
     const orderItem = useCallback((price: any) => {
         const key = `${product?.id}-${price.id}`
         functions.cart.addItem({
@@ -271,7 +246,7 @@ function ProductPage() {
                             <OrderBox
                                 title="پیشنهادات روز"
                                 scrolled={scrolled}
-                                productArray={productArray}
+                                productArray={order}
                                 classNameSection="scroll-mt-[20rem]"
                                 contentClassNamesSection='flex flex-col gap-[1rem] items-center'
                             />

@@ -9,7 +9,6 @@ import { SearchIcon } from "@/icons/search"
 import Head from "next/head"
 import Image from "next/image"
 import noImage from "@/assets/images/no-image.jpg"
-import Link from "next/link"
 import { Fragment, useContext, useEffect, useMemo, useState } from "react"
 import { Swiper, SwiperSlide } from "swiper/react"
 import 'swiper/css';
@@ -19,10 +18,13 @@ import provider, { ProviderContext } from "@/providers/main/provider"
 import { axios, serverBaseUrl } from "@/utils/axios"
 import { CoffeeShopPageProvider } from "@/providers/coffee_shop/page_provider"
 import { SearchBusinessBox } from "@/components/common/search_business_box/search_business_box"
+import { useRouter } from "next/router"
+import { Link } from "@/components/common/link"
 
 
 function Home() {
     const { setLoading } = useContext(ProviderContext)
+    const router = useRouter()
     const [searchField, setSearchField] = useState("")
     const [pinBusinesses, setPinBusinesses] = useState<{
         slug: string,
@@ -33,7 +35,7 @@ function Home() {
 
     const fetchPinBusinesses = () => {
         setLoading(true)
-        axios.get(`/api/cafe-restaurants/search?pin=1`)
+        axios.get(`/api/cafe-restaurants?pin=1`)
             .finally(() => setLoading(false))
             .then(({ data }) => {
                 setPinBusinesses(data?.map((business: any) => ({
@@ -61,13 +63,33 @@ function Home() {
     }, [pinBusinesses])
 
     useEffect(() => {
-        // fetchPinBusinesses()
+        fetchPinBusinesses()
     }, [])
+    useEffect(() => {
+        setLoading(false)
+    }, [router])
 
     const handleSearchBusiness = (searchPhrase: string) => {
-        console.log({
-            searchPhrase
-        });
+        if (!searchPhrase) return
+        setLoading(true)
+        router.push(`/search?search=${searchPhrase}`)
+    }
+    const findNearestBusinessHandler = () => {
+        if (navigator.geolocation) {
+            setLoading(true)
+            navigator.geolocation.getCurrentPosition((position) => {
+                setLoading(false)
+                const lat = position.coords.latitude;
+                const long = position.coords.longitude;
+                router.push(`/search?near=1&lat=${lat}&long=${long}`)
+            }, error => {
+                setLoading(false)
+                console.log({
+                    error
+                });
+                alert(JSON.stringify(error.message))
+            })
+        }
     }
 
     return (
@@ -77,26 +99,25 @@ function Home() {
                 <div className="text-typography/[.8] text-[.875rem] font-medium">
                     کافه ای که میخوای را پیدا کن
                 </div>
-                <div className="mt-[2.12rem]">
+                <div className="mt-[2.12rem] w-full px-[1.9rem]">
                     <SearchBusinessBox value={searchField} onChange={setSearchField} onSearch={handleSearchBusiness} />
                 </div>
-                <div className="mt-[1rem]">
-                    <Button color="secondary" className="py-[.5rem] px-[.8rem] flex items-center">
+                <div className="mt-[2.12rem]">
+                    <Button color="secondary" className="py-[.5rem] px-[.8rem] flex items-center" onClick={findNearestBusinessHandler}>
                         <Location />
                         پیدا کردن نزدیکترین کافه
                     </Button>
                 </div>
                 <div className="mt-[2.12rem] w-full max-w-[65rem]">
-                    <Section title="کافه های پیشنهادی" append={(
-                        <div className="text-typography/[.8] text-[.625rem] cursor-pointer">
-                            مشاهده همه
-                        </div>
-                    )} contentClassNames="mx-[2.31rem] pt-[1rem]">
+                    <Section title="کافه های پیشنهادی"
+                        contentClassNames="pt-[1rem]">
                         <Swiper
                             slidesPerView={"auto"}
                             spaceBetween={8}
                             grabCursor={true}
                             scrollbar
+                            slidesOffsetBefore={20}
+                            slidesOffsetAfter={20}
                         >
                             {businessesSlides}
                         </Swiper>

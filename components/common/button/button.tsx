@@ -9,7 +9,7 @@ export const Button: IButton = ({ type = "primary", color = "primary", ...props 
         <div
             className={twMerge('cursor-pointer',
                 classNames(
-                    twMerge('text-[1rem] rounded-[.625rem] px-[.8rem] py-[.3rem] text-typography bg-white cursor-pointer whitespace-nowrap  w-fit', props.className),
+                    twMerge('text-[1rem] rounded-[.625rem] px-[.8rem] py-[.3rem] text-typography bg-white cursor-pointer whitespace-nowrap  w-fit select-none', props.className),
                     {
                         [`rounded-[${props.rounded}]`]: typeof props.rounded == "string",
                         [`rounded-full`]: typeof props.rounded == "boolean",

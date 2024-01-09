@@ -6,7 +6,7 @@ import { LinedAddIcon } from '@/icons/lined_add'
 import noImage from '@/assets/images/no-image.jpg'
 import { ProviderContext } from '@/providers/main/provider';
 import { useParams } from 'next/navigation'
-import Link from 'next/link'
+import { Link } from "@/components/common/link";
 import { useRouter } from 'next/router'
 import _ from 'lodash'
 import { useSlug } from '@/providers/main/hooks'

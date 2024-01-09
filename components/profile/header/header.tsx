@@ -3,7 +3,7 @@ import coffeeshopImage from '@/assets/images/coffeeshop.jpg'
 import coffeeshopLogo from '@/assets/images/coffeeshopLogo.png'
 import { IProfileHeader } from '../header/types'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from "@/components/common/link";
 import { Container } from '@/components/common/container/container'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'

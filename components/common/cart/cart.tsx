@@ -10,7 +10,7 @@ import Image from 'next/image'
 import { Trash1Icon } from '@/icons/trash1'
 import { ProviderContext } from '@/providers/main/provider'
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
-import Link from 'next/link'
+import { Link } from "@/components/common/link";
 import { useParams } from 'next/navigation'
 import { useSlug } from '@/providers/main/hooks'
 import { FlexBox } from '@/components/common/flex_box/flex_box'

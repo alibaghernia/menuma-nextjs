@@ -51,7 +51,7 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
         {
             title: "باشگاه مشتریان",
             icon: <UserGroupIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-            url: `/${slug}customer-club/register`
+            url: `/${slug}customer`
         },
         // {
         //     title: "پشتیبانی",

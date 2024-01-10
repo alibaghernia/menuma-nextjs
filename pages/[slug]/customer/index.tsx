@@ -1,47 +1,35 @@
-
-// import React, { Fragment } from 'react'
-// import { DatePicker } from 'jalali-react-datepicker';
-// import { DatePicker, ConfigProvider } from 'antd';
-
-// import { DatePicker, JalaliLocaleListener } from 'antd-jalali'
-
-// import fa_IR from "antd/lib/locale/fa_IR";
-// import { ConfigProvider } from 'antd/es';
-
-
-// import { DatePicker, ConfigProvider } from "antd";
-import { DatePicker as DatePickerJalali, Calendar, JalaliLocaleListener } from "antd-jalali";
-// import fa_IR from "antd/lib/locale/fa_IR";
-// import en_US from "antd/lib/locale/en_US";
-// import "antd/dist/antd.css";
-// import Provider from '@/providers/main/provider';
-// import classNames from 'classnames';
-// import { Badge } from '../../../../components/common/badge/badge';
-// import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg';
 import { Navbar } from '@/components/core/navbar/navbar'
-import React, {
-    //  useCallback, useContext, useEffect,
-    useMemo,
-    //   useRef,
-    useState, Fragment
-} from 'react'
-// import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
-import Head from "next/head";
-// import { useSlug } from "@/providers/main/hooks";
+import styles from '@/assets/styles/pages/menu/menu.module.scss'
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import _ from 'lodash'
+import { useParams, usePathname } from 'next/navigation'
+import { useRouter } from 'next/router'
+import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
+import { axios, serverBaseUrl } from '@/utils/axios'
+import { useQuery } from 'react-query'
+import Head from 'next/head'
+import { toast } from 'react-toastify'
+import { useSlug } from '@/providers/main/hooks'
+import { DatePicker as DatePickerJalali, Calendar, JalaliLocaleListener } from "antd-jalali";
+import { withCafeeShopProfile } from '@/utils/serverSideUtils';
+import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
+import { ProviderContext } from '@/providers/main/provider'
 
 
-function RegisterForm() {
-    const textInputClasses = 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ddd:bg-gray-600 ddd:border-gray-500 ddd:placeholder-gray-400 ddd:text-white'
-    // const { state } = useContext(CoffeeShopProviderContext)
-    const [t, setT] = useState('sss')
-    // console.log(state);
-    // return null;
+function CustomerPage() {
+    const { state } = useContext(CoffeeShopProviderContext)
+    const { setLoading, state: mainState } = useContext(ProviderContext)
+    const slug = useSlug(false)
+    const rouer = useRouter()
 
-    const slug = 'useSlug(false)'
+    useEffect(() => {
 
+        setLoading(false)
+
+    }, [setLoading])
     const navbar = useMemo(() => (
-        <Navbar title={'state?.profile?.name'}  />
-    ), [t])
+        <Navbar title={state?.profile?.name} back callPager={false} />
+    ), [state.profile])
     return (
         <>
             <Head>
@@ -70,7 +58,7 @@ function RegisterForm() {
                                     نام
                                 </label>
                                 <input type="text" name="name" id="name"
-                                    className={textInputClasses} placeholder="نام خود را وارد کنید" required />
+                                    placeholder="نام خود را وارد کنید" required />
                             </div>
                             <div>
                                 <label htmlFor="family"
@@ -78,7 +66,7 @@ function RegisterForm() {
                                     نام خانوادگی
                                 </label>
                                 <input type="text" name="family" id="family"
-                                    className={textInputClasses} placeholder="نام خانوادگی خود را وارد کنید" required />
+                                    placeholder="نام خانوادگی خود را وارد کنید" required />
                             </div>
                             <div className="">
                                 <label
@@ -123,6 +111,6 @@ function RegisterForm() {
     )
 }
 
-RegisterForm.provider = Fragment
+export const getServerSideProps = withCafeeShopProfile()
 
-export default RegisterForm
+export default CoffeeShopPageProvider(CustomerPage)

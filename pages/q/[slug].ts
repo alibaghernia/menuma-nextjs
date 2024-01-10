@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { axios } from '@/utils/axios'
+import { axios } from '@/utils/axios';
 
 // TODO fix client side redirect. make sure redirect will be just server side
 const RedirectPage = () => {
@@ -31,7 +31,9 @@ export async function getServerSideProps(context: any) {
 
   // Fetch the necessary data for redirection based on the slug
   // For demonstration purposes, let's assume the target URL is hardcoded
-  const { destination }: any = await axios.get(`/api/go/${slug}`).then(({ data }) => data)
+  const { destination }: any = await axios
+    .get(`/api/go/${slug}`)
+    .then(({ data }) => data);
 
   const targetUrl = destination;
 

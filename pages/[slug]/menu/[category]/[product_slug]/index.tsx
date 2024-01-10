@@ -1,5 +1,3 @@
-import { Navbar } from '@/components/core/navbar/noSSR';
-import noImage from '@/assets/images/no-image.jpg';
 import React, {
   useCallback,
   useContext,
@@ -18,29 +16,28 @@ import { axios, serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
 import { toast } from 'react-toastify';
 import _ from 'lodash';
+import { Navbar } from '@/components/core/navbar/noSSR';
+import noImage from '@/assets/images/no-image.jpg';
+import sperso from '@/assets/images/sperso.png';
+import warmDrink from '@/assets/images/warm-drink.png';
 import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
-import { useRouter } from 'next/router';
 
-import { Section } from '@/components/common/section/section';
-import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
-import { Product } from '@/components/common/product/product';
-import { EffectCoverflow, Pagination } from 'swiper/modules';
-import { twMerge } from 'tailwind-merge';
-import classNames from 'classnames';
-import { IProduct } from '@/components/common/product/types';
+import { OrderBox } from '@/components/menu/order-box';
 
 function ProductPage() {
+  const [scrolled, setScrolled] = useState(false);
   const { setLoading, functions } = useContext(ProviderContext);
   const { state } = useContext(CoffeeShopProviderContext);
-  const { query: params } = useRouter();
+  const params = useParams();
   const slug = useSlug(false);
   const [orderedItems, setOrderedItems] = useState<Record<string, any>>({});
   const [product, setProduct] = useState<APIProduct>();
+  const [order, setOrder] = useState<APIProduct>();
   function productFetcher(): Promise<APIProduct> {
     return axios
       .get(
@@ -48,7 +45,6 @@ function ProductPage() {
       )
       .then(({ data }) => data);
   }
-
   const { isSuccess, data, refetch, status, isError } = useQuery({
     queryKey: `fetch-menu-${params.slug}-item-${params.product_slug}`,
     queryFn: productFetcher,
@@ -56,24 +52,61 @@ function ProductPage() {
     retry: 2,
     cacheTime: 5 * 60 * 1000,
   });
+
+  function productOrder(): Promise<APIProduct> {
+    return axios
+      .get(`/api/cafe-restaurants/${params.slug}/menu/day-offers`)
+      .then(({ data }) => data);
+  }
+  const {
+    isSuccess: isSuccessOrder,
+    data: dataOrder,
+    refetch: refreshOrder,
+    status: statusOrder,
+    isError: isErrorOrder,
+  } = useQuery({
+    queryKey: `fetch-order-${params.slug}`,
+    queryFn: productOrder,
+    enabled: false,
+    retry: 2,
+    cacheTime: 5 * 60 * 1000,
+  });
+
   useEffect(() => {
     if (isError) {
       toast.error('خطا در ارتباط با سرور');
     }
-  }, [isError]);
+    if (isErrorOrder) {
+      toast.error('خطا در ارتباط با سرور');
+    }
+  }, [isError, isErrorOrder]);
 
   useEffect(() => {
     if (!params) return;
     setLoading(true);
     refetch();
-  }, [refetch, setLoading, params]);
+    refreshOrder();
+  }, [refetch, refreshOrder, setLoading, params]);
 
   useEffect(() => {
     if (isSuccess) {
       setProduct(data);
       setLoading(false);
     }
-  }, [isSuccess, setLoading, data, status, params]);
+    if (isSuccessOrder) {
+      setOrder(dataOrder);
+      setLoading(false);
+    }
+  }, [
+    isSuccess,
+    isSuccessOrder,
+    setLoading,
+    data,
+    dataOrder,
+    status,
+    statusOrder,
+    params,
+  ]);
 
   const orderItem = useCallback(
     (price: any) => {
@@ -251,6 +284,19 @@ function ProductPage() {
                   </FlexBox>
                 </FlexItem>
               )}
+            </FlexBox>
+          </FlexItem>
+        </FlexBox>
+        <FlexBox direction="column" className="mt-[1rem]">
+          <FlexItem>
+            <FlexBox direction="column" gap={2} className=" mb-[1.25rem]">
+              <OrderBox
+                title="پیشنهادات روز"
+                scrolled={scrolled}
+                productArray={order}
+                classNameSection="scroll-mt-[20rem]"
+                contentClassNamesSection="flex flex-col gap-[1rem] items-center"
+              />
             </FlexBox>
           </FlexItem>
         </FlexBox>

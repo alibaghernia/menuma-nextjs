@@ -8,7 +8,7 @@ jobs:
   cache-install:
     runs-on: ubuntu-latest
     permissions:
-      contents: write|read
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -48,7 +48,6 @@ jobs:
         with:
           commit_message: "Prettier format"
           skip_dirty_check: false
-          commit_user_name: "Github Action"
 
       - name: Run CI
         run: npm run ci

@@ -62,7 +62,7 @@
     "husky": "^8.0.0"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
+    "**/*": [
       "npx prettier --write"
     ]
   }

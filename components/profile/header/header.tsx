@@ -1,9 +1,9 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import coffeeshopImage from '@/assets/images/coffeeshop.jpg'
 import coffeeshopLogo from '@/assets/images/coffeeshopLogo.png'
 import { IProfileHeader } from '../header/types'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from "@/components/common/link";
 import { Container } from '@/components/common/container/container'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
 import { FlexItem } from '@/components/common/flex_item/flex_item'
@@ -15,7 +15,6 @@ import { XIcon } from '@/icons/x'
 import { WhatsappIcon } from '@/icons/whatsapp'
 
 export const ProfileHeader: IProfileHeader = (props) => {
-
   const { state: { profile: profileData } } = useContext(CoffeeShopProviderContext)
 
 
@@ -69,7 +68,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
         </FlexItem>
       </FlexBox>
       <Container
-        className="left-[50%] bottom-[-4.25rem] rounded-full z-20 w-[8.5rem] h-[8.5rem] translate-x-[-50%] overflow-hidden border-[0.7rem] border-secondary bg-white"
+        className="left-[50%] bottom-[-4.25rem] rounded-full z-20 w-[8.5rem] h-[8.5rem] translate-x-[-50%] overflow-hidden border-[0.7rem] border-background bg-white"
       >
         <Image
           fill

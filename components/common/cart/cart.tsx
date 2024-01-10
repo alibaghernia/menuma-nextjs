@@ -10,7 +10,7 @@ import Image from 'next/image'
 import { Trash1Icon } from '@/icons/trash1'
 import { ProviderContext } from '@/providers/main/provider'
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
-import Link from 'next/link'
+import { Link } from "@/components/common/link";
 import { useParams } from 'next/navigation'
 import { useSlug } from '@/providers/main/hooks'
 import { FlexBox } from '@/components/common/flex_box/flex_box'
@@ -20,9 +20,10 @@ import { IConfirmModalProps } from '../confirm_modal/types'
 import { ConfirmModal } from '../confirm_modal/confirm_modal'
 import _ from 'lodash'
 import { CallGarson } from '../call_garson/call_garson'
+import { useRouter } from 'next/router'
 
 export const Cart: ICart = (props) => {
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug()
     const [dismissModal, setDismissModal] = useState<IConfirmModalProps | undefined>(undefined)
     const resolvedTailwindConfig = resolveConfig(tailwindConfig)

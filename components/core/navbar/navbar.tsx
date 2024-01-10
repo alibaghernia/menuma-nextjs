@@ -19,7 +19,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Container } from '@/components/common/container/container'
 import dynamic from 'next/dynamic'
 import { CallGarson } from '@/components/common/call_garson/call_garson'
-import Link from 'next/link'
+import { Link } from "@/components/common/link";
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false })
 export const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
@@ -27,7 +27,6 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
     const slug = useSlug()
     const { setLoading } = useContext(ProviderContext)
     const { state: coffeShopState, handleCallGarson, cancelGarsonCallButton } = useContext(CoffeeShopProviderContext)
-    const params = useParams()
     const { state } = useContext(ProviderContext)
     const [menuOpen, setMenuOpen] = useState(false)
     const [cartOpen, setCartOpen] = useState(false)
@@ -111,8 +110,8 @@ export const Navbar: INavBar = ({ background = true, callPager = true, ...props 
                 justify='between'
                 className={
                     classNames(
-                        "relative px-[1.6rem] z-20 left-0 right-0 py-[1.2rem]",
-                        { "bg-secondary": background }
+                        "relative px-[1.6rem] z-20 left-0 right-0 py-[1rem]",
+                        { "bg-background": background }
                     )
                 }
             >

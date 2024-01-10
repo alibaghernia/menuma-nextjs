@@ -6,6 +6,10 @@
 html {
     font-size: 16px;
     font-family: Vazir FD, sans-serif;
+
+    @media screen and (max-width: 768px) {
+        font-size: 90%
+    }
 }
 
 @layer base {

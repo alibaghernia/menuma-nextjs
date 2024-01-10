@@ -1,14 +1,14 @@
 import { ProfileHeader } from '@/components/profile/header/header'
 import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg'
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo } from 'react'
 import { Section } from '@/components/common/section/section'
 import { Navbar } from '@/components/core/navbar/noSSR'
 import { useRouter } from 'next/router'
 import dynamic from 'next/dynamic'
-import { GetServerSideProps, NextPage } from 'next'
+import { GetServerSideProps } from 'next'
 import { ProviderContext } from '@/providers/main/provider'
 import { IProfile } from './types'
-import CoffeShopProvider, { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider'
 import Head from 'next/head'
 import { Button } from '@/components/common/button'
 import { useSlug } from '@/providers/main/hooks'
@@ -18,10 +18,9 @@ import { PhoneIcon } from '@/icons/phone'
 import resolveConfig from 'tailwindcss/resolveConfig'
 import tailwindConfig from '@/tailwind.config'
 import { MailIcon } from '@/icons/mail'
-import Link from 'next/link'
-import { axios, serverBaseUrl } from '@/utils/axios'
-import { QueryClient } from 'react-query'
-import { getSlugFromReq, withCafeeShopProfile } from '@/utils/serverSideUtils'
+import { Link } from "@/components/common/link";
+import { serverBaseUrl } from '@/utils/axios'
+import { withCafeeShopProfile } from '@/utils/serverSideUtils'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 import { MetaTags } from '@/components/common/metatags'
 import _ from 'lodash'
@@ -80,7 +79,7 @@ const Profile = () => {
                     value: profileData?.logo_path ? `${serverBaseUrl}/storage/${profileData?.logo_path}` : cafeeshopBannelPlaceholder.src,
                 }
             ]} />
-            <div className='bg-secondary min-h-screen'>
+            <div className='bg-background min-h-screen'>
                 <Navbar
                     dark
                     background={false}
@@ -98,6 +97,7 @@ const Profile = () => {
                             }
                             className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
                             rounded
+                            color='#fff'
                         >
                             مشاهده مـنـو
                         </Button>
@@ -113,6 +113,7 @@ const Profile = () => {
                                     className='text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F]'
                                     linkTarget='_blank'
                                     rounded="1rem"
+                                    color='secondary'
                                 >
                                     مسیریابی
                                 </Button>

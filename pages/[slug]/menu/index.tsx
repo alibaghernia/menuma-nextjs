@@ -36,7 +36,7 @@ function MenuPage() {
     const { state } = useContext(CoffeeShopProviderContext)
     const { setLoading, state: mainState } = useContext(ProviderContext)
     const [searchInput, setSearchInput] = useState<string>("")
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug(false)
     const rouer = useRouter()
 
@@ -121,6 +121,7 @@ function MenuPage() {
     }, [menuData, setSelectedCategory, scrolled])
 
     const renderProducts = useCallback((category: APICateogory) => {
+
         const categoryItems = category?.items || []
         const filtred = categoryItems.filter(product => product.name.includes(searchInput!))
         if (!filtred.length) return (
@@ -163,13 +164,13 @@ function MenuPage() {
                     {`${state.profile.name + " - منو" + (slug ? ' - منوما' : '')}`}
                 </title>
             </Head>
-            <div className='bg-secondary min-h-screen'>
+            <div className='bg-background min-h-screen'>
                 {navbar}
                 <FlexBox direction='column'>
                     <Container
                         position='sticky'
                         id='category-bar'
-                        className={twMerge(classNames("top-0 bg-secondary z-20", {
+                        className={twMerge(classNames("top-0 bg-background z-20", {
                             "pb-[1.125rem]": !scrolled,
                             "pb-[1rem]": scrolled,
                         }))}

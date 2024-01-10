@@ -16,11 +16,12 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
+import { useRouter } from 'next/router';
 
 function ProductPage() {
     const { setLoading, functions } = useContext(ProviderContext)
     const { state } = useContext(CoffeeShopProviderContext)
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug(false)
     const [orderedItems, setOrderedItems] = useState<Record<string, any>>({})
     const [product, setProduct] = useState<APIProduct>()
@@ -41,7 +42,6 @@ function ProductPage() {
         retry: 2,
         cacheTime: 5 * 60 * 1000
     })
-
     useEffect(() => {
         if (isError) {
             toast.error("خطا در ارتباط با سرور")
@@ -98,9 +98,8 @@ function ProductPage() {
     }, [functions, product?.id])
 
     const prices = useMemo(() => product?.prices?.map((price: any, key: number) => {
-
+        const foundTagSoldOut = !!product.tags?.find((tag: any) => tag.type === 'soldout');
         const order = functions.cart.getItem(`${product.id}-${price.id}`);
-
         return (
             <FlexItem key={key}>
                 <FlexBox
@@ -121,12 +120,14 @@ function ProductPage() {
                         </FlexBox>
                     </FlexItem>
                     {!order ? (
-                        <FlexItem
+
+                        !foundTagSoldOut && <FlexItem
                             className="rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]"
                             onClick={() => orderItem(price)}
                         >
                             سفارش
                         </FlexItem>
+
                     ) : (
                         <FlexItem>
                             <FlexBox gap={2} alignItems='center'>
@@ -151,7 +152,9 @@ function ProductPage() {
     const navbar = useMemo(() => (
         <Navbar title={state.profile?.name} note back />
     ), [state.profile])
+    console.log({ product })
 
+    const foundTagSoldOut = !!product?.tags?.find((tag: any) => tag.type === 'soldout');
     return (
         <>
             <Head>
@@ -160,12 +163,12 @@ function ProductPage() {
                 </title>
             </Head>
             {navbar}
-            <div className='bg-secondary h-screen pt-[4.5rem] z-10 px-4'>
+            <div className='bg-background h-screen pt-[4.5rem] z-10 px-4'>
                 <FlexBox direction='column'>
                     <FlexItem
                         className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow"
                     >
-                        <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name! || "pic"} className='inset-0 block object-cover' fill />
+                        <Image src={product?.image_path ? `${serverBaseUrl}/storage/${product?.image_path}` : noImage.src} alt={product?.name! || "pic"} className={`inset-0 block object-cover ${foundTagSoldOut && 'grayscale'}`} fill />
                     </FlexItem>
                     <FlexItem className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[.5rem]" grow>
                         <FlexBox direction='column'>

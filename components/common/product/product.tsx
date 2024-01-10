@@ -6,7 +6,7 @@ import { LinedAddIcon } from '@/icons/lined_add'
 import noImage from '@/assets/images/no-image.jpg'
 import { ProviderContext } from '@/providers/main/provider';
 import { useParams } from 'next/navigation'
-import Link from 'next/link'
+import { Link } from "@/components/common/link";
 import { useRouter } from 'next/router'
 import _ from 'lodash'
 import { useSlug } from '@/providers/main/hooks'
@@ -16,15 +16,12 @@ import { FlexItem } from '@/components/common/flex_item/flex_item'
 import { Badge } from '@/components/common/badge/badge'
 
 export const Product: IProduct = (props) => {
+    const foundTagSoldOut = !!props.tags?.find(tag => tag.type === 'soldout');
     const router = useRouter()
-    const params = useParams()
+    const { query: params } = useRouter()
     const slug = useSlug()
     const { functions, setLoading } = useContext(ProviderContext)
-
     const productSlug = useMemo(() => params ? `/${slug}menu/${props.categoryId}/${props.id}` : "#", [params, props, slug])
-
-
-
     const orderItem = useCallback((price: any) => {
         const key = `${props.id}-${price.id}`
         functions.cart.addItem({
@@ -117,15 +114,19 @@ export const Product: IProduct = (props) => {
                                                     e.stopPropagation();
                                                     increaseOrderItemCount(price);
                                                 }, 500)}>
+
                                                 <Container
                                                     center
                                                 >
                                                     +
                                                 </Container>
+
+
                                             </FlexItem>
                                         </FlexBox>
                                     ) : (
-                                        <LinedAddIcon color='#434343' />
+
+                                        !foundTagSoldOut && <LinedAddIcon color='#434343' />
                                     )}
                                 </FlexItem>
                             </FlexBox>
@@ -143,7 +144,8 @@ export const Product: IProduct = (props) => {
                 "relative h-full": mono,
             })}>
 
-                <Image fill src={props.image!} alt={props.title} className='z-0 object-cover relative' />
+                <Image fill src={props.image!} alt={props.title} className={`z-0 object-cover relative ${foundTagSoldOut && 'grayscale'}`} />
+
                 {props.single_mode && (
                     <>
                         <span className="z-10 absolute inset-0" style={{
@@ -167,6 +169,7 @@ export const Product: IProduct = (props) => {
     }
 
     const renderTags = useCallback(() => {
+
         return props.tags?.map((tag, idx) => (
             <FlexItem key={idx}>
                 <Badge

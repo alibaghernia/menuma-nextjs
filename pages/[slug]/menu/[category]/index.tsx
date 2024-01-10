@@ -13,7 +13,6 @@ import { withCafeeShopProfile } from '@/utils/serverSideUtils'
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider'
 
 function CategoryPage() {
-    const params = useParams()
     const [searchInput, setSearchInput] = useState<string>()
     const category = {
         title: "ویژه ها",
@@ -44,12 +43,12 @@ function CategoryPage() {
             <Navbar title="کافه شب" note back />
             <FlexBox
                 direction='column'
-                className='bg-secondary min-h-screen pt-[2.5rem] z-10 px-[2.8rem]'
+                className='bg-background min-h-screen pt-[2.5rem] z-10 px-[2.8rem]'
             >
                 <FlexItem>
                     <Container
                         position='sticky'
-                        className="top-0 z-10 bg-secondary pt-[2rem] pb-[1rem]">
+                        className="top-0 z-10 bg-background pt-[2rem] pb-[1rem]">
                         <FlexBox
                             alignItems='center'
                             gap="1.3rem"

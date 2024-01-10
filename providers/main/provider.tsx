@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useReducer, useState } from 'react'
+import React, { createContext, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import { IProvider, IProviderState } from './types';
 import reducer from './reducer';
 import { INITIAL_STATE, REDUCER_KEYS } from './constants';
@@ -6,6 +6,7 @@ import _ from 'lodash'
 import functions from './functions';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 
 const Loading = dynamic(() => import('@/components/common/loading/loading'), { ssr: false })
 
@@ -21,13 +22,12 @@ export const ProviderContext = createContext<{
 const localStoragekey = "provider-storage-new-v3.0"
 
 const Provider: IProvider = ({ children }) => {
-    const [loading, setLoading] = useState(true)
-    const params = useParams()
-
+    const [loading, setLoading] = useState(false)
+    const { query: params } = useRouter()
     const getLocalStorageKey = useCallback(() => {
         const slug = params.slug || "menuma"
         return `${slug}-${localStoragekey}`
-    }, [params.slug])
+    }, [params?.slug])
 
     const storeReducerState = useCallback((state: IProviderState) => {
         localStorage.setItem(getLocalStorageKey(), JSON.stringify(state))
@@ -82,22 +82,22 @@ const Provider: IProvider = ({ children }) => {
         checkAppDomain()
     }, [getReducerState, checkAppDomain])
 
+    const loadingMem = useMemo(() => loading && <Loading />, [loading])
+
     return (
         <>
             <ProviderContext.Provider value={{
                 state,
                 dispatch,
                 functions: functions(state, dispatch),
-                loading,
+                loading: loading,
                 setLoading
             }}>
                 {children}
             </ProviderContext.Provider>
-            {
-                loading && <Loading />
-            }
+            {loadingMem}
         </>
     )
 }
 
-export default React.memo(Provider);
+export default Provider;

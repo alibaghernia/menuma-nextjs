@@ -64,8 +64,7 @@
   },
   "lint-staged": {
     "**/*": [
-      "npx prettier . --write",
-      "git add"
+      "npx prettier --write ."
     ]
   },
   "husky": {

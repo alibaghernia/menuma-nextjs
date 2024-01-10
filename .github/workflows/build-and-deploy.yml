@@ -2,7 +2,7 @@ name: Build and deploy
 
 on:
   push:
-    branches: ['*']
+    branches: ['main']
 
 jobs:
   push_to_registry:

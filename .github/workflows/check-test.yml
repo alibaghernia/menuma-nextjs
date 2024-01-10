@@ -40,4 +40,4 @@ jobs:
         run: pnpm i
 
       - name: Run CI
-        run: npm run ci
+        run: npm run check

@@ -1,20 +1,20 @@
-import { IProfile } from "@/pages/[slug]/types";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
-import { QueryClient } from "react-query";
-import { axios } from "./axios";
-import _ from "lodash";
+import { IProfile } from '@/pages/[slug]/types';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { QueryClient } from 'react-query';
+import { axios } from './axios';
+import _ from 'lodash';
 
 export const getSlugFromReq = (
   { req, params }: GetServerSidePropsContext,
-  traillingSlash: boolean = true
+  traillingSlash: boolean = true,
 ) => {
-  const isNotMenuma = req.headers.isNotMenuma == "1";
+  const isNotMenuma = req.headers.isNotMenuma == '1';
   const slug = isNotMenuma ? `` : params?.slug;
   return traillingSlash && slug ? `${slug}/` : slug;
 };
 
 export const withCafeeShopProfile = (
-  serverSidePropsFunc?: GetServerSideProps
+  serverSidePropsFunc?: GetServerSideProps,
 ) => {
   return async (context: GetServerSidePropsContext) => {
     const slug = getSlugFromReq(context);
@@ -46,7 +46,7 @@ export const withCafeeShopProfile = (
           profile,
         },
       },
-      getServerSidePropsRes
+      getServerSidePropsRes,
     );
   };
 };

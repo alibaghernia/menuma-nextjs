@@ -1,11 +1,15 @@
-import { REDUCER_KEYS } from "./constants";
-import { IProviderState } from "./types";
-import { type ICartItem } from "./types";
+import { CommonService } from '@/services/common.service';
+import { REDUCER_KEYS } from './constants';
+import { IProviderState } from './types';
+import { type ICartItem } from './types';
+import { axios } from '@/utils/axios';
 
 export default function functions(
   state: IProviderState,
-  dispatch: (action: any) => void
+  dispatch: (action: any) => void,
 ) {
+  const commonService = CommonService.init(axios);
+
   return {
     setProfile: (profile: any) => {
       dispatch({
@@ -25,6 +29,17 @@ export default function functions(
       },
       get() {
         return state.profile;
+      },
+    },
+    services: {
+      callGarson: (tableID: string) => {
+        return commonService.callGarson(state.profile.slug, tableID);
+      },
+      cancelCallGarson: (tableID: string) => {
+        return commonService.cancelCallGarson(state.profile.slug, tableID);
+      },
+      geTable: (tableID: string) => {
+        return commonService.getTable(state.profile.slug, tableID);
       },
     },
   };

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 declare interface ICategoryCardProps {
   titleClassName?: string;

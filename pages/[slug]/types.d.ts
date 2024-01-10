@@ -1,4 +1,4 @@
-import { NextPage, FunctionComponent } from "next";
+import { NextPage, FunctionComponent } from 'next';
 
 declare interface IProfile {
   id: number;
@@ -36,12 +36,12 @@ declare type WorkignHour = {
   cafe_restaurant_id: number;
 };
 
-declare module "next" {
+declare module 'next' {
   interface NextPage {
     provider?: any;
   }
 }
-declare module "next" {
+declare module 'next' {
   interface FunctionComponent {
     provider?: any;
   }

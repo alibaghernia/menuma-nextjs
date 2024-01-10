@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC } from 'react';
+import { TagType } from '@/components/common/badge/types';
 
 declare interface IProductProps {
   id: string | number;
@@ -15,9 +16,9 @@ declare interface IProductProps {
     title: stirng;
     price: string;
   }[];
-  tags?: {
-    type: "new" | "hot" | "soldout";
-  }[];
+  tags?: TagType[];
+  // tags?: "new" | "hot" | "sold_out" | undefined[];
+  // tags?: any;
 }
 
 declare type IProduct = FC<IProductProps>;

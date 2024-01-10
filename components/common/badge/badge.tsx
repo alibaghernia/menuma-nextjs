@@ -15,9 +15,9 @@ export const Badge: IBadge = (props) => {
             <FireIcon color='red' />
             ویژه
         </div>,
-        soldout: <div className="
-        bg-white text-black-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-300 dark:text-typography flex items-center">
-            ناموجود
+        sold_out: <div className="
+        bg-white text-black-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-300 dark:text-typography flex items-center mt-4 mr-2">
+            تمام شده
         </div>
     }), [])
     const badge = useMemo(() => (

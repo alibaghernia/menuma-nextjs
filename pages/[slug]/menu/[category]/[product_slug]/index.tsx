@@ -98,7 +98,7 @@ function ProductPage() {
     }, [functions, product?.id])
 
     const prices = useMemo(() => product?.prices?.map((price: any, key: number) => {
-        const foundTagSoldOut = !!product.tags?.find((tag: any) => tag.type === 'soldout');
+        const foundTagSoldOut = !!product.tags?.find((tag: any) => tag === 'sold_out');
         const order = functions.cart.getItem(`${product.id}-${price.id}`);
         return (
             <FlexItem key={key}>
@@ -152,9 +152,8 @@ function ProductPage() {
     const navbar = useMemo(() => (
         <Navbar title={state.profile?.name} note back />
     ), [state.profile])
-    console.log({ product })
 
-    const foundTagSoldOut = !!product?.tags?.find((tag: any) => tag.type === 'soldout');
+    const foundTagSoldOut = !!product?.tags?.find((tag: any) => tag === 'sold_out');
     return (
         <>
             <Head>
@@ -182,11 +181,14 @@ function ProductPage() {
                             <FlexItem className="text-[1rem] font-[400] mt-[1.5rem] text-typography md:text-center text-justify">
                                 {product?.description}
                             </FlexItem>
-                            <FlexItem className="mt-[3rem]">
-                                <FlexBox direction='column' gap={2}>
-                                    {prices}
-                                </FlexBox>
-                            </FlexItem>
+                            {!foundTagSoldOut &&
+                                <FlexItem className="mt-[3rem]">
+                                    <FlexBox direction='column' gap={2}>
+                                        {prices}
+                                    </FlexBox>
+                                </FlexItem>
+                            }
+
                         </FlexBox>
 
                     </FlexItem>

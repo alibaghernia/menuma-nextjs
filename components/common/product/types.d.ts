@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 declare interface IProductProps {
   id: string | number;
@@ -16,7 +16,7 @@ declare interface IProductProps {
     price: string;
   }[];
   tags?: {
-    type: "new" | "hot" | "soldout";
+    type: 'new' | 'hot' | 'soldout';
   }[];
 }
 

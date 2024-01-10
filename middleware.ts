@@ -1,17 +1,17 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const appDomain = process.env.NEXT_PUBLIC_MENUMA_DOMAIN;
   if (!appDomain) {
-    console.log("check app domain");
+    console.log('check app domain');
     process.exit(1);
   }
   const url = new URL(request.url);
-  const host = request.headers.get("host");
+  const host = request.headers.get('host');
   const protocol =
-    `${request.headers.get("x-forwarded-proto")}:` || url.protocol;
-  const reqUrl = request.url.replace(`${url.host}`, host || "");
+    `${request.headers.get('x-forwarded-proto')}:` || url.protocol;
+  const reqUrl = request.url.replace(`${url.host}`, host || '');
   if (
     !reqUrl.startsWith(`http://${appDomain}/`) &&
     !reqUrl.startsWith(`https://${appDomain}/`) &&
@@ -25,21 +25,21 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`http://192.168.`) &&
     !reqUrl.startsWith(`https://192.168.`)
   ) {
-    const domain_name = host?.split(".") || [];
+    const domain_name = host?.split('.') || [];
     // const nginxUrl = `${protocol}//${host}`;
     const nextUrl = `${url.protocol}//${url.host}`;
     const username = (
       domain_name.length > 1
         ? domain_name[domain_name.length - 2]
         : domain_name.toString()
-    ).replace(/:(\d+)/, "");
-    const pathname = request.url.replace(nextUrl, "");
-    request.headers.set("isNotMenuma", "1");
+    ).replace(/:(\d+)/, '');
+    const pathname = request.url.replace(nextUrl, '');
+    request.headers.set('isNotMenuma', '1');
     return NextResponse.rewrite(`${nextUrl}/${username}${pathname}`, {
       headers: request.headers,
     });
   }
-  request.headers.set("isNotMenuma", "0");
+  request.headers.set('isNotMenuma', '0');
   return NextResponse.next({
     headers: request.headers,
   });

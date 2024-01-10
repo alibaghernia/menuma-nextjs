@@ -1,1 +1,1 @@
-export * from './noSSR'
+export * from './noSSR';

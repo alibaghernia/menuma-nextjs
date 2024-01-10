@@ -1,15 +1,10 @@
-
-import React, { Fragment } from 'react'
-import {
-    RegisterFormComponent
-} from '@/components/pages/register_form'
+import React, { Fragment } from 'react';
+import { RegisterFormComponent } from '@/components/pages/register_form';
 
 function RegisterForm() {
-    return (
-        <RegisterFormComponent />
-    )
+  return <RegisterFormComponent />;
 }
 
-RegisterForm.provider = Fragment
+RegisterForm.provider = Fragment;
 
-export default RegisterForm
+export default RegisterForm;

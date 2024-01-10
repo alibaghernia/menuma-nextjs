@@ -1,8 +1,8 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from 'react';
 
 declare interface ILabelProps {
-    className?: string;
-    for: string
+  className?: string;
+  for: string;
 }
 
-declare type ILabel = FC<PropsWithChildren<IButtonProps>>
+declare type ILabel = FC<PropsWithChildren<IButtonProps>>;

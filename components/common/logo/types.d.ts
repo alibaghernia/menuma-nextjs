@@ -1,3 +1,3 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from 'react';
 
 declare type ILogo = FC<PropsWithChildren<any>>;

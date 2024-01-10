@@ -1,10 +1,10 @@
-import { REDUCER_KEYS } from "./constants";
-import { IProviderState } from "./types";
-import { type ICartItem } from "./types";
+import { REDUCER_KEYS } from './constants';
+import { IProviderState } from './types';
+import { type ICartItem } from './types';
 
 export default function functions(
   state: IProviderState,
-  dispatch: (action: any) => void
+  dispatch: (action: any) => void,
 ) {
   return {
     cart: {
@@ -39,7 +39,7 @@ export default function functions(
         });
       },
       getItem(itemId: string) {
-        return state.cart.find(item => item.id == itemId)
+        return state.cart.find((item) => item.id == itemId);
       },
     },
   };

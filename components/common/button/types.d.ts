@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from 'react';
 
 declare interface IButtonProps {
   className?: string;
@@ -7,8 +7,8 @@ declare interface IButtonProps {
   onClick?: () => void;
   rounded?: string | boolean;
   shadow?: string | boolean;
-  type?: "primary" | "ghost";
-  color?: "primary" | "secondary" | string;
+  type?: 'primary' | 'ghost';
+  color?: 'primary' | 'secondary' | string;
 }
 
 declare type IButton = FC<PropsWithChildren<IButtonProps>>;

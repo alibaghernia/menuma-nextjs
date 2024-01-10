@@ -1,12 +1,12 @@
-import { CommonService } from "@/services/common.service";
-import { REDUCER_KEYS } from "./constants";
-import { IProviderState } from "./types";
-import { type ICartItem } from "./types";
-import { axios } from "@/utils/axios";
+import { CommonService } from '@/services/common.service';
+import { REDUCER_KEYS } from './constants';
+import { IProviderState } from './types';
+import { type ICartItem } from './types';
+import { axios } from '@/utils/axios';
 
 export default function functions(
   state: IProviderState,
-  dispatch: (action: any) => void
+  dispatch: (action: any) => void,
 ) {
   const commonService = CommonService.init(axios);
 

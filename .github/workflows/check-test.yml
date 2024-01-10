@@ -43,10 +43,10 @@ jobs:
         run: npm run format
 
       - name: Commit format changes
-        uses: CatChen/check-git-status-action@v1
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          push-if-not-clean: true
-          commit-message: 'Prettier format'
+          commit_message: "Prettier format"
+          skip_dirty_check: false
 
       - name: Run CI
         run: npm run ci

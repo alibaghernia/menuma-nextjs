@@ -42,15 +42,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm i
-
-      - name: Format Code
-        run: npm run format
-
-      - name: Commit format changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: 'Prettier format'
-          skip_dirty_check: false
-
+        
       - name: Run CI
         run: npm run ci

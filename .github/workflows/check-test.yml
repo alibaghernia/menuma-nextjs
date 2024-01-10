@@ -39,5 +39,14 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
+      - name: Format Code
+        run: npm run format
+
+      - name: Commit format changes
+        uses: CatChen/check-git-status-action@v1
+        with:
+          push-if-not-clean: true
+          commit-message: 'Prettier format'
+
       - name: Run CI
         run: npm run ci

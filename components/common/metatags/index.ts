@@ -1,1 +1,1 @@
-export * from "./metatags";
+export * from './metatags';

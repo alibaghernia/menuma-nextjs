@@ -1,11 +1,11 @@
-import { LinkProps } from "next/link";
+import { LinkProps } from 'next/link';
 import {
   ElementType,
   FC,
   PropsWithChildren,
   ReactElement,
   ReactPropTypes,
-} from "react";
+} from 'react';
 
 declare type ILinkProps = LinkProps & HTMLAttributes<HTMLDivElement>;
 

@@ -1,6 +1,5 @@
-import { FC } from "react";
-import { TagType } from '@/components/common/badge/types'
-
+import { FC } from 'react';
+import { TagType } from '@/components/common/badge/types';
 
 declare interface IProductProps {
   id: string | number;

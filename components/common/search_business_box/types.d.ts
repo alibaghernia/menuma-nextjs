@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren } from 'react';
 
 declare interface ISearchBusinessBoxProps {
   onSearch: (value: string) => void;

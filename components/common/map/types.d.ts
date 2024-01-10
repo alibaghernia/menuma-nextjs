@@ -1,11 +1,11 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 declare type ILocation = {
-    coordinates: [number, number]
-}
+  coordinates: [number, number];
+};
 
 declare interface IMapProps {
-    location: ILocation
+  location: ILocation;
 }
 
-declare type IMap = FC<IMapProps>
+declare type IMap = FC<IMapProps>;

@@ -2,7 +2,7 @@ name: Build and deploy
 
 on:
   push:
-    branches: ['main']
+    branches: ['*']
 
 jobs:
   push_to_registry:
@@ -15,7 +15,7 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: reg2.menuma.online
+          registry: reg2.menuma.online:444
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
@@ -30,7 +30,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: reg2.menuma.online/menuma/fontend:latest
+          tags: reg2.menuma.online:444/menuma/fontend:latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Call API to update server

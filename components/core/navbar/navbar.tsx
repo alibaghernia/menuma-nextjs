@@ -116,7 +116,7 @@ export const Navbar: INavBar = ({
         }}
       />
     ),
-    [cartOpen, Cart],
+    [cartOpen],
   );
 
   return (

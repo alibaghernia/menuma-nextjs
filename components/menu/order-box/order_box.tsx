@@ -36,7 +36,7 @@ export const OrderBox: IOrderBox = (props) => {
             spaceBetween={15}
             pagination={{
               clickable: true,
-              el: '#swiper-pagination',
+              el: '#swiper-pagination-order',
               bulletActiveClass: styles['swiper-pagination-bullet'],
             }}
             breakpoints={{
@@ -79,13 +79,13 @@ export const OrderBox: IOrderBox = (props) => {
           </Swiper>
         </FlexItem>
         <FlexItem
-          id="swiper-pagination"
+          id="swiper-pagination-order"
           className={twMerge(
             classNames(
               'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
-              {
-                '!hidden': props.scrolled,
-              },
+              // {
+              //   '!hidden': props.scrolled,
+              // },
             ),
           )}
         />

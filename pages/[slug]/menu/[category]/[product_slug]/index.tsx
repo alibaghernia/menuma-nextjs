@@ -267,17 +267,19 @@ function ProductPage() {
             </FlexBox>
           </FlexItem>
         </FlexBox>
-        <FlexBox direction="column" className="mt-[1.2rem]">
-          <FlexItem>
-            <OrderBox
-              title="پیشنهادات روز"
-              scrolled={scrolled}
-              productArray={order}
-              classNameSection="scroll-mt-[20rem] "
-              contentClassNamesSection="flex flex-col gap-[1rem] items-center"
-            />
-          </FlexItem>
-        </FlexBox>
+        {order?.length && (
+          <FlexBox direction="column" className="mt-[1.2rem]">
+            <FlexItem>
+              <OrderBox
+                title="پیشنهادات روز"
+                scrolled={scrolled}
+                productArray={order}
+                classNameSection="scroll-mt-[20rem] "
+                contentClassNamesSection="flex flex-col gap-[1rem] items-center"
+              />
+            </FlexItem>
+          </FlexBox>
+        )}
       </div>
     </>
   );

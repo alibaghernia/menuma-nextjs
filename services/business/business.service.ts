@@ -29,10 +29,22 @@ export class BusinessService {
       .get<APIProduct[]>(`/${slug}/menu/day-offers`)
       .then(({ data }) => data);
   }
+  getTable(cafe_slug: string, tableID: string) {
+    return this.axios.get<TableType>(`${cafe_slug}/tables/${tableID}`);
+  }
+  callGarson(cafe_slug: string, tableID: string) {
+    return this.axios.post(`${cafe_slug}/waiter_pager/${tableID}/call`);
+  }
+  cancelCallGarson(cafe_slug: string, tableID: string) {
+    return this.axios.post(`${cafe_slug}/waiter_pager/${tableID}/cancel`);
+  }
   getApisBySlug(slug: string) {
     return {
       get: this.get.bind(this, slug),
       getDailyOffers: this.getDailyOffers.bind(this, slug),
+      getTable: this.getTable.bind(this, slug),
+      callGarson: this.callGarson.bind(this, slug),
+      cancelCallGarson: this.cancelCallGarson.bind(this, slug),
     };
   }
   pager(business_uuid: string) {

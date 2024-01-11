@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  useContext,
   useEffect,
   useReducer,
   useRef,
@@ -11,18 +10,13 @@ import reducer from './reducer';
 import { INITIAL_STATE } from './constants';
 import _ from 'lodash';
 import Functions from './functions';
-import { axios } from '@/utils/axios';
-import { useParams, useSearchParams } from 'next/navigation';
-import { useQuery } from 'react-query';
-import { IProfile } from '@/pages/[slug]/types';
-import { ProviderContext } from '../main/provider';
+import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useSlug } from '../main/hooks';
 import moment from 'moment';
 import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
-import classNames from 'classnames';
 import { ConfirmModal } from '@/components/common/confirm_modal/confirm_modal';
 import { useRouter } from 'next/router';
 import { BusinessService } from '@/services/business/business.service';

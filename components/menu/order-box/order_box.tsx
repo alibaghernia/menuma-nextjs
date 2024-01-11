@@ -17,7 +17,7 @@ import 'swiper/css/pagination';
 export const OrderBox: IOrderBox = (props) => {
   const element = useMemo(
     () => (
-      <Fragment>
+      <FlexBox direction="column" gap={2}>
         <FlexItem className="px-2">
           <Section
             className={twMerge(classNames(), props.classNameSection)}
@@ -37,7 +37,9 @@ export const OrderBox: IOrderBox = (props) => {
             pagination={{
               clickable: true,
               el: '#swiper-pagination',
-              bulletActiveClass: styles['swiper-pagination-bullet'],
+              bulletElement: 'div',
+              bulletClass: styles['swiper-pagination-bullet'],
+              bulletActiveClass: styles['swiper-pagination-bullet-active'],
             }}
             breakpoints={{
               768: {
@@ -78,14 +80,14 @@ export const OrderBox: IOrderBox = (props) => {
           id="swiper-pagination"
           className={twMerge(
             classNames(
-              'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
+              'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s]',
               {
                 '!hidden': props.scrolled,
               },
             ),
           )}
         />
-      </Fragment>
+      </FlexBox>
     ),
     [props],
   );

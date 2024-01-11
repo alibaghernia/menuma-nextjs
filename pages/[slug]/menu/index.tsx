@@ -190,72 +190,73 @@ function MenuPage() {
           {`${state.profile.name + ' - منو' + (slug ? ' - منوما' : '')}`}
         </title>
       </Head>
-      <div className="bg-background min-h-screen">
-        {navbar}
-        <FlexBox direction="column">
-          <Container
-            position="sticky"
-            id="category-bar"
-            className={twMerge(
-              classNames('top-0 bg-background z-20', {
-                'pb-[1.125rem]': !scrolled,
-                'pb-[1rem]': scrolled,
-              }),
-            )}
-          >
-            <FlexBox direction="column">
-              <FlexItem>
-                <FlexBox direction="column" gap={2} className="pt-[4.5rem]">
-                  <FlexItem className="px-2">
-                    <Swiper
-                      slidesPerView={'auto'}
-                      spaceBetween={8}
-                      grabCursor={true}
-                      scrollbar
-                      pagination={{
-                        clickable: true,
-                        el: '#swiper-pagination',
-                        bulletActiveClass: styles['swiper-pagination-bullet'],
-                      }}
-                      breakpoints={{
-                        768: {
-                          centerInsufficientSlides: true,
-                        },
-                      }}
-                      modules={[Pagination]}
-                    >
-                      {categoriesSwiperSlides}
-                    </Swiper>
-                  </FlexItem>
-                  <FlexItem
-                    id="swiper-pagination"
-                    className={twMerge(
-                      classNames(
-                        'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
-                        {
-                          '!hidden': scrolled,
-                        },
-                      ),
-                    )}
-                  />
-                </FlexBox>
-              </FlexItem>
-              <FlexItem>
-                <div className="mt-4 md:max-w-md md:mx-auto mx-6">
-                  <SearchField
-                    value={searchInput ?? ''}
-                    onChange={setSearchInput}
-                    onSearch={(value) => {}}
-                  />
-                </div>
-              </FlexItem>
-            </FlexBox>
-          </Container>
-          <FlexItem className="z-10 relative">
-            {renderCategorySections()}
-          </FlexItem>
-        </FlexBox>
-      </div>
+      {navbar}
+      <FlexBox direction="column">
+        <Container
+          position="sticky"
+          id="category-bar"
+          className={twMerge(
+            classNames('top-0 bg-background z-20', {
+              'pb-[1.125rem]': !scrolled,
+              'pb-[1rem]': scrolled,
+            }),
+          )}
+        >
+          <FlexBox direction="column">
+            <FlexItem>
+              <FlexBox direction="column" gap={2} className="pt-[4.5rem]">
+                <FlexItem className="px-2">
+                  <Swiper
+                    slidesPerView={'auto'}
+                    spaceBetween={8}
+                    grabCursor={true}
+                    scrollbar
+                    pagination={{
+                      clickable: true,
+                      el: '#swiper-pagination',
+                      bulletElement: 'div',
+                      bulletClass: styles['swiper-pagination-bullet'],
+                      bulletActiveClass:
+                        styles['swiper-pagination-bullet-active'],
+                    }}
+                    breakpoints={{
+                      768: {
+                        centerInsufficientSlides: true,
+                      },
+                    }}
+                    modules={[Pagination]}
+                  >
+                    {categoriesSwiperSlides}
+                  </Swiper>
+                </FlexItem>
+                <FlexItem
+                  id="swiper-pagination"
+                  className={twMerge(
+                    classNames(
+                      'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s]',
+                      {
+                        '!hidden': scrolled,
+                      },
+                    ),
+                  )}
+                />
+              </FlexBox>
+            </FlexItem>
+            <FlexItem>
+              <div className="mt-4 md:max-w-md md:mx-auto mx-6">
+                <SearchField
+                  value={searchInput ?? ''}
+                  onChange={setSearchInput}
+                  onSearch={(value) => {}}
+                />
+              </div>
+            </FlexItem>
+          </FlexBox>
+        </Container>
+        <FlexItem className="z-10 relative">
+          {renderCategorySections()}
+        </FlexItem>
+      </FlexBox>
     </>
   );
 }

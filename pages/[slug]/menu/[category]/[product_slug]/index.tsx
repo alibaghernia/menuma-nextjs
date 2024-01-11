@@ -218,7 +218,7 @@ function ProductPage() {
         </title>
       </Head>
       {navbar}
-      <div className="bg-background pt-[4.5rem] z-10 px-4">
+      <div className="pt-[4.5rem] pb-[2.5rem] z-10 px-4">
         <FlexBox direction="column">
           <FlexItem className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow">
             <Image

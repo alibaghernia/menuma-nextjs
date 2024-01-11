@@ -1,6 +1,7 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 const config: Config = {
+  mode: 'jit',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -14,15 +15,17 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        typography: "#434343",
-        secondary: "#EDEDED",
-        more: "#EEB33F",
-      }
+        primary: '#3177FF',
+        typography: '#434343',
+        secondary: '#EEB33F',
+        background: '#EDEDED',
+        more: '#EEB33F',
+      },
     },
     fontFamily: {
-      sans: ["Vazirmatn"]
+      sans: ['Vazirmatn'],
     },
   },
   plugins: [],
-}
-export default config
+};
+export default config;

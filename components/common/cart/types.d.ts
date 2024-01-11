@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 declare interface ICartProps {
-    open: boolean;
-    onClose: () => void;
+  open: boolean;
+  onClose: () => void;
 }
 
-declare type ICart = FC<ICartProps>
+declare type ICart = FC<ICartProps>;

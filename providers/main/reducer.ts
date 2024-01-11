@@ -1,5 +1,5 @@
-import { REDUCER_KEYS } from "./constants";
-import { IProviderState } from "./types";
+import { REDUCER_KEYS } from './constants';
+import { IProviderState } from './types';
 
 export default function reducer(state: IProviderState, action: any) {
   switch (action.type) {
@@ -23,38 +23,38 @@ export default function reducer(state: IProviderState, action: any) {
       if (itemIndex) {
         const item = state.cart[itemIndex];
         //@ts-ignore
-        item[key] = value
-        state.cart[itemIndex] = item
+        item[key] = value;
+        state.cart[itemIndex] = item;
       }
       return state;
     }
     case REDUCER_KEYS.cart.INCREASE_COUNT: {
-      const  itemId  = action.data;
+      const itemId = action.data;
       const itemIndex = state.cart.findIndex((item) => item.id == itemId);
       if (itemIndex > -1) {
         const item = state.cart[itemIndex];
-        item.count++
-        state.cart[itemIndex] = item
+        item.count++;
+        state.cart[itemIndex] = item;
       }
       return state;
     }
     case REDUCER_KEYS.cart.DECREASE_COUNT: {
-      const  itemId  = action.data;
+      const itemId = action.data;
       const itemIndex = state.cart.findIndex((item) => item.id == itemId);
       if (itemIndex > -1) {
         const item = state.cart[itemIndex];
-        item.count--
-        state.cart[itemIndex] = item
+        item.count--;
+        state.cart[itemIndex] = item;
       }
       return state;
     }
     case REDUCER_KEYS.RESTORE_DATA: {
-      state = action.data
-      state.restored = true
+      state = action.data;
+      state.restored = true;
       return state;
     }
     case REDUCER_KEYS.SET_RESTORED_DATA: {
-      state.restored = true
+      state.restored = true;
       return state;
     }
     default: {

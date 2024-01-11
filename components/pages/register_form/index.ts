@@ -1,1 +1,1 @@
-export * from './register_form_component'
+export * from './register_form_component';

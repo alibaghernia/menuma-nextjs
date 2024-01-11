@@ -20,6 +20,7 @@ export const ConfirmModal: IConfirmModal = ({
   onConfirm,
   onDismiss,
   content,
+  children,
 }) => {
   if (typeof window == 'undefined') return <div></div>;
   return createPortal(
@@ -39,7 +40,7 @@ export const ConfirmModal: IConfirmModal = ({
                 {title}
               </FlexItem>
             )}
-            <FlexItem grow>{content}</FlexItem>
+            <FlexItem grow>{children || content}</FlexItem>
             <FlexItem grow={false}>
               <FlexBox gap={2}>
                 {dismissButton && (

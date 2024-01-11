@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
 declare interface IConfirmModalProps {
   title?: string;
@@ -11,8 +11,8 @@ declare interface IConfirmModalProps {
   dismissText?: string;
   confirmButton?: boolean;
   dismissButton?: boolean;
-  content: any;
+  content?: any;
   outClose?: boolean;
   dangerConfirm?: boolean;
 }
-declare type IConfirmModal = FC<IConfirmModalProps>;
+declare type IConfirmModal = FC<PropsWithChildren<IConfirmModalProps>>;

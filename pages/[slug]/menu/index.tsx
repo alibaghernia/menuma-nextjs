@@ -36,6 +36,7 @@ import {
   usePageLoading,
 } from '@/utils/hooks';
 import { BusinessService } from '@/services/business/business.service';
+import { OrderBox } from '@/components/menu/order-box';
 
 function MenuPage() {
   const [addL, removeL] = useLoadings();
@@ -46,9 +47,13 @@ function MenuPage() {
   const { state } = useContext(CoffeeShopProviderContext);
   const [searchInput, setSearchInput] = useState<string>('');
   const { query: params } = useCustomRouter();
+  const [order, setOrder] = useState<APIProduct[]>();
   const slug = useSlug(false);
   const businessService = BusinessService.init();
   const [selectedCategory, setSelectedCategory] = useState<string | number>();
+  const businessApisBySlug = businessService.getApisBySlug(
+    params.slug as string,
+  );
 
   function menuFetcher() {
     addL('fetch-menu');
@@ -64,8 +69,26 @@ function MenuPage() {
         message.error('خطا در دریافت اطلاعات منو');
       });
   }
+
+  function fetchDaiulyOffers() {
+    addL('fetch-offers');
+    businessApisBySlug
+      .getDailyOffers()
+      .then((data) => {
+        setOrder(data);
+      })
+      .catch(() => {
+        message.error('مشکلی در دریافت پیشنهادات وجود دارد.');
+      })
+      .finally(() => {
+        removeL('fetch-offers');
+      });
+  }
+
+
   useEffect(() => {
     menuFetcher();
+    fetchDaiulyOffers();
   }, []);
   useEffect(() => {
     const handler = () => {
@@ -84,6 +107,19 @@ function MenuPage() {
       window.removeEventListener('scroll', _.throttle(handler, 50));
     };
   }, [scrolled]);
+
+  const renderOrderSection = () => {
+    return (<OrderBox
+      title="پیشنهادات روز"
+      scrolled={scrolled}
+      productArray={order}
+      classNameSection="scroll-mt-[20rem] "
+      classNameScroll={classNames({
+        'h-[6rem] rounded-[1rem]': scrolled,
+      })}
+      contentClassNamesSection="flex flex-col gap-[1rem] items-center"
+    />)
+  }
 
   const categoriesSwiperSlides = useMemo(() => {
     return _.chunk(menuData, 2).map((categories, key1) => (
@@ -245,9 +281,12 @@ function MenuPage() {
                   <SearchField
                     value={searchInput ?? ''}
                     onChange={setSearchInput}
-                    onSearch={(value) => {}}
+                    onSearch={(value) => { }}
                   />
                 </div>
+              </FlexItem>
+              <FlexItem>
+                {renderOrderSection()}
               </FlexItem>
             </FlexBox>
           </Container>

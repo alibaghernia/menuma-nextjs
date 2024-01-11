@@ -7,5 +7,6 @@ declare interface IOrderBoxProps {
   productArray: any;
   classNameSection?: string;
   contentClassNamesSection?: string;
+  classNameScroll?: string
 }
 declare type IOrderBox = FC<IOrderBoxProps>;

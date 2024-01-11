@@ -54,22 +54,26 @@ export const OrderBox: IOrderBox = (props) => {
                 className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] md:!w-fit"
                 key={product.id}
               >
-                <Product
-                  id={product.id}
-                  title={product.name}
-                  descriptions={product.description}
-                  image={
-                    product.image_path
-                      ? `${serverBaseUrl}/storage/${product.image_path}`
-                      : noImage.src
-                  }
-                  prices={product.prices || []}
-                  fullWidth
-                  className="w-full md:w-[30rem]"
-                  categoryId={product.category_id}
-                  tags={product.tags}
-                  single_mode
-                />
+                <div className={props.classNameScroll}>
+                  <Product
+                    id={product.id}
+                    scrolled={props.scrolled}
+                    title={product.name}
+                    descriptions={product.description}
+                    image={
+                      product.image_path
+                        ? `${serverBaseUrl}/storage/${product.image_path}`
+                        : noImage.src
+                    }
+                    prices={product.prices || []}
+                    fullWidth
+                    className={twMerge("w-full md:w-[30rem]")}
+                    categoryId={product.category_id}
+                    tags={product.tags}
+                    single_mode
+                  />
+                </div>
+
               </SwiperSlide>
             ))}
           </Swiper>

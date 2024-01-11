@@ -46,7 +46,6 @@ function ProductPage() {
   const { state } = useContext(CoffeeShopProviderContext);
   const { query: params } = useCustomRouter();
   const slug = useSlug(false);
-  const [orderedItems, setOrderedItems] = useState<Record<string, any>>({});
   const [order, setOrder] = useState<APIProduct[]>();
 
   const productService = ProductService.init(params.slug as string);
@@ -217,11 +216,10 @@ function ProductPage() {
     <>
       <Head>
         <title>
-          {`${
-            state.profile.name +
+          {`${state.profile.name +
             ` - ${product?.name || ''}` +
             (slug ? ' - منوما' : '')
-          }`}
+            }`}
         </title>
       </Head>
       {navbar}
@@ -235,9 +233,8 @@ function ProductPage() {
                   : noImage.src
               }
               alt={product?.name! || 'pic'}
-              className={`inset-0 block object-cover ${
-                foundTagSoldOut && 'grayscale'
-              }`}
+              className={`inset-0 block object-cover ${foundTagSoldOut && 'grayscale'
+                }`}
               fill
             />
           </FlexItem>

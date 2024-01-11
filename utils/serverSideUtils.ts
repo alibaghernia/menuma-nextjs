@@ -3,6 +3,7 @@ import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { QueryClient } from 'react-query';
 import { axios } from './axios';
 import _ from 'lodash';
+import { BusinessService } from '@/services/business/business.service';
 
 export const getSlugFromReq = (
   { req, params }: GetServerSidePropsContext,
@@ -17,20 +18,11 @@ export const withCafeeShopProfile = (
   serverSidePropsFunc?: GetServerSideProps,
 ) => {
   return async (context: GetServerSidePropsContext) => {
-    const slug = getSlugFromReq(context);
-    const queryClient = new QueryClient();
+    const businessService = BusinessService.init();
     function profileFetcher(): Promise<IProfile> {
-      return axios
-        .get<IProfile>(`/api/cafe-restaurants/${context.params?.slug}`)
-        .then(({ data }) => data);
+      return businessService.get(context.params?.slug as string);
     }
-
-    const fetchProfileKey = `fetch-profile-${slug}`;
-
-    const profile = await queryClient.fetchQuery({
-      queryKey: fetchProfileKey,
-      queryFn: profileFetcher,
-    });
+    const profile = await profileFetcher();
 
     let getServerSidePropsRes;
     if (serverSidePropsFunc) {

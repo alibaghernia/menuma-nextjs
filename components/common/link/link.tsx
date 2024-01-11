@@ -6,16 +6,19 @@ import { ProviderContext } from '@/providers/main/provider';
 import { useRouter } from 'next/router';
 import { twMerge } from 'tailwind-merge';
 import classNames from 'classnames';
+import { useCustomRouter } from '@/utils/hooks';
+import { GeneralContext } from '@/providers/general/provider';
+import { LOADING_KEYS } from '@/providers/general/contants';
 
 export const Link: ILink = ({ href, children, className, ...props }) => {
-  const { setLoading } = useContext(ProviderContext);
-  const router = useRouter();
+  const { addLoading } = useContext(GeneralContext);
+  const router = useCustomRouter();
 
   return (
     <span
       {...props}
       onClick={() => {
-        setLoading(true);
+        addLoading(LOADING_KEYS.pageLoading);
         router.push(href);
       }}
       className={classNames(twMerge('cursor-pointer', className))}

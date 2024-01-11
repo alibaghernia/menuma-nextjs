@@ -11,11 +11,13 @@ import { axios, serverBaseUrl } from '@/utils/axios';
 import Image from 'next/image';
 import { Link } from '@/components/common/link';
 import noImage from '@/assets/images/no-image.jpg';
+import { useCustomRouter, useLoadings } from '@/utils/hooks';
+import { LOADING_KEYS } from '@/providers/general/contants';
 
 function Search() {
-  const { query: params } = useRouter();
+  const [addL, removeL] = useLoadings();
+  const { query: params } = useCustomRouter();
   const isNear = !!params.near;
-  const { setLoading } = useContext(ProviderContext);
   const [searchField, setSearchField] = useState('');
   const [fetchedItems, setFetchedItems] = useState<
     {
@@ -29,11 +31,11 @@ function Search() {
 
   const handleFetchBusinesses = (searchPhrase: string) => {
     if (!searchPhrase) return;
-    setLoading(true);
+    addL('fetch-businesses');
     axios
       .get(`/api/cafe-restaurants?all_fields=${searchPhrase}`)
       .finally(() => {
-        setLoading(false);
+        removeL('fetch-businesses');
       })
       .then(({ data }) => {
         setFetchedItems(
@@ -50,13 +52,13 @@ function Search() {
   };
 
   const fetchNearBusinesses = () => {
-    setLoading(true);
+    addL('fetch-businesses');
     axios
       .get(
         `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=2000`,
       )
       .finally(() => {
-        setLoading(false);
+        addL('fetch-businesses');
       })
       .then(({ data }) => {
         setFetchedItems(

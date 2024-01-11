@@ -26,87 +26,67 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
+import {
+  useCustomRouter,
+  useLoadings,
+  useMessage,
+  usePageLoading,
+} from '@/utils/hooks';
+import { ProductService } from '@/services/product/product.service';
 
 import { OrderBox } from '@/components/menu/order-box';
+import { BusinessService } from '@/services/business/business.service';
 
 function ProductPage() {
+  const [addL, removeL] = useLoadings();
+  const message = useMessage();
+  const { functions } = useContext(ProviderContext);
   const [scrolled, setScrolled] = useState(false);
-  const { setLoading, functions } = useContext(ProviderContext);
   const { state } = useContext(CoffeeShopProviderContext);
-  const params = useParams();
+  const { query: params } = useCustomRouter();
   const slug = useSlug(false);
   const [orderedItems, setOrderedItems] = useState<Record<string, any>>({});
+  const [order, setOrder] = useState<APIProduct[]>();
+
+  const productService = ProductService.init(params.slug as string);
+  const businessService = BusinessService.init();
+  const businessApisBySlug = businessService.getApisBySlug(
+    params.slug as string,
+  );
   const [product, setProduct] = useState<APIProduct>();
-  const [order, setOrder] = useState<APIProduct>();
-  function productFetcher(): Promise<APIProduct> {
-    return axios
-      .get(
-        `/api/cafe-restaurants/${params.slug}/menu/items/${params.product_slug}`,
-      )
-      .then(({ data }) => data);
+  function fetchProduct() {
+    addL('fetch-product');
+    productService
+      .getOne(params.product_slug as string)
+      .then((data) => {
+        setProduct(data);
+      })
+      .catch(() => {
+        message.error('مشکلی در دریافت اطلاعات آیتم وجود دارد.');
+      })
+      .finally(() => {
+        removeL('fetch-product');
+      });
   }
-  const { isSuccess, data, refetch, status, isError } = useQuery({
-    queryKey: `fetch-menu-${params.slug}-item-${params.product_slug}`,
-    queryFn: productFetcher,
-    enabled: false,
-    retry: 2,
-    cacheTime: 5 * 60 * 1000,
-  });
-
-  function productOrder(): Promise<APIProduct> {
-    return axios
-      .get(`/api/cafe-restaurants/${params.slug}/menu/day-offers`)
-      .then(({ data }) => data);
+  function fetchDaiulyOffers() {
+    addL('fetch-offers');
+    businessApisBySlug
+      .getDailyOffers()
+      .then((data) => {
+        setOrder(data);
+      })
+      .catch(() => {
+        message.error('مشکلی در دریافت پیشنهادات وجود دارد.');
+      })
+      .finally(() => {
+        removeL('fetch-offers');
+      });
   }
-  const {
-    isSuccess: isSuccessOrder,
-    data: dataOrder,
-    refetch: refreshOrder,
-    status: statusOrder,
-    isError: isErrorOrder,
-  } = useQuery({
-    queryKey: `fetch-order-${params.slug}`,
-    queryFn: productOrder,
-    enabled: false,
-    retry: 2,
-    cacheTime: 5 * 60 * 1000,
-  });
 
   useEffect(() => {
-    if (isError) {
-      toast.error('خطا در ارتباط با سرور');
-    }
-    if (isErrorOrder) {
-      toast.error('خطا در ارتباط با سرور');
-    }
-  }, [isError, isErrorOrder]);
-
-  useEffect(() => {
-    if (!params) return;
-    setLoading(true);
-    refetch();
-    refreshOrder();
-  }, [refetch, refreshOrder, setLoading, params]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      setProduct(data);
-      setLoading(false);
-    }
-    if (isSuccessOrder) {
-      setOrder(dataOrder);
-      setLoading(false);
-    }
-  }, [
-    isSuccess,
-    isSuccessOrder,
-    setLoading,
-    data,
-    dataOrder,
-    status,
-    statusOrder,
-    params,
-  ]);
+    fetchDaiulyOffers();
+    fetchProduct();
+  }, []);
 
   const orderItem = useCallback(
     (price: any) => {
@@ -168,7 +148,7 @@ function ProductPage() {
             <FlexBox
               justify="between"
               alignItems="center"
-              className="p-[.5rem] px-[1.5rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto"
+              className="p-[.5rem] px-[1.5rem] pl-[.875rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto"
             >
               <FlexItem className="text-[1.3rem] text-typography">
                 <FlexBox gap={2} alignItems="center">
@@ -261,7 +241,7 @@ function ProductPage() {
             />
           </FlexItem>
           <FlexItem
-            className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[.5rem]"
+            className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[1.5rem]"
             grow
           >
             <FlexBox direction="column">

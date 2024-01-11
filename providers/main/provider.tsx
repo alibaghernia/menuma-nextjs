@@ -2,36 +2,25 @@ import React, {
   createContext,
   useCallback,
   useEffect,
-  useMemo,
   useReducer,
-  useState,
 } from 'react';
 import { IProvider, IProviderState } from './types';
 import reducer from './reducer';
 import { INITIAL_STATE, REDUCER_KEYS } from './constants';
 import _ from 'lodash';
 import functions from './functions';
-import { useParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-
-const Loading = dynamic(() => import('@/components/common/loading/loading'), {
-  ssr: false,
-});
 
 export const ProviderContext = createContext<{
   state: IProviderState;
   dispatch: (action: any) => void;
   functions: ReturnType<typeof functions>;
-  loading: boolean;
-  setLoading: (state: boolean) => void;
   // @ts-ignore
 }>({});
 
 const localStoragekey = 'provider-storage-new-v3.0';
 
 const Provider: IProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false);
   const { query: params } = useRouter();
   const getLocalStorageKey = useCallback(() => {
     const slug = params.slug || 'menuma';
@@ -103,8 +92,6 @@ const Provider: IProvider = ({ children }) => {
     checkAppDomain();
   }, [getReducerState, checkAppDomain]);
 
-  const loadingMem = useMemo(() => loading && <Loading />, [loading]);
-
   return (
     <>
       <ProviderContext.Provider
@@ -112,13 +99,10 @@ const Provider: IProvider = ({ children }) => {
           state,
           dispatch,
           functions: functions(state, dispatch),
-          loading: loading,
-          setLoading,
         }}
       >
         {children}
       </ProviderContext.Provider>
-      {loadingMem}
     </>
   );
 };

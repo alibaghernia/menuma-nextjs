@@ -236,15 +236,14 @@ function ProductPage() {
     <>
       <Head>
         <title>
-          {`${
-            state.profile.name +
+          {`${state.profile.name +
             ` - ${product?.name || ''}` +
             (slug ? ' - منوما' : '')
-          }`}
+            }`}
         </title>
       </Head>
       {navbar}
-      <div className="bg-background h-screen pt-[4.5rem] z-10 px-4">
+      <div className="bg-background pt-[4.5rem] z-10 px-4">
         <FlexBox direction="column">
           <FlexItem className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow">
             <Image
@@ -254,9 +253,8 @@ function ProductPage() {
                   : noImage.src
               }
               alt={product?.name! || 'pic'}
-              className={`inset-0 block object-cover ${
-                foundTagSoldOut && 'grayscale'
-              }`}
+              className={`inset-0 block object-cover ${foundTagSoldOut && 'grayscale'
+                }`}
               fill
             />
           </FlexItem>
@@ -286,21 +284,22 @@ function ProductPage() {
               )}
             </FlexBox>
           </FlexItem>
+
         </FlexBox>
-        <FlexBox direction="column" className="mt-[1rem]">
+        <FlexBox direction="column" >
           <FlexItem>
-            <FlexBox direction="column" gap={2} className=" mb-[1.25rem]">
-              <OrderBox
-                title="پیشنهادات روز"
-                scrolled={scrolled}
-                productArray={order}
-                classNameSection="scroll-mt-[20rem]"
-                contentClassNamesSection="flex flex-col gap-[1rem] items-center"
-              />
-            </FlexBox>
+            <OrderBox
+              title="پیشنهادات روز"
+              scrolled={scrolled}
+              productArray={order}
+              classNameSection="scroll-mt-[20rem] "
+              contentClassNamesSection="flex flex-col gap-[1rem] items-center"
+            />
           </FlexItem>
         </FlexBox>
+
       </div>
+
     </>
   );
 }

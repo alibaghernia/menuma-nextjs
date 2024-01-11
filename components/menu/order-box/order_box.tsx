@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { IOrderBox } from './types';
 import { Section } from '@/components/common/section/section';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
+import { FlexBox } from '@/components/common/flex_box/flex_box';
 import classNames from 'classnames';
 import { twMerge } from 'tailwind-merge';
 import noImage from '@/assets/images/no-image.jpg';
@@ -16,15 +17,17 @@ import 'swiper/css/pagination';
 export const OrderBox: IOrderBox = (props) => {
   const element = useMemo(
     () => (
-      <>
-        <Section
-          className={twMerge(classNames(), props.classNameSection)}
-          contentClassNames={twMerge(
-            classNames(),
-            props.contentClassNamesSection,
-          )}
-          title={props.title}
-        ></Section>
+      <Fragment>
+        <FlexItem className="px-2">
+          <Section
+            className={twMerge(classNames(), props.classNameSection)}
+            contentClassNames={twMerge(
+              classNames(),
+              props.contentClassNamesSection,
+            )}
+            title={props.title}
+          ></Section>
+        </FlexItem>
         <FlexItem className="px-2">
           <Swiper
             slidesPerView={'auto'}
@@ -58,7 +61,7 @@ export const OrderBox: IOrderBox = (props) => {
                   }
                   prices={product.prices || []}
                   fullWidth
-                  className="px-5 w-96"
+                  className="px-5 max-w-lg"
                   categoryId={product.categoryId}
                   tags={product.tags}
                   single_mode
@@ -78,7 +81,8 @@ export const OrderBox: IOrderBox = (props) => {
             ),
           )}
         />
-      </>
+
+      </Fragment>
     ),
     [props],
   );

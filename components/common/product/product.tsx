@@ -101,8 +101,7 @@ export const Product: IProduct = (props) => {
                     alignItems="center"
                     gap={2}
                     className={classNames(
-                      `px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] ${
-                        !foundTagSoldOut && 'cursor-pointer'
+                      `px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] ${!foundTagSoldOut && 'cursor-pointer'
                       }  transition-all duration-[.3s]`,
                       {
                         'active:scale-[.8]': !order,
@@ -177,9 +176,8 @@ export const Product: IProduct = (props) => {
             fill
             src={props.image!}
             alt={props.title}
-            className={`z-0 object-cover relative ${
-              foundTagSoldOut && 'grayscale'
-            }`}
+            className={`z-0 object-cover relative ${foundTagSoldOut && 'grayscale'
+              }`}
           />
 
           {props.single_mode && (

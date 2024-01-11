@@ -20,6 +20,8 @@ import { Container } from '@/components/common/container/container';
 import dynamic from 'next/dynamic';
 import { CallGarson } from '@/components/common/call_garson/call_garson';
 import { Link } from '@/components/common/link';
+import { useCustomRouter, useLoadings } from '@/utils/hooks';
+import { LOADING_KEYS } from '@/providers/general/contants';
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false });
 export const Navbar: INavBar = ({
@@ -27,9 +29,9 @@ export const Navbar: INavBar = ({
   callPager = true,
   ...props
 }) => {
-  const router = useRouter();
+  const router = useCustomRouter();
   const slug = useSlug();
-  const { setLoading } = useContext(ProviderContext);
+  const [addL, removeL] = useLoadings();
   const {
     state: coffeShopState,
     handleCallGarson,
@@ -85,7 +87,7 @@ export const Navbar: INavBar = ({
           if (menuItem.url) {
             setOverlay(false);
             setMenuOpen(false);
-            setLoading(true);
+            // addL(LOADING_KEYS.pageLoading);
             router.push(menuItem.url);
           }
         }}
@@ -94,7 +96,7 @@ export const Navbar: INavBar = ({
         <FlexItem className="text-[1rem]">{menuItem.title}</FlexItem>
       </FlexBox>
     ));
-  }, [menuItems, router, setLoading]);
+  }, [menuItems, router]);
 
   function handleBack() {
     if (props.backUrl) {

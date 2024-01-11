@@ -1,6 +1,5 @@
 import React, {
   createContext,
-  useContext,
   useEffect,
   useReducer,
   useRef,
@@ -11,20 +10,17 @@ import reducer from './reducer';
 import { INITIAL_STATE } from './constants';
 import _ from 'lodash';
 import Functions from './functions';
-import { axios } from '@/utils/axios';
-import { useParams, useSearchParams } from 'next/navigation';
-import { useQuery } from 'react-query';
-import { IProfile } from '@/pages/[slug]/types';
-import { ProviderContext } from '../main/provider';
+import { useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useSlug } from '../main/hooks';
 import moment from 'moment';
 import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
-import classNames from 'classnames';
 import { ConfirmModal } from '@/components/common/confirm_modal/confirm_modal';
 import { useRouter } from 'next/router';
+import { BusinessService } from '@/services/business/business.service';
+import { useLoadings, useMessage } from '@/utils/hooks';
 
 export const TABLE_NUMBER_METADATA_STORAGE_KEY = '-table-number-key-';
 
@@ -46,8 +42,8 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     }
     return INITIAL_STATE;
   };
-
-  const { setLoading, state: mainState } = useContext(ProviderContext);
+  const [addL, removeL] = useLoadings();
+  const message = useMessage();
   const { query: params } = useRouter();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -56,6 +52,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     (state: IProviderState, action: any) => reducer(_.cloneDeep(state), action),
     getInitialState(),
   );
+  const businessService = BusinessService.init();
   const functions = Functions(state, dispatch);
 
   // garson call
@@ -77,44 +74,23 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     }
   }, [searchParams, setTableID]);
 
-  function profileFetcher(): Promise<IProfile> {
-    return axios
-      .get<IProfile>(`/api/cafe-restaurants/${params.slug}`)
-      .then(({ data }) => data);
+  function profileFetcher() {
+    addL('fetch-business');
+    businessService
+      .get(params.slug as string)
+      .then()
+      .finally(() => removeL('fetch-business'))
+      .then((data) => {
+        functions.setProfile(data);
+      })
+      .catch(() => {
+        message.error('خطا در دریافت اطلاعات کافه');
+      });
   }
 
-  const fetchProfileKey = `fetch-profile-${slug}`;
-
-  const { isSuccess, data, refetch, isFetched, isError } = useQuery({
-    queryKey: fetchProfileKey,
-    queryFn: profileFetcher,
-    enabled: false,
-    retry: 2,
-    cacheTime: 5 * 60 * 1000,
-  });
-
   useEffect(() => {
-    if (isSuccess) {
-      functions.setProfile(data);
-    }
-  }, [isSuccess, data]);
-
-  useEffect(() => {
-    // if (!state.profile || params?.slug != state.profile.slug && !profile) {
-    //     setLoading(true)
-    //     refetch()
-    // }
-  }, [refetch, params, state, setLoading, profile]);
-
-  useEffect(() => {
-    if (isSuccess) setLoading(false);
-  }, [setLoading, isFetched, isSuccess]);
-
-  useEffect(() => {
-    if (isError) {
-      toast.error('خطا در ارتباط با سرور');
-    }
-  }, [isError]);
+    profileFetcher();
+  }, []);
 
   const enableCancelGarsonCallInterval = () => {
     setCancelGarsonCallButton(true);
@@ -130,7 +106,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
 
   const handleCallGarson = async () => {
     const handle = (tableID: string) => {
-      setLoading(true);
+      addL('call-garson');
       if (!cancelGarsonCallButton) {
         functions.services
           .callGarson(tableID)
@@ -139,7 +115,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
             setCallGarsonModal(undefined);
           })
           .finally(() => {
-            setLoading(false);
+            removeL('call-garson');
           });
       } else {
         functions.services
@@ -149,7 +125,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
             setCallGarsonModal(undefined);
           })
           .finally(() => {
-            setLoading(false);
+            removeL('call-garson');
           });
       }
     };
@@ -179,7 +155,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
       };
       if (table) showModal(table);
       else {
-        setLoading(true);
+        addL('get-table');
         functions.services
           .geTable(storageTableID)
           .then(({ data: table }) => {
@@ -190,7 +166,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
             toast.error('خطا در دریافت اطلاعات میز');
           })
           .finally(() => {
-            setLoading(false);
+            removeL('get-table');
           });
       }
     } else {

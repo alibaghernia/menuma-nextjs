@@ -10,26 +10,17 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
-import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';
-import { EffectCoverflow, Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
 import { Section } from '@/components/common/section/section';
 import { Product } from '@/components/common/product/product';
 import _ from 'lodash';
-import { IProductProps } from '@/components/common/product/types';
 import { SearchField } from '@/components/common/search_field/search_field';
-import { useParams, usePathname } from 'next/navigation';
-import { useRouter } from 'next/router';
-import CoffeShopProvider, {
-  CoffeeShopProviderContext,
-} from '@/providers/coffee_shop/provider';
-import { axios, serverBaseUrl } from '@/utils/axios';
-import { useQuery } from 'react-query';
-import { ProviderContext } from '@/providers/main/provider';
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
+import { serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
-import { toast } from 'react-toastify';
 import { useSlug } from '@/providers/main/hooks';
 import { Container } from '@/components/common/container/container';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
@@ -38,51 +29,44 @@ import classNames from 'classnames';
 import { twMerge } from 'tailwind-merge';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
+import {
+  useCustomRouter,
+  useLoadings,
+  useMessage,
+  usePageLoading,
+} from '@/utils/hooks';
+import { BusinessService } from '@/services/business/business.service';
 
 function MenuPage() {
+  const [addL, removeL] = useLoadings();
+  usePageLoading();
+  const message = useMessage();
   const [scrolled, setScrolled] = useState(false);
   const [menuData, setMenuData] = useState<APICateogory[]>([]);
   const { state } = useContext(CoffeeShopProviderContext);
-  const { setLoading, state: mainState } = useContext(ProviderContext);
   const [searchInput, setSearchInput] = useState<string>('');
-  const { query: params } = useRouter();
+  const { query: params } = useCustomRouter();
   const slug = useSlug(false);
-  const rouer = useRouter();
-
+  const businessService = BusinessService.init();
   const [selectedCategory, setSelectedCategory] = useState<string | number>();
 
-  function menuFetcher(): Promise<APICateogory[]> {
-    return axios
-      .get(`/api/cafe-restaurants/${params.slug}/menu`)
-      .then(({ data }) => data);
+  function menuFetcher() {
+    addL('fetch-menu');
+    businessService
+      .getMenu(params.slug as string)
+      .finally(() => {
+        removeL('fetch-menu');
+      })
+      .then((data) => {
+        setMenuData(data);
+      })
+      .catch(() => {
+        message.error('خطا در دریافت اطلاعات منو');
+      });
   }
-  const { isSuccess, data, refetch, status, isError, error } = useQuery({
-    queryKey: `fetch-menu-${params.slug}`,
-    queryFn: menuFetcher,
-    enabled: false,
-    retry: 2,
-    cacheTime: 5 * 60 * 1000,
-  });
-
   useEffect(() => {
-    if (isError) {
-      toast.error('خطا در ارتباط با سرور');
-    }
-  }, [isError]);
-  useEffect(() => {
-    if (!params) return;
-    setLoading(true);
-    refetch();
-  }, [refetch, setLoading, params]);
-
-  useEffect(() => {
-    if (isSuccess && menuData) {
-      setSelectedCategory(data[0]?.id);
-      setMenuData(data);
-      setLoading(false);
-    }
-  }, [isSuccess, setLoading, data, menuData, rouer]);
-
+    menuFetcher();
+  }, []);
   useEffect(() => {
     const handler = () => {
       const actegoryBar = window.document.getElementById('category-bar');

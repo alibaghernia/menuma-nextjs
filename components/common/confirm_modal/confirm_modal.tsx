@@ -90,3 +90,4 @@ export const ConfirmModal: IConfirmModal = ({
     document.body.querySelector('main')!,
   );
 };
+export default ConfirmModal;

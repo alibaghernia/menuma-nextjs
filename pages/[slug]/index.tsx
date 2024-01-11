@@ -1,12 +1,9 @@
 import { ProfileHeader } from '@/components/profile/header/header';
 import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Section } from '@/components/common/section/section';
-import { Navbar } from '@/components/core/navbar/noSSR';
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps } from 'next';
-import { ProviderContext } from '@/providers/main/provider';
 import { IProfile } from './types';
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import Head from 'next/head';
@@ -24,30 +21,27 @@ import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { MetaTags } from '@/components/common/metatags';
 import _ from 'lodash';
+import { usePageLoading } from '@/utils/hooks';
+import Navbar from '@/components/core/navbar/navbar';
 
+const WorkingHours = dynamic(
+  import('@/components/profile/working_hours/working_hours'),
+  { ssr: false },
+);
+const MapComponent = dynamic(import('@/components/common/map/map'), {
+  ssr: false,
+});
 const Profile = () => {
-  const { setLoading, state: mainState } = useContext(ProviderContext);
+  usePageLoading();
   const { state } = useContext(CoffeeShopProviderContext);
   const profileData: IProfile = state.profile;
-  const router = useRouter();
   const slug = useSlug();
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
-  const WorkingHours = dynamic(
-    import('@/components/profile/working_hours/working_hours'),
-    { ssr: false },
-  );
-  const MapComponent = dynamic(import('@/components/common/map/map'), {
-    ssr: false,
-  });
 
   const locationCoordinates: [number, number] = [
     parseFloat(profileData.location_lat || '0'),
     parseFloat(profileData.location_long || '0'),
   ];
-
-  useEffect(() => {
-    if (Object.keys(profileData).length) setLoading(false);
-  }, [setLoading, state.profile, profileData, router]);
 
   const contactInfo = useMemo(
     () =>
@@ -102,17 +96,15 @@ const Profile = () => {
         <div className="z-0">
           <ProfileHeader />
           <div className="mt-[4.3rem]">
-            <Button
-              onClick={() => {
-                router.push(`/${slug}menu`);
-                setLoading(true);
-              }}
-              className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
-              rounded
-              color="#fff"
-            >
-              مشاهده مـنـو
-            </Button>
+            <Link href={`/${slug}menu`}>
+              <Button
+                className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
+                rounded
+                color="#fff"
+              >
+                مشاهده مـنـو
+              </Button>
+            </Link>
             <div className="mt-[1rem]">
               <WorkingHours data={profileData.working_hours || []} />
             </div>
@@ -181,6 +173,7 @@ const Profile = () => {
       </div>
     </>
   );
+  return <></>;
 };
 
 export const getServerSideProps: GetServerSideProps = withCafeeShopProfile();

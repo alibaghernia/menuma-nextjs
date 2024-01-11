@@ -15,15 +15,16 @@ import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
 import { Link } from '../link';
+import { useCustomRouter } from '@/utils/hooks';
+import { serverBaseUrl } from '@/utils/axios';
 
 export const Product: IProduct = (props) => {
   const foundTagSoldOut = !!props.tags?.find(
     (tag: string) => tag === 'sold_out',
   );
-  const router = useRouter();
-  const { query: params } = useRouter();
+  const { query: params } = useCustomRouter();
   const slug = useSlug();
-  const { functions, setLoading } = useContext(ProviderContext);
+  const { functions } = useContext(ProviderContext);
   const productSlug = useMemo(
     () => (params ? `/${slug}menu/${props.categoryId}/${props.id}` : '#'),
     [params, props, slug],
@@ -164,7 +165,6 @@ export const Product: IProduct = (props) => {
       return (
         <Link
           href={productSlug}
-          onClick={() => setLoading(true)}
           className={classNames(
             'flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]',
             {
@@ -256,7 +256,6 @@ export const Product: IProduct = (props) => {
                   <Link
                     href={productSlug}
                     className="text-[1.2rem] font-[500] text-typography w-full"
-                    onClick={() => setLoading(true)}
                   >
                     {props.title}
                   </Link>

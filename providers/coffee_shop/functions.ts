@@ -3,13 +3,14 @@ import { REDUCER_KEYS } from './constants';
 import { IProviderState } from './types';
 import { type ICartItem } from './types';
 import { axios } from '@/utils/axios';
+import { BusinessService } from '@/services/business/business.service';
 
 export default function functions(
   state: IProviderState,
   dispatch: (action: any) => void,
 ) {
-  const commonService = CommonService.init(axios);
-
+  const businessService = BusinessService.init();
+  const getApisBySlug = businessService.getApisBySlug(state.profile.slug);
   return {
     setProfile: (profile: any) => {
       dispatch({
@@ -33,13 +34,13 @@ export default function functions(
     },
     services: {
       callGarson: (tableID: string) => {
-        return commonService.callGarson(state.profile.slug, tableID);
+        return getApisBySlug.callGarson(tableID);
       },
       cancelCallGarson: (tableID: string) => {
-        return commonService.cancelCallGarson(state.profile.slug, tableID);
+        return getApisBySlug.cancelCallGarson(tableID);
       },
       geTable: (tableID: string) => {
-        return commonService.getTable(state.profile.slug, tableID);
+        return getApisBySlug.getTable(tableID);
       },
     },
   };

@@ -20,10 +20,12 @@ import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { SearchBusinessBox } from '@/components/common/search_business_box/search_business_box';
 import { useRouter } from 'next/router';
 import { Link } from '@/components/common/link';
+import { useCustomRouter, useLoadings } from '@/utils/hooks';
+import { LOADING_KEYS } from '@/providers/general/contants';
 
 function Home() {
-  const { setLoading } = useContext(ProviderContext);
-  const router = useRouter();
+  const [addL, removeL] = useLoadings();
+  const router = useCustomRouter();
   const [searchField, setSearchField] = useState('');
   const [pinBusinesses, setPinBusinesses] = useState<
     {
@@ -34,10 +36,10 @@ function Home() {
   >([]);
 
   const fetchPinBusinesses = () => {
-    setLoading(true);
+    addL('pin-businesses');
     axios
       .get(`/api/cafe-restaurants?pin=1`)
-      .finally(() => setLoading(false))
+      .finally(() => removeL('pin-businesses'))
       .then(({ data }) => {
         setPinBusinesses(
           data?.map((business: any) => ({
@@ -72,27 +74,25 @@ function Home() {
   useEffect(() => {
     fetchPinBusinesses();
   }, []);
-  useEffect(() => {
-    setLoading(false);
-  }, [router]);
 
   const handleSearchBusiness = (searchPhrase: string) => {
     if (!searchPhrase) return;
-    setLoading(true);
+    addL(LOADING_KEYS.pageLoading);
     router.push(`/search?search=${searchPhrase}`);
   };
   const findNearestBusinessHandler = () => {
     if (navigator.geolocation) {
-      setLoading(true);
+      addL('get-location');
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLoading(false);
+          removeL('get-location');
           const lat = position.coords.latitude;
           const long = position.coords.longitude;
+          addL(LOADING_KEYS.pageLoading);
           router.push(`/search?near=1&lat=${lat}&long=${long}`);
         },
         (error) => {
-          setLoading(false);
+          removeL('get-location');
           console.log({
             error,
           });

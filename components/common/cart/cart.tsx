@@ -17,10 +17,14 @@ import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '../container/container';
 import { IConfirmModalProps } from '../confirm_modal/types';
-import { ConfirmModal } from '../confirm_modal/confirm_modal';
 import _ from 'lodash';
 import { CallGarson } from '../call_garson/call_garson';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+const ConfirmModal = dynamic(
+  () => import('@/components/common/confirm_modal/confirm_modal'),
+  { ssr: false },
+);
 
 export const Cart: ICart = (props) => {
   const { query: params } = useRouter();
@@ -39,7 +43,7 @@ export const Cart: ICart = (props) => {
   const orderItems = state.cart;
 
   const increaseOrderItemCount = useCallback(
-    (product: any, price: any) => {
+    (product: any, price: number) => {
       const key = `${product?.id}-${price}`;
       functions.cart.increaseCount(key);
     },
@@ -47,7 +51,7 @@ export const Cart: ICart = (props) => {
   );
 
   const decreasOrderItemCount = useCallback(
-    (product: any, price: any) => {
+    (product: any, price: number) => {
       const key = `${product?.id}-${price}`;
       const item = functions.cart.getItem(key);
       if (item!.count == 1) {
@@ -153,7 +157,7 @@ export const Cart: ICart = (props) => {
                           () =>
                             increaseOrderItemCount(
                               orderItem.product,
-                              orderItem.id.split('-')[1],
+                              parseInt(orderItem.id.split('-')[1]),
                             ),
                           500,
                         )}
@@ -171,7 +175,7 @@ export const Cart: ICart = (props) => {
                           if (orderItem.count > 1)
                             decreasOrderItemCount(
                               orderItem.product,
-                              orderItem.id.split('-')[1],
+                              parseInt(orderItem.id.split('-')[1]),
                             );
                           else
                             setDismissModal({

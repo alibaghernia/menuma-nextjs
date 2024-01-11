@@ -33,7 +33,11 @@ function ProductPage() {
   usePageLoading();
   const [addL, removeL] = useLoadings();
   const message = useMessage();
-  const { functions } = useContext(ProviderContext);
+  const {
+    functions,
+    state: mainProviderState,
+    checkCartItemsExist,
+  } = useContext(ProviderContext);
   const [scrolled, setScrolled] = useState(false);
   const { state } = useContext(CoffeeShopProviderContext);
   const { query: params } = useCustomRouter();
@@ -64,6 +68,15 @@ function ProductPage() {
     fetchProduct();
   }, [params.product_slug]);
 
+  useEffect(() => {
+    if (
+      mainProviderState.restored &&
+      product &&
+      product.tags?.some((tag: string) => tag == 'sold_out')
+    ) {
+      checkCartItemsExist([product]);
+    }
+  }, [mainProviderState.restored, product]);
   const orderItem = useCallback(
     (price: any) => {
       const key = `${product?.id}-${price.id}`;

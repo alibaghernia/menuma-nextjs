@@ -37,6 +37,7 @@ import {
 } from '@/utils/hooks';
 import { BusinessService } from '@/services/business/business.service';
 import { DailyOffers } from '@/components/menu/dayli_offers';
+import { ProviderContext } from '@/providers/main/provider';
 
 function MenuPage() {
   const [addL, removeL] = useLoadings();
@@ -45,6 +46,8 @@ function MenuPage() {
   const [scrolled, setScrolled] = useState(false);
   const [menuData, setMenuData] = useState<APICateogory[]>([]);
   const { state } = useContext(CoffeeShopProviderContext);
+  const { checkCartItemsExist, state: mainProviderState } =
+    useContext(ProviderContext);
   const [searchInput, setSearchInput] = useState<string>('');
   const { query: params } = useCustomRouter();
   const [dailyOffers, setDailyOffers] = useState<APIProduct[]>();
@@ -84,6 +87,21 @@ function MenuPage() {
         removeL('fetch-offers');
       });
   }
+
+  useEffect(() => {
+    if (mainProviderState.restored && menuData) {
+      checkCartItemsExist(
+        menuData
+          ?.map(
+            (cat: any) =>
+              cat.items?.filter((item: any) =>
+                item.tags.some((tag: string) => tag == 'sold_out'),
+              ),
+          )
+          .flat() || [],
+      );
+    }
+  }, [mainProviderState.restored, menuData]);
 
   useEffect(() => {
     menuFetcher();

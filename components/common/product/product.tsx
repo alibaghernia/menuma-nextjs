@@ -258,6 +258,11 @@ export const Product: IProduct = (props) => {
                     {props.title}
                   </Link>
                 </FlexItem>
+                {Boolean(props.tags?.length) && (
+                  <FlexItem>
+                    <FlexBox gap={2}>{renderTags()}</FlexBox>
+                  </FlexItem>
+                )}
                 <FlexItem grow>
                   <div
                     className={classNames(
@@ -279,16 +284,6 @@ export const Product: IProduct = (props) => {
           <FlexBox direction="column" className="shrink-0 w-full z-0">
             {renderPrices()}
           </FlexBox>
-        )}
-        {Boolean(props.tags?.length) && (
-          <Container
-            position="absolute"
-            className={classNames('z-50 top-[1rem] left-[1rem]', {
-              'top-[0rem]': props.scrolled,
-            })}
-          >
-            <FlexBox gap={2}>{renderTags()}</FlexBox>
-          </Container>
         )}
       </FlexBox>
     </div>

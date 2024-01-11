@@ -47,7 +47,6 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
   const { query: params } = useRouter();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const slug = useSlug(false);
   const [state, dispatch] = useReducer(
     (state: IProviderState, action: any) => reducer(_.cloneDeep(state), action),
     getInitialState(),

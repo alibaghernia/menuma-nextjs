@@ -207,7 +207,7 @@ export const Product: IProduct = (props) => {
         href={productSlug}
         className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s] block"
       >
-        سفارش
+        {foundTagSoldOut ? 'مشاهده' : 'سفارش'}
       </Link>
     );
   };
@@ -263,7 +263,7 @@ export const Product: IProduct = (props) => {
                 </FlexItem>
                 <FlexItem grow>
                   <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
-                    {props.descriptions}
+                    {props.descriptions ? props.descriptions : 'بدون توضیحات'}
                   </div>
                 </FlexItem>
 

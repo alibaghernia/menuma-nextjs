@@ -9,7 +9,7 @@ import { Button } from '../button';
 
 const SearchBusinessBox: ISearchBusinessBox = (props) => {
   return (
-    <div className="flex items-center border p-[.5rem] border-1 gap-[.5rem] rounded-[.63rem]">
+    <div className="flex items-center border p-[.5rem] border-1 gap-[.5rem] rounded-[.63rem] bg-white">
       <SearchIcon color="#959595" />
       <input
         className="bg-none border-none outline-none w-full"

@@ -33,6 +33,7 @@ export const OrderBox: IOrderBox = (props) => {
             slidesPerView={'auto'}
             grabCursor={true}
             scrollbar
+            spaceBetween={15}
             pagination={{
               clickable: true,
               el: '#swiper-pagination',
@@ -42,12 +43,15 @@ export const OrderBox: IOrderBox = (props) => {
               768: {
                 centerInsufficientSlides: true,
               },
+              640: {
+                slidesPerView: 1,
+              },
             }}
             modules={[Pagination]}
           >
             {props.productArray?.map((product: any, key: any) => (
               <SwiperSlide
-                className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-fit"
+                className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] md:!w-fit"
                 key={key}
               >
                 <Product
@@ -61,7 +65,7 @@ export const OrderBox: IOrderBox = (props) => {
                   }
                   prices={product.prices || []}
                   fullWidth
-                  className="px-5 max-w-lg"
+                  className="w-full md:w-[30rem]"
                   categoryId={product.categoryId}
                   tags={product.tags}
                   single_mode
@@ -81,7 +85,6 @@ export const OrderBox: IOrderBox = (props) => {
             ),
           )}
         />
-
       </Fragment>
     ),
     [props],

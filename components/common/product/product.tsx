@@ -7,7 +7,6 @@ import { LinedAddIcon } from '@/icons/lined_add';
 import noImage from '@/assets/images/no-image.jpg';
 import { ProviderContext } from '@/providers/main/provider';
 import { useParams } from 'next/navigation';
-import { Link } from '@/components/common/link';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import { useSlug } from '@/providers/main/hooks';
@@ -15,6 +14,7 @@ import { Container } from '../container/container';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
+import { Link } from '../link';
 
 export const Product: IProduct = (props) => {
   const foundTagSoldOut = !!props.tags?.find(
@@ -101,7 +101,8 @@ export const Product: IProduct = (props) => {
                     alignItems="center"
                     gap={2}
                     className={classNames(
-                      `px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] ${!foundTagSoldOut && 'cursor-pointer'
+                      `px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] ${
+                        !foundTagSoldOut && 'cursor-pointer'
                       }  transition-all duration-[.3s]`,
                       {
                         'active:scale-[.8]': !order,
@@ -176,8 +177,9 @@ export const Product: IProduct = (props) => {
             fill
             src={props.image!}
             alt={props.title}
-            className={`z-0 object-cover relative ${foundTagSoldOut && 'grayscale'
-              }`}
+            className={`z-0 object-cover relative ${
+              foundTagSoldOut && 'grayscale'
+            }`}
           />
 
           {props.single_mode && (
@@ -201,12 +203,12 @@ export const Product: IProduct = (props) => {
   );
   const renderSingleModePrice = () => {
     return (
-      <div
-        className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s]"
-        onClick={() => router.push(productSlug)}
+      <Link
+        href={productSlug}
+        className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s] block"
       >
         سفارش
-      </div>
+      </Link>
     );
   };
 
@@ -237,6 +239,7 @@ export const Product: IProduct = (props) => {
           className={classNames('w-full', { 'z-20': !props.single_mode })}
         >
           <FlexBox
+            alignItems="stretch"
             className={classNames(
               'bg-white h-[12.9rem] rounded-[2rem] border border-black/[.05]',
               {
@@ -248,7 +251,7 @@ export const Product: IProduct = (props) => {
           >
             {props.fullWidth && <FlexItem>{renderImage(true)}</FlexItem>}
             <FlexItem grow>
-              <FlexBox direction="column" gap={2}>
+              <FlexBox direction="column" gap={2} className="h-full">
                 <FlexItem>
                   <Link
                     href={productSlug}
@@ -258,14 +261,17 @@ export const Product: IProduct = (props) => {
                     {props.title}
                   </Link>
                 </FlexItem>
-                <FlexItem>
+                <FlexItem grow>
                   <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
                     {props.descriptions}
                   </div>
                 </FlexItem>
+
+                <FlexItem>
+                  {props.single_mode && renderSingleModePrice()}
+                </FlexItem>
               </FlexBox>
             </FlexItem>
-            <FlexItem>{props.single_mode && renderSingleModePrice()}</FlexItem>
           </FlexBox>
         </FlexItem>
         {!props.single_mode && (

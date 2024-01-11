@@ -236,10 +236,11 @@ function ProductPage() {
     <>
       <Head>
         <title>
-          {`${state.profile.name +
+          {`${
+            state.profile.name +
             ` - ${product?.name || ''}` +
             (slug ? ' - منوما' : '')
-            }`}
+          }`}
         </title>
       </Head>
       {navbar}
@@ -253,8 +254,9 @@ function ProductPage() {
                   : noImage.src
               }
               alt={product?.name! || 'pic'}
-              className={`inset-0 block object-cover ${foundTagSoldOut && 'grayscale'
-                }`}
+              className={`inset-0 block object-cover ${
+                foundTagSoldOut && 'grayscale'
+              }`}
               fill
             />
           </FlexItem>
@@ -273,7 +275,7 @@ function ProductPage() {
                 </FlexBox>
               </FlexItem>
               <FlexItem className="text-[1rem] font-[400] mt-[1.5rem] text-typography md:text-center text-justify">
-                {product?.description}
+                {product?.description ? product?.description : 'بدون توضیحات'}
               </FlexItem>
               {!foundTagSoldOut && (
                 <FlexItem className="mt-[3rem]">
@@ -284,9 +286,8 @@ function ProductPage() {
               )}
             </FlexBox>
           </FlexItem>
-
         </FlexBox>
-        <FlexBox direction="column" >
+        <FlexBox direction="column" className="mt-[1.2rem]">
           <FlexItem>
             <OrderBox
               title="پیشنهادات روز"
@@ -297,9 +298,7 @@ function ProductPage() {
             />
           </FlexItem>
         </FlexBox>
-
       </div>
-
     </>
   );
 }

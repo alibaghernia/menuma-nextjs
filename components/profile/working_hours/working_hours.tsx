@@ -1,8 +1,6 @@
-import { FlexBox } from '@/components/common/flex_box/flex_box';
-import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Section } from '@/components/common/section/section';
 import moment from 'moment';
-import React, { FC, Fragment, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import _ from 'lodash';
 
 export const WorkingHours: FC<any> = ({ data }) => {

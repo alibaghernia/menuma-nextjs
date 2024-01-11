@@ -10,6 +10,7 @@ export const FlexItem: IFlexItem = ({
 }) => {
   return (
     <div
+      {...props}
       className={classNames(
         {
           grow: grow,
@@ -17,7 +18,6 @@ export const FlexItem: IFlexItem = ({
         },
         className,
       )}
-      {...props}
     >
       {children}
     </div>

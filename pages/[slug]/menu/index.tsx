@@ -36,6 +36,7 @@ import {
   usePageLoading,
 } from '@/utils/hooks';
 import { BusinessService } from '@/services/business/business.service';
+import { DailyOffers } from '@/components/menu/dayli_offers';
 
 function MenuPage() {
   const [addL, removeL] = useLoadings();
@@ -46,9 +47,13 @@ function MenuPage() {
   const { state } = useContext(CoffeeShopProviderContext);
   const [searchInput, setSearchInput] = useState<string>('');
   const { query: params } = useCustomRouter();
+  const [dailyOffers, setDailyOffers] = useState<APIProduct[]>();
   const slug = useSlug(false);
   const businessService = BusinessService.init();
   const [selectedCategory, setSelectedCategory] = useState<string | number>();
+  const businessApisBySlug = businessService.getApisBySlug(
+    params.slug as string,
+  );
 
   function menuFetcher() {
     addL('fetch-menu');
@@ -64,8 +69,25 @@ function MenuPage() {
         message.error('خطا در دریافت اطلاعات منو');
       });
   }
+
+  function fetchDaiulyOffers() {
+    addL('fetch-offers');
+    businessApisBySlug
+      .getDailyOffers()
+      .then((data) => {
+        setDailyOffers(data);
+      })
+      .catch(() => {
+        message.error('مشکلی در دریافت پیشنهادات وجود دارد.');
+      })
+      .finally(() => {
+        removeL('fetch-offers');
+      });
+  }
+
   useEffect(() => {
     menuFetcher();
+    fetchDaiulyOffers();
   }, []);
   useEffect(() => {
     const handler = () => {
@@ -84,6 +106,17 @@ function MenuPage() {
       window.removeEventListener('scroll', _.throttle(handler, 50));
     };
   }, [scrolled]);
+
+  const renderDailyOffersSection = () => {
+    return (
+      <DailyOffers
+        title="پیشنهادات روز"
+        productArray={dailyOffers}
+        classNameSection="scroll-mt-[20rem]"
+        contentClassNamesSection="px-4 md:px-0"
+      />
+    );
+  };
 
   const categoriesSwiperSlides = useMemo(() => {
     return _.chunk(menuData, 2).map((categories, key1) => (
@@ -190,73 +223,79 @@ function MenuPage() {
           {`${state.profile.name + ' - منو' + (slug ? ' - منوما' : '')}`}
         </title>
       </Head>
-      {navbar}
-      <FlexBox direction="column">
-        <Container
-          position="sticky"
-          id="category-bar"
-          className={twMerge(
-            classNames('top-0 bg-background z-20', {
-              'pb-[1.125rem]': !scrolled,
-              'pb-[1rem]': scrolled,
-            }),
+      <div className="bg-background min-h-screen">
+        {navbar}
+        <FlexBox direction="column">
+          <Container
+            position="sticky"
+            id="category-bar"
+            className={twMerge(
+              classNames('top-0 bg-background z-20', {
+                'pb-[1.125rem]': !scrolled,
+                'pb-[1rem]': scrolled,
+              }),
+            )}
+          >
+            <FlexBox direction="column">
+              <FlexItem>
+                <FlexBox direction="column" gap={2} className="pt-[4.5rem]">
+                  <FlexItem className="px-2">
+                    <Swiper
+                      slidesPerView={'auto'}
+                      spaceBetween={8}
+                      grabCursor={true}
+                      scrollbar
+                      pagination={{
+                        clickable: true,
+                        el: '#swiper-pagination',
+                        bulletElement: 'div',
+                        bulletClass: styles['swiper-pagination-bullet'],
+                        bulletActiveClass:
+                          styles['swiper-pagination-bullet-active'],
+                      }}
+                      breakpoints={{
+                        768: {
+                          centerInsufficientSlides: true,
+                        },
+                      }}
+                      modules={[Pagination]}
+                    >
+                      {categoriesSwiperSlides}
+                    </Swiper>
+                  </FlexItem>
+                  <FlexItem
+                    id="swiper-pagination"
+                    className={twMerge(
+                      classNames(
+                        'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s]',
+                        {
+                          '!hidden': scrolled,
+                        },
+                      ),
+                    )}
+                  />
+                </FlexBox>
+              </FlexItem>
+              <FlexItem>
+                <div className="mt-4 md:max-w-md md:mx-auto mx-6">
+                  <SearchField
+                    value={searchInput ?? ''}
+                    onChange={setSearchInput}
+                    onSearch={(value) => {}}
+                  />
+                </div>
+              </FlexItem>
+            </FlexBox>
+          </Container>
+
+          {!!dailyOffers?.length && (
+            <FlexItem>{renderDailyOffersSection()}</FlexItem>
           )}
-        >
-          <FlexBox direction="column">
-            <FlexItem>
-              <FlexBox direction="column" gap={2} className="pt-[4.5rem]">
-                <FlexItem className="px-2">
-                  <Swiper
-                    slidesPerView={'auto'}
-                    spaceBetween={8}
-                    grabCursor={true}
-                    scrollbar
-                    pagination={{
-                      clickable: true,
-                      el: '#swiper-pagination',
-                      bulletElement: 'div',
-                      bulletClass: styles['swiper-pagination-bullet'],
-                      bulletActiveClass:
-                        styles['swiper-pagination-bullet-active'],
-                    }}
-                    breakpoints={{
-                      768: {
-                        centerInsufficientSlides: true,
-                      },
-                    }}
-                    modules={[Pagination]}
-                  >
-                    {categoriesSwiperSlides}
-                  </Swiper>
-                </FlexItem>
-                <FlexItem
-                  id="swiper-pagination"
-                  className={twMerge(
-                    classNames(
-                      'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s]',
-                      {
-                        '!hidden': scrolled,
-                      },
-                    ),
-                  )}
-                />
-              </FlexBox>
-            </FlexItem>
-            <FlexItem>
-              <div className="mt-4 md:max-w-md md:mx-auto mx-6">
-                <SearchField
-                  value={searchInput ?? ''}
-                  onChange={setSearchInput}
-                  onSearch={(value) => {}}
-                />
-              </div>
-            </FlexItem>
-          </FlexBox>
-        </Container>
-        <FlexItem className="z-10 relative">
-          {renderCategorySections()}
-        </FlexItem>
-      </FlexBox>
+          <FlexItem className="z-10 relative">
+            {renderCategorySections()}
+          </FlexItem>
+        </FlexBox>
+      </div>
     </>
   );
 }

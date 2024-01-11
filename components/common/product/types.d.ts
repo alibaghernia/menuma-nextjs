@@ -17,6 +17,7 @@ declare interface IProductProps {
     price: string;
   }[];
   tags?: TagType[];
+  scrolled?: boolean;
   // tags?: "new" | "hot" | "sold_out" | undefined[];
   // tags?: any;
 }

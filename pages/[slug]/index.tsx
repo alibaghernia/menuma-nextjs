@@ -97,7 +97,7 @@ const Profile = () => {
         <div className="mt-[4.3rem]">
           <Link href={`/${slug}menu`}>
             <Button
-              className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold"
+              className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
               rounded
               color="#fff"
             >
@@ -146,7 +146,7 @@ const Profile = () => {
               <FlexBox direction="column" className="px-[1rem]" gap={2}>
                 {contactInfo.map((contact, key) => (
                   <FlexItem
-                    className="text-typography text-[.9rem] text-justify rounded-[2rem]"
+                    className="text-typography text-[.9rem] text-justify rounded-[2rem] border"
                     key={key}
                   >
                     <FlexBox alignItems="center" gap={0}>
@@ -171,7 +171,6 @@ const Profile = () => {
       </div>
     </>
   );
-  return <></>;
 };
 
 export const getServerSideProps: GetServerSideProps = withCafeeShopProfile();

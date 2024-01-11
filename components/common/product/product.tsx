@@ -262,7 +262,7 @@ export const Product: IProduct = (props) => {
                 </FlexItem>
                 <FlexItem grow>
                   <div className="text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]">
-                    {props.descriptions ? props.descriptions : 'بدون توضیحات'}
+                    {props.descriptions}
                   </div>
                 </FlexItem>
 

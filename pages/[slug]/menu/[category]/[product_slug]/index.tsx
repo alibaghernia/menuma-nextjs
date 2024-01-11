@@ -7,19 +7,12 @@ import React, {
 } from 'react';
 import Image from 'next/image';
 import { ProviderContext } from '@/providers/main/provider';
-import CoffeShopProvider, {
-  CoffeeShopProviderContext,
-} from '@/providers/coffee_shop/provider';
-import { useParams } from 'next/navigation';
-import { useQuery } from 'react-query';
-import { axios, serverBaseUrl } from '@/utils/axios';
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
+import { serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
-import { toast } from 'react-toastify';
 import _ from 'lodash';
 import { Navbar } from '@/components/core/navbar/noSSR';
 import noImage from '@/assets/images/no-image.jpg';
-import sperso from '@/assets/images/sperso.png';
-import warmDrink from '@/assets/images/warm-drink.png';
 import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -256,7 +249,7 @@ function ProductPage() {
                 </FlexBox>
               </FlexItem>
               <FlexItem className="text-[1rem] font-[400] mt-[1.5rem] text-typography md:text-center text-justify">
-                {product?.description ? product?.description : 'بدون توضیحات'}
+                {product?.description}
               </FlexItem>
               {!foundTagSoldOut && (
                 <FlexItem className="mt-[3rem]">
@@ -268,7 +261,7 @@ function ProductPage() {
             </FlexBox>
           </FlexItem>
         </FlexBox>
-        {order?.length && (
+        {!!order?.length && (
           <FlexBox direction="column" className="mt-[1.2rem]">
             <FlexItem>
               <OrderBox

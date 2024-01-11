@@ -52,7 +52,7 @@ export const OrderBox: IOrderBox = (props) => {
             {props.productArray?.map((product: any, key: any) => (
               <SwiperSlide
                 className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] md:!w-fit"
-                key={key}
+                key={product.id}
               >
                 <Product
                   id={product.id}
@@ -66,7 +66,7 @@ export const OrderBox: IOrderBox = (props) => {
                   prices={product.prices || []}
                   fullWidth
                   className="w-full md:w-[30rem]"
-                  categoryId={product.categoryId}
+                  categoryId={product.category_id}
                   tags={product.tags}
                   single_mode
                 />

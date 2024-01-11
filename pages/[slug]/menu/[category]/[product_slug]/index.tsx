@@ -38,6 +38,7 @@ import { OrderBox } from '@/components/menu/order-box';
 import { BusinessService } from '@/services/business/business.service';
 
 function ProductPage() {
+  usePageLoading();
   const [addL, removeL] = useLoadings();
   const message = useMessage();
   const { functions } = useContext(ProviderContext);
@@ -86,7 +87,7 @@ function ProductPage() {
   useEffect(() => {
     fetchDaiulyOffers();
     fetchProduct();
-  }, []);
+  }, [params.product_slug]);
 
   const orderItem = useCallback(
     (price: any) => {

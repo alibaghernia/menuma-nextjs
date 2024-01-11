@@ -34,7 +34,6 @@ import {
 } from '@/utils/hooks';
 import { ProductService } from '@/services/product/product.service';
 
-import { OrderBox } from '@/components/menu/order-box';
 import { BusinessService } from '@/services/business/business.service';
 
 function ProductPage() {
@@ -46,7 +45,6 @@ function ProductPage() {
   const { state } = useContext(CoffeeShopProviderContext);
   const { query: params } = useCustomRouter();
   const slug = useSlug(false);
-  const [order, setOrder] = useState<APIProduct[]>();
 
   const productService = ProductService.init(params.slug as string);
   const businessService = BusinessService.init();
@@ -68,23 +66,9 @@ function ProductPage() {
         removeL('fetch-product');
       });
   }
-  function fetchDaiulyOffers() {
-    addL('fetch-offers');
-    businessApisBySlug
-      .getDailyOffers()
-      .then((data) => {
-        setOrder(data);
-      })
-      .catch(() => {
-        message.error('مشکلی در دریافت پیشنهادات وجود دارد.');
-      })
-      .finally(() => {
-        removeL('fetch-offers');
-      });
-  }
+
 
   useEffect(() => {
-    fetchDaiulyOffers();
     fetchProduct();
   }, [params.product_slug]);
 
@@ -265,19 +249,6 @@ function ProductPage() {
             </FlexBox>
           </FlexItem>
         </FlexBox>
-        {order?.length && (
-          <FlexBox direction="column" className="mt-[1.2rem]">
-            <FlexItem>
-              <OrderBox
-                title="پیشنهادات روز"
-                scrolled={scrolled}
-                productArray={order}
-                classNameSection="scroll-mt-[20rem] "
-                contentClassNamesSection="flex flex-col gap-[1rem] items-center"
-              />
-            </FlexItem>
-          </FlexBox>
-        )}
       </div>
     </>
   );

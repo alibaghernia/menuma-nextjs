@@ -7,28 +7,26 @@ export const Badge: IBadge = (props) => {
   const typeBadge = useMemo(
     () => ({
       new: (
-        <></>
-        // <div
-        //   className="
-        // bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-10 dark:text-green-900 flex items-center"
-        // >
-        //   <NewIcon />
-        //   جدید
-        // </div>
+        // <></>
+        <div
+          className="
+        text-xs font-medium px-2.5 py-0.5 rounded-full bg-green-100/[.75] text-green-900 flex items-center text-center"
+        >
+          <span className="mx-auto">جدید</span>
+        </div>
       ),
       hot: (
         <div
           className="
-        bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-100 dark:text-red-900  flex items-center"
+        text-xs font-medium px-2.5 py-0.5 rounded-full bg-red-200/[.75] text-red-900"
         >
-          <FireIcon color="red" />
           ویژه
         </div>
       ),
       sold_out: (
         <div
           className="
-        bg-white text-black-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-gray-300 dark:text-typography flex items-center mt-4 mr-2"
+        text-xs font-medium px-2.5 py-0.5 rounded-full bg-gray-200/[.75] text-typography flex items-center"
         >
           تمام شده
         </div>

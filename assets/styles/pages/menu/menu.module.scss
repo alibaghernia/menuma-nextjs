@@ -1,5 +1,16 @@
 .swiper-pagination-bullet {
-  margin-top: 1rem;
+  display: block !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50%;
+  margin-left: 0.25rem !important;
+  margin-right: 0.25rem !important;
+  background-color: theme('colors.typography') !important;
+  opacity: 0.5 !important;
+}
+
+.swiper-pagination-bullet-active {
+  display: block !important;
   transform: scale(1.5) !important;
   background-color: theme('colors.typography') !important;
   opacity: 1 !important;

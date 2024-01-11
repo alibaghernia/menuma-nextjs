@@ -102,7 +102,8 @@ export const Product: IProduct = (props) => {
                     alignItems="center"
                     gap={2}
                     className={classNames(
-                      `px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] ${!foundTagSoldOut && 'cursor-pointer'
+                      `px-[.8rem] py-[.2rem] bg-white/[.3] rounded-[1rem] ${
+                        !foundTagSoldOut && 'cursor-pointer'
                       }  transition-all duration-[.3s]`,
                       {
                         'active:scale-[.8]': !order,
@@ -168,7 +169,7 @@ export const Product: IProduct = (props) => {
             'flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]',
             {
               'absolute !h-[12rem] right-[0]': !mono,
-              'relative h-full': mono
+              'relative h-full': mono,
             },
           )}
         >
@@ -176,8 +177,9 @@ export const Product: IProduct = (props) => {
             fill
             src={props.image!}
             alt={props.title}
-            className={`z-0 object-cover relative ${foundTagSoldOut && 'grayscale'
-              }`}
+            className={`z-0 object-cover relative ${
+              foundTagSoldOut && 'grayscale'
+            }`}
           />
 
           {props.single_mode && (
@@ -212,9 +214,7 @@ export const Product: IProduct = (props) => {
 
   const renderTags = useCallback(() => {
     return props.tags?.map((tag: TagType, idx: number) => (
-      <FlexItem key={idx}>
-        <Badge type={tag} />
-      </FlexItem>
+      <Badge type={tag} key={idx} />
     ));
   }, [props.tags]);
   return (
@@ -223,7 +223,6 @@ export const Product: IProduct = (props) => {
         'relative',
         { 'w-full': props.fullWidth },
         props.className,
-
       )}
     >
       <FlexBox
@@ -231,7 +230,6 @@ export const Product: IProduct = (props) => {
           'w-full': props.fullWidth,
           'pr-[7.25rem]': !props.fullWidth,
           'flex-col ': !props.single_mode,
-
         })}
       >
         {!props.fullWidth && renderImage(false)}
@@ -241,13 +239,12 @@ export const Product: IProduct = (props) => {
           <FlexBox
             alignItems="stretch"
             className={classNames(
-              'bg-white h-[12.9rem] rounded-[2rem] border border-black/[.05]',
+              'bg-white h-[12.9rem] rounded-[2rem] border border-black/[.05] overflow-hidden',
               {
                 'w-[16.3rem] pr-[5.6rem] flex-col  py-[1.1rem] pl-[1.4rem]  items-center  justify-between':
                   !props.fullWidth,
                 'w-full p-[1rem] gap-[1.4rem] z-10': props.fullWidth,
-                'h-[6rem]': props.scrolled
-              }
+              },
             )}
           >
             {props.fullWidth && <FlexItem>{renderImage(true)}</FlexItem>}
@@ -262,56 +259,38 @@ export const Product: IProduct = (props) => {
                   </Link>
                 </FlexItem>
                 <FlexItem grow>
-                  <div className={classNames(
-                    'text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]',
-                    {
-                      'h-[0rem] invisible': props.scrolled,
-                    },
-                  )}>
-                    {props.descriptions ? props.descriptions : 'بدون توضیحات'}
+                  <div
+                    className={classNames(
+                      'text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]',
+                    )}
+                  >
+                    {props.descriptions}
                   </div>
                 </FlexItem>
 
                 <FlexItem>
-                  <div className={classNames(
-                    {
-                      'h-[2.5rem] rounded-[1rem]': props.scrolled,
-                    },
-                  )}>
-                    {props.single_mode && renderSingleModePrice()}
-                  </div>
+                  {props.single_mode && renderSingleModePrice()}
                 </FlexItem>
-
               </FlexBox>
             </FlexItem>
           </FlexBox>
         </FlexItem>
-        {
-          !props.single_mode && (
-            <FlexBox direction="column" className="shrink-0 w-full z-0">
-              {renderPrices()}
-            </FlexBox>
-          )
-        }
-      </FlexBox >
-
-      {Boolean(props.tags?.length) && (
-        <Container
-          position="absolute"
-          className={classNames(
-            'z-10 top-[1rem] right-[2.5rem]',
-            {
-              'top-[0rem]': props.scrolled
-            }
-          )}
-
-
-        >
-          <FlexBox gap={2} justify="center" direction="column">
-            {renderTags()}
+        {!props.single_mode && (
+          <FlexBox direction="column" className="shrink-0 w-full z-0">
+            {renderPrices()}
           </FlexBox>
-        </Container>
-      )}
-    </div >
+        )}
+        {Boolean(props.tags?.length) && (
+          <Container
+            position="absolute"
+            className={classNames('z-50 top-[1rem] left-[1rem]', {
+              'top-[0rem]': props.scrolled,
+            })}
+          >
+            <FlexBox gap={2}>{renderTags()}</FlexBox>
+          </Container>
+        )}
+      </FlexBox>
+    </div>
   );
 };

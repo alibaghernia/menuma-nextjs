@@ -7,19 +7,12 @@ import React, {
 } from 'react';
 import Image from 'next/image';
 import { ProviderContext } from '@/providers/main/provider';
-import CoffeShopProvider, {
-  CoffeeShopProviderContext,
-} from '@/providers/coffee_shop/provider';
-import { useParams } from 'next/navigation';
-import { useQuery } from 'react-query';
-import { axios, serverBaseUrl } from '@/utils/axios';
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
+import { serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
-import { toast } from 'react-toastify';
 import _ from 'lodash';
 import { Navbar } from '@/components/core/navbar/noSSR';
 import noImage from '@/assets/images/no-image.jpg';
-import sperso from '@/assets/images/sperso.png';
-import warmDrink from '@/assets/images/warm-drink.png';
 import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -66,7 +59,6 @@ function ProductPage() {
         removeL('fetch-product');
       });
   }
-
 
   useEffect(() => {
     fetchProduct();
@@ -200,14 +192,15 @@ function ProductPage() {
     <>
       <Head>
         <title>
-          {`${state.profile.name +
+          {`${
+            state.profile.name +
             ` - ${product?.name || ''}` +
             (slug ? ' - منوما' : '')
-            }`}
+          }`}
         </title>
       </Head>
       {navbar}
-      <div className="bg-background pt-[4.5rem] z-10 px-4">
+      <div className="pt-[4.5rem] pb-[2.5rem] z-10 px-4">
         <FlexBox direction="column">
           <FlexItem className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow">
             <Image
@@ -217,13 +210,14 @@ function ProductPage() {
                   : noImage.src
               }
               alt={product?.name! || 'pic'}
-              className={`inset-0 block object-cover ${foundTagSoldOut && 'grayscale'
-                }`}
+              className={`inset-0 block object-cover ${
+                foundTagSoldOut && 'grayscale'
+              }`}
               fill
             />
           </FlexItem>
           <FlexItem
-            className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[1.5rem]"
+            className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[1.5rem] border"
             grow
           >
             <FlexBox direction="column">
@@ -237,7 +231,7 @@ function ProductPage() {
                 </FlexBox>
               </FlexItem>
               <FlexItem className="text-[1rem] font-[400] mt-[1.5rem] text-typography md:text-center text-justify">
-                {product?.description ? product?.description : 'بدون توضیحات'}
+                {product?.description}
               </FlexItem>
               {!foundTagSoldOut && (
                 <FlexItem className="mt-[3rem]">

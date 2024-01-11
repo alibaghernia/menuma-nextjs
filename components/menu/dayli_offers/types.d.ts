@@ -1,12 +1,12 @@
 import { classNames } from 'classnames';
 import { FC } from 'react';
 
-declare interface IOrderBoxProps {
+declare interface IDailyOffersProps {
   title: string;
   scrolled?: boolean;
   productArray: any;
   classNameSection?: string;
   contentClassNamesSection?: string;
-  classNameScroll?: string
+  classNameScroll?: string;
 }
-declare type IOrderBox = FC<IOrderBoxProps>;
+declare type IDailyOffers = FC<IDailyOffersProps>;

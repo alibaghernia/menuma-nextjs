@@ -11,7 +11,7 @@ export const SearchField: ISearchField = (props) => {
       alignItems="center"
       gap={2}
       className={classNames(
-        'rounded-full p-[.3rem] bg-white overflow-hidden',
+        'rounded-full p-[.3rem] bg-white overflow-hidden border',
         props.className,
       )}
     >

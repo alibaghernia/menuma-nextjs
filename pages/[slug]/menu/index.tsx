@@ -36,7 +36,7 @@ import {
   usePageLoading,
 } from '@/utils/hooks';
 import { BusinessService } from '@/services/business/business.service';
-import { OrderBox } from '@/components/menu/order-box';
+import { DailyOffers } from '@/components/menu/dayli_offers';
 
 function MenuPage() {
   const [addL, removeL] = useLoadings();
@@ -47,7 +47,7 @@ function MenuPage() {
   const { state } = useContext(CoffeeShopProviderContext);
   const [searchInput, setSearchInput] = useState<string>('');
   const { query: params } = useCustomRouter();
-  const [order, setOrder] = useState<APIProduct[]>();
+  const [dailyOffers, setDailyOffers] = useState<APIProduct[]>();
   const slug = useSlug(false);
   const businessService = BusinessService.init();
   const [selectedCategory, setSelectedCategory] = useState<string | number>();
@@ -75,7 +75,7 @@ function MenuPage() {
     businessApisBySlug
       .getDailyOffers()
       .then((data) => {
-        setOrder(data);
+        setDailyOffers(data);
       })
       .catch(() => {
         message.error('مشکلی در دریافت پیشنهادات وجود دارد.');
@@ -84,7 +84,6 @@ function MenuPage() {
         removeL('fetch-offers');
       });
   }
-
 
   useEffect(() => {
     menuFetcher();
@@ -108,18 +107,16 @@ function MenuPage() {
     };
   }, [scrolled]);
 
-  const renderOrderSection = () => {
-    return (<OrderBox
-      title="پیشنهادات روز"
-      scrolled={scrolled}
-      productArray={order}
-      classNameSection="scroll-mt-[20rem] "
-      classNameScroll={classNames({
-        'h-[6rem] rounded-[1rem]': scrolled,
-      })}
-      contentClassNamesSection="flex flex-col gap-[1rem] items-center"
-    />)
-  }
+  const renderDailyOffersSection = () => {
+    return (
+      <DailyOffers
+        title="پیشنهادات روز"
+        productArray={dailyOffers}
+        classNameSection="scroll-mt-[20rem]"
+        contentClassNamesSection="px-4 md:px-0"
+      />
+    );
+  };
 
   const categoriesSwiperSlides = useMemo(() => {
     return _.chunk(menuData, 2).map((categories, key1) => (
@@ -251,7 +248,10 @@ function MenuPage() {
                       pagination={{
                         clickable: true,
                         el: '#swiper-pagination',
-                        bulletActiveClass: styles['swiper-pagination-bullet'],
+                        bulletElement: 'div',
+                        bulletClass: styles['swiper-pagination-bullet'],
+                        bulletActiveClass:
+                          styles['swiper-pagination-bullet-active'],
                       }}
                       breakpoints={{
                         768: {
@@ -267,7 +267,7 @@ function MenuPage() {
                     id="swiper-pagination"
                     className={twMerge(
                       classNames(
-                        'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s] !gap-1',
+                        'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s]',
                         {
                           '!hidden': scrolled,
                         },
@@ -281,15 +281,16 @@ function MenuPage() {
                   <SearchField
                     value={searchInput ?? ''}
                     onChange={setSearchInput}
-                    onSearch={(value) => { }}
+                    onSearch={(value) => {}}
                   />
                 </div>
               </FlexItem>
-              <FlexItem>
-                {renderOrderSection()}
-              </FlexItem>
             </FlexBox>
           </Container>
+
+          {!!dailyOffers?.length && (
+            <FlexItem>{renderDailyOffersSection()}</FlexItem>
+          )}
           <FlexItem className="z-10 relative">
             {renderCategorySections()}
           </FlexItem>

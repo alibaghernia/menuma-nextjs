@@ -15,15 +15,15 @@ export const Link: ILink = ({ href, children, className, ...props }) => {
   const router = useCustomRouter();
 
   return (
-    <span
+    <div
       {...props}
       onClick={() => {
-        addLoading(LOADING_KEYS.pageLoading);
+        // addLoading(LOADING_KEYS.pageLoading);
         router.push(href);
       }}
-      className={classNames(twMerge('cursor-pointer', className))}
+      className={classNames(twMerge('cursor-pointer w-fit', className))}
     >
       {children}
-    </span>
+    </div>
   );
 };

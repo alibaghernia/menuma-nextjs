@@ -23,12 +23,14 @@ import _ from 'lodash';
 import { usePageLoading } from '@/utils/hooks';
 import Navbar from '@/components/core/navbar/navbar';
 import Link from 'next/link';
+import 'leaflet/dist/leaflet.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const WorkingHours = dynamic(
-  import('@/components/profile/working_hours/working_hours'),
+  () => import('@/components/profile/working_hours/working_hours'),
   { ssr: false },
 );
-const MapComponent = dynamic(import('@/components/common/map/map'), {
+const MapComponent = dynamic(() => import('@/components/common/map/map'), {
   ssr: false,
 });
 const Profile = () => {

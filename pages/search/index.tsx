@@ -58,7 +58,7 @@ function Search() {
         `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=2000`,
       )
       .finally(() => {
-        addL('fetch-businesses');
+        removeL('fetch-businesses');
       })
       .then(({ data }) => {
         setFetchedItems(

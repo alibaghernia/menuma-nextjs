@@ -75,17 +75,19 @@ export const ProfileHeader: IProfileHeader = (props) => {
           </FlexBox>
         </FlexItem>
       </FlexBox>
-      <Container className="left-[50%] bottom-[-4.25rem] rounded-full z-20 w-[8.5rem] h-[8.5rem] translate-x-[-50%] overflow-hidden border-[0.7rem] border-background bg-white">
-        <Image
-          fill
-          src={
-            profileData?.logo_path
-              ? `${serverBaseUrl}/storage/${profileData?.logo_path}`
-              : coffeeshopLogo.src
-          }
-          alt={profileData.name}
-          className="object-cover"
-        />
+      <Container className="left-[50%] bottom-[-4.25rem] rounded-full z-20 w-[8.5rem] h-[8.5rem] translate-x-[-50%] border-[0.7rem] border-background bg-white">
+        <div className="relative h-full w-full rounded-full border overflow-hidden">
+          <Image
+            fill
+            src={
+              profileData?.logo_path
+                ? `${serverBaseUrl}/storage/${profileData?.logo_path}`
+                : coffeeshopLogo.src
+            }
+            alt={profileData.name}
+            className="object-cover"
+          />
+        </div>
       </Container>
     </Container>
   );

@@ -52,6 +52,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
         <FlexItem>
           <Image
             fill
+            priority
             src={
               profileData?.banner_path
                 ? `${serverBaseUrl}/storage/${profileData?.banner_path}`

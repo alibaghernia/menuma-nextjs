@@ -17,13 +17,13 @@ export const WorkingHours: FC<any> = ({ data }) => {
               {time1.hour() < 12 ? 'صبح' : 'عصر'}
             </td>
             <td className="pb-2">
-              <div className="bg-white/[.5] px-4 py-1 rounded-full">
+              <div className="bg-white/[.5] px-4 py-1 rounded-full border">
                 {time1.format('HH:mm')}
               </div>
             </td>
             <td className="px-2 pb-2">تا</td>
             <td className="pb-2">
-              <div className="bg-white/[.5] px-4 py-1 rounded-full ">
+              <div className="bg-white/[.5] px-4 py-1 rounded-full border">
                 {time2.format('HH:mm')}
               </div>
             </td>

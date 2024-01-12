@@ -3,7 +3,6 @@ import coffeeshopImage from '@/assets/images/coffeeshop.jpg';
 import coffeeshopLogo from '@/assets/images/coffeeshopLogo.png';
 import { IProfileHeader } from '../header/types';
 import Image from 'next/image';
-import { Link } from '@/components/common/link';
 import { Container } from '@/components/common/container/container';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -13,6 +12,7 @@ import { InstagramIcon } from '@/icons/instagram';
 import { TelegramIcon } from '@/icons/telegram';
 import { XIcon } from '@/icons/x';
 import { WhatsappIcon } from '@/icons/whatsapp';
+import Link from 'next/link';
 
 export const ProfileHeader: IProfileHeader = (props) => {
   const {

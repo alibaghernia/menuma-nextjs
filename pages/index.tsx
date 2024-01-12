@@ -19,9 +19,9 @@ import { axios, serverBaseUrl } from '@/utils/axios';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { SearchBusinessBox } from '@/components/common/search_business_box/search_business_box';
 import { useRouter } from 'next/router';
-import { Link } from '@/components/common/link';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
+import Link from 'next/link';
 
 function Home() {
   const [addL, removeL] = useLoadings();

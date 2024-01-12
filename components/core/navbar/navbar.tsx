@@ -19,9 +19,9 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import dynamic from 'next/dynamic';
 import { CallGarson } from '@/components/common/call_garson/call_garson';
-import { Link } from '@/components/common/link';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
+import Link from 'next/link';
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false });
 export const Navbar: INavBar = ({

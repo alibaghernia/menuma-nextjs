@@ -12,8 +12,8 @@ import { Container } from '../container/container';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
-import { Link } from '../link';
 import { useCustomRouter } from '@/utils/hooks';
+import Link from 'next/link';
 
 export const Product: IProduct = (props) => {
   const foundTagSoldOut = !!props.tags?.find(

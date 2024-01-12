@@ -15,7 +15,6 @@ import { PhoneIcon } from '@/icons/phone';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindConfig from '@/tailwind.config';
 import { MailIcon } from '@/icons/mail';
-import { Link } from '@/components/common/link';
 import { serverBaseUrl } from '@/utils/axios';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
@@ -23,6 +22,7 @@ import { MetaTags } from '@/components/common/metatags';
 import _ from 'lodash';
 import { usePageLoading } from '@/utils/hooks';
 import Navbar from '@/components/core/navbar/navbar';
+import Link from 'next/link';
 
 const WorkingHours = dynamic(
   import('@/components/profile/working_hours/working_hours'),

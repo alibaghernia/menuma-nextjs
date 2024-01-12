@@ -9,10 +9,10 @@ import { SearchBusinessBox } from '@/components/common/search_business_box/searc
 import { useRouter } from 'next/router';
 import { axios, serverBaseUrl } from '@/utils/axios';
 import Image from 'next/image';
-import { Link } from '@/components/common/link';
 import noImage from '@/assets/images/no-image.jpg';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
+import Link from 'next/link';
 
 function Search() {
   const [addL, removeL] = useLoadings();

@@ -95,7 +95,7 @@ const Profile = () => {
       <div className="z-0">
         <ProfileHeader />
         <div className="mt-[4.3rem]">
-          <Link href={`/${slug}menu`}>
+          <Link href={`/${slug}menu`} className="mx-auto">
             <Button
               className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
               rounded

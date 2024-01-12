@@ -2,6 +2,7 @@ import { LinkProps } from 'next/link';
 import {
   ElementType,
   FC,
+  HTMLAttributes,
   PropsWithChildren,
   ReactElement,
   ReactPropTypes,

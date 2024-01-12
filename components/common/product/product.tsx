@@ -6,8 +6,6 @@ import classNames from 'classnames';
 import { LinedAddIcon } from '@/icons/lined_add';
 import noImage from '@/assets/images/no-image.jpg';
 import { ProviderContext } from '@/providers/main/provider';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/router';
 import _ from 'lodash';
 import { useSlug } from '@/providers/main/hooks';
 import { Container } from '../container/container';
@@ -16,7 +14,6 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
 import { Link } from '../link';
 import { useCustomRouter } from '@/utils/hooks';
-import { serverBaseUrl } from '@/utils/axios';
 
 export const Product: IProduct = (props) => {
   const foundTagSoldOut = !!props.tags?.find(
@@ -205,7 +202,7 @@ export const Product: IProduct = (props) => {
     return (
       <Link
         href={productSlug}
-        className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s] block"
+        className="text-[.8rem] px-[.8rem] py-[.3rem] text-typography bg-typography/[.1] text-center rounded-[1rem] font-[600] cursor-pointer active:scale-[.8] transition-transform duration-[.3s] block w-full"
       >
         {foundTagSoldOut ? 'مشاهده' : 'سفارش'}
       </Link>

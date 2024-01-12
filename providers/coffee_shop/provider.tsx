@@ -88,7 +88,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
   }
 
   useEffect(() => {
-    profileFetcher();
+    if (params.slug) profileFetcher();
   }, []);
 
   const enableCancelGarsonCallInterval = () => {

@@ -5,9 +5,7 @@
 
 html {
   font-size: 16px;
-  font-family:
-    Vazir FD,
-    sans-serif;
+  font-family: 'vazirmatn', sans-serif;
 
   @media screen and (max-width: 768px) {
     font-size: 90%;
@@ -18,5 +16,24 @@ html {
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+  }
+}
+
+.zaman-input-wrapper {
+  input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: #ffffff;
+    padding: 4px 11px;
+    font-size: 0.875rem;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+  }
+
+  &.is-invalid {
+    input {
+      border-color: red;
+    }
   }
 }

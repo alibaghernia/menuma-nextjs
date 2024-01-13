@@ -4,41 +4,7 @@ import '@/assets/styles/global.scss';
 import classNames from 'classnames';
 import Provider from '@/providers/main/provider';
 import { GeneralProvider } from '@/providers/general/provider';
-
-const vazirMatn = LocalFont({
-  src: [
-    {
-      path: '../assets/fonts/vazirFD-100.woff2',
-      weight: '100',
-      style: 'normal',
-    },
-    {
-      path: '../assets/fonts/vazirFD-300.woff2',
-      weight: '300',
-      style: 'normal',
-    },
-    {
-      path: '../assets/fonts/vazirFD-400.woff2',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../assets/fonts/vazirFD-500.woff2',
-      weight: '500',
-      style: 'normal',
-    },
-    {
-      path: '../assets/fonts/vazirFD-700.woff2',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: '../assets/fonts/vazirFD-900.woff2',
-      weight: '900',
-      style: 'normal',
-    },
-  ],
-});
+import { ConfigProvider } from 'antd/lib';
 
 export default function App({ Component, pageProps }: AppProps) {
   //@ts-ignore
@@ -46,12 +12,20 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <main className={classNames('z-10', vazirMatn.className)}>
-        <PageProvider>
-          <GeneralProvider>
-            <Component {...pageProps} />
-          </GeneralProvider>
-        </PageProvider>
+      <main className={classNames('z-10')}>
+        <ConfigProvider
+          theme={{
+            token: {
+              fontFamily: 'vazirmatn',
+            },
+          }}
+        >
+          <PageProvider>
+            <GeneralProvider>
+              <Component {...pageProps} />
+            </GeneralProvider>
+          </PageProvider>
+        </ConfigProvider>
       </main>
     </>
   );

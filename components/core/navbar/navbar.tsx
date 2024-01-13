@@ -22,6 +22,7 @@ import { CallGarson } from '@/components/common/call_garson/call_garson';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
+import { PeopleIcon } from '@/icons/people';
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false });
 export const Navbar: INavBar = ({
@@ -68,10 +69,17 @@ export const Navbar: INavBar = ({
         ),
         url: `/${slug}menu`,
       },
-      // {
-      //     title: "پشتیبانی",
-      //     icon: <SupportIcon color={resolvedTailwindConfig.theme?.colors?.['typography'].toString()} />,
-      // }
+      {
+        title: 'ثبت نام در باشگاه مشتریان',
+        icon: (
+          <PeopleIcon
+            color={resolvedTailwindConfig.theme?.colors?.[
+              'typography'
+            ].toString()}
+          />
+        ),
+        url: `/${slug}/customer_club/register`,
+      },
     ],
     [resolvedTailwindConfig, slug],
   );
@@ -121,7 +129,7 @@ export const Navbar: INavBar = ({
 
   return (
     <Container
-      position="fixed"
+      position={props.fixed ? 'fixed' : 'sticky'}
       className={classNames('z-50', { 'top-0 w-full': !props.fixed })}
     >
       <FlexBox

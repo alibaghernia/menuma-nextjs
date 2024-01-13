@@ -7,6 +7,7 @@ const nextConfig = {
     'zustand',
     'leva',
     'zaman',
+    'react-jss',
   ],
   images: {
     remotePatterns: [

@@ -129,7 +129,13 @@ export const Navbar: INavBar = ({
 
   return (
     <Container
-      position={props.fixed ? 'fixed' : 'sticky'}
+      position={
+        typeof props.fixed == 'undefined'
+          ? 'fixed'
+          : props.fixed
+            ? 'fixed'
+            : 'sticky'
+      }
       className={classNames('z-50', { 'top-0 w-full': !props.fixed })}
     >
       <FlexBox

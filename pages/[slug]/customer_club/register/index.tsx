@@ -5,16 +5,36 @@ import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import { useSlug } from '@/providers/main/hooks';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
-import { Button, Form, Input, Radio } from 'antd/lib';
+import { Button, Form, Input, Radio, theme } from 'antd/lib';
 import classNames from 'classnames';
 import Head from 'next/head';
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { DatePicker } from 'zaman';
+import { createUseStyles } from 'react-jss';
 
 function CustomerClubRegisterPage() {
   const slug = useSlug(false);
   const [form] = Form.useForm();
   const { state } = useContext(CoffeeShopProviderContext);
+  const designToken = theme.useToken();
+
+  const datePickerStype = createUseStyles(
+    {
+      input: {
+        width: '100%',
+        border: 'none',
+        outline: 'none',
+        backgroundColor: '#ffffff',
+        padding: `${designToken.token.Input?.paddingBlock}px 11px`,
+        fontSize: '0.875rem',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: '#d9d9d9',
+        borderRadius: '6px',
+      },
+    },
+    { name: 'date-picker' },
+  )();
 
   const onFinish = (values: any) => {
     console.log({
@@ -82,16 +102,18 @@ function CustomerClubRegisterPage() {
                   ]}
                 >
                   <div
-                    className={classNames('zaman-input-wrapper', {
+                    className={classNames({
                       'is-invalid': !!form.getFieldError('birth_date').length,
                     })}
                   >
                     <DatePicker
+                      className="date"
                       round="x2"
-                      accentColor="#6374ae"
+                      accentColor={designToken.token.colorPrimary}
                       onChange={(e) => {
                         form.setFieldValue('birth_date', e.value.toISOString());
                       }}
+                      inputClass={datePickerStype.input}
                     />
                   </div>
                 </Form.Item>

@@ -52,7 +52,12 @@ function CustomerClubRegisterPage() {
         </title>
       </Head>
       <div className="min-h-screen w-full">
-        <Navbar fixed={false} callPager={false} />
+        <Navbar
+          fixed={false}
+          callPager={false}
+          back
+          title={state.profile.name}
+        />
         <div className="px-10">
           <FlexBox
             className="max-w-lg mx-auto mt-2 gap-[1rem]"

@@ -32,6 +32,8 @@ jobs:
           push: true
           tags: registry.menuma.online/menuma/fontend:latest
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Call API to update server
         uses: indiesdev/curl@v1.1

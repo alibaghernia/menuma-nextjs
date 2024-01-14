@@ -16,8 +16,8 @@ RUN pnpm i
 
 COPY . .
 
-RUN pnpm build
+# RUN pnpm build
 
 EXPOSE 3000:3000
 
-CMD [ "pnpm", "start" ]
+CMD [ "pnpm", "build", "&&", "pnpm", "start" ]

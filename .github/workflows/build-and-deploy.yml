@@ -33,8 +33,8 @@ jobs:
           tags: registry.menuma.online/menuma/fontend:latest
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            NEXT_PUBLIC_BACKEND_BASE_API=${{ env.NEXT_PUBLIC_BACKEND_BASE_API }}
-            NEXT_PUBLIC_MENUMA_DOMAIN=${{ env.NEXT_PUBLIC_MENUMA_DOMAIN }}
+            NEXT_PUBLIC_BACKEND_BASE_API=${{ vars.NEXT_PUBLIC_BACKEND_BASE_API }}
+            NEXT_PUBLIC_MENUMA_DOMAIN=${{ vars.NEXT_PUBLIC_MENUMA_DOMAIN }}
 
       - name: Call API to update server
         uses: indiesdev/curl@v1.1

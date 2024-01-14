@@ -30,7 +30,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: registry.menuma.online:444/menuma/fontend:latest
+          tags: registry.menuma.online/menuma/fontend:latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Call API to update server

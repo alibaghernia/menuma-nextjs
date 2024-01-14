@@ -20,4 +20,4 @@ COPY . .
 
 EXPOSE 3000:3000
 
-CMD [ "pnpm", "build", "&&", "pnpm", "start" ]
+CMD [ "pnpm build && pnpm start" ]

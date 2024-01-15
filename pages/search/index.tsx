@@ -1,5 +1,5 @@
 import { Logo } from '@/components/common/logo';
-import { useContext, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -13,6 +13,7 @@ import noImage from '@/assets/images/no-image.jpg';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
+import { SelectField } from '@/components/common/select_field/select_field'
 
 function Search() {
   const [addL, removeL] = useLoadings();
@@ -51,11 +52,11 @@ function Search() {
       });
   };
 
-  const fetchNearBusinesses = () => {
+  const fetchNearBusinesses = (distance: string) => {
     addL('fetch-businesses');
     axios
       .get(
-        `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=2000`,
+        `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=${(distance)}`,
       )
       .finally(() => {
         removeL('fetch-businesses');
@@ -81,16 +82,21 @@ function Search() {
       setSearchField(params.search as string);
     }
     if (params.near && params.lat && params.long && isNear) {
-      fetchNearBusinesses();
+      fetchNearBusinesses('2000');
     }
   }, [params]);
 
+
+  function roundUpToNearestMultipleOf100(number: number) {
+    return Math.ceil(number / 100) * 100;
+  }
+
   const getDistanceText = (distance: number) => {
     const km = distance / 1000;
-    if (km > 0) {
+    if (km > 1) {
       return `کمتر از ${Math.floor(km) + 1} کیلومتر`;
     } else {
-      return `کمتر از 1 کیلومتر`;
+      return `کمتر از${roundUpToNearestMultipleOf100(distance)}متر`;
     }
   };
 
@@ -130,7 +136,7 @@ function Search() {
                   فاصله:
                 </div>
                 <div className="text-[.725rem] text-typography/[.8] whitespace-nowrap">
-                  {getDistanceText(business.distance)}
+                  {getDistanceText(256)}
                 </div>
               </div>
             )}
@@ -143,7 +149,15 @@ function Search() {
   const handleSearchBusiness = (searchPhrase: string) => {
     handleFetchBusinesses(searchPhrase);
   };
+  const onChangeSelect = (value: string) => {
+    fetchNearBusinesses(value)
+  };
 
+  const onSearch = (value: string) => {
+    console.log('search:', value);
+  };
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
   return (
     <>
       <div className="mx-auto md:w-fit mt-[2.38rem] flex flex-col px-[2rem]">
@@ -158,9 +172,41 @@ function Search() {
               onSearch={handleSearchBusiness}
             />
           ) : (
-            <div className="text-center text-typography/[.8] w-full">
-              در شعاع 2 کیلومتری شما
-            </div>
+
+            <Fragment>
+              <div className="flex flex-col gap-[.875rem] items-center pb-4">
+                <SelectField
+                  showSearch
+                  style={{ width: '100%' }}
+                  optionFilterProp="children"
+                  placeholder='انتخاب محدوده'
+                  onChange={onChangeSelect}
+                  onSearch={onSearch}
+                  option={[
+                    {
+                      value: '500',
+                      label: 'محدوده 500 متر',
+                    },
+                    {
+                      value: '1000',
+                      label: 'محدوده 1000 متر',
+                    },
+                    {
+                      value: '2000',
+                      label: 'محدوده 2000 متر',
+                    },
+                  ]}
+                  name='search'
+                  filterOption={filterOption}
+                />
+              </div>
+
+
+              <div className="text-center text-typography/[.8] w-full">
+                در شعاع 2 کیلومتری شما
+              </div>
+            </Fragment>
+
           )}
         </div>
 

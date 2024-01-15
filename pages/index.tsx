@@ -81,24 +81,31 @@ function Home() {
     router.push(`/search?search=${searchPhrase}`);
   };
   const findNearestBusinessHandler = () => {
+
     if (navigator.geolocation) {
       addL('get-location');
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          removeL('get-location');
-          const lat = position.coords.latitude;
-          const long = position.coords.longitude;
-          addL(LOADING_KEYS.pageLoading);
-          router.push(`/search?near=1&lat=${lat}&long=${long}`);
-        },
-        (error) => {
-          removeL('get-location');
-          console.log({
-            error,
-          });
-          alert(JSON.stringify(error.message));
-        },
-      );
+      const lat = 31.8974;
+      const long = 54.3569;
+      addL(LOADING_KEYS.pageLoading);
+      router.push(`/search?near=1&lat=${lat}&long=${long}`);
+      // navigator.geolocation.getCurrentPosition(
+      //   (position) => {
+      //     removeL('get-location');
+      //     const lat = position.coords.latitude;
+      //     const long = position.coords.longitude;
+      //     const lat = 31;
+      //     const long = 54;
+      //     addL(LOADING_KEYS.pageLoading);
+      //     router.push(`/search?near=1&lat=${lat}&long=${long}`);
+      //   },
+      //   (error) => {
+      //     removeL('get-location');
+      //     console.log({
+      //       error,
+      //     });
+      //     alert(JSON.stringify(error.message));
+      //   },
+      // );
     }
   };
 

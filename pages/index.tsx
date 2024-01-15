@@ -22,11 +22,14 @@ import { useRouter } from 'next/router';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
+import { EventCard } from '@/components/common/event_card';
+import { MainService } from '@/services/main/main.service';
 
 function Home() {
   const [addL, removeL] = useLoadings();
   const router = useCustomRouter();
   const [searchField, setSearchField] = useState('');
+  const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
   const [pinBusinesses, setPinBusinesses] = useState<
     {
       slug: string;
@@ -34,6 +37,7 @@ function Home() {
       title: string;
     }[]
   >([]);
+  const mainService = MainService.init();
 
   const fetchPinBusinesses = () => {
     addL('pin-businesses');
@@ -50,6 +54,17 @@ function Home() {
               : noImage.src,
           })),
         );
+      });
+  };
+  const fetchEvents = () => {
+    addL('fetch-events');
+    mainService
+      .getEvents()
+      .finally(() => {
+        removeL('fetch-events');
+      })
+      .then((data) => {
+        setFetchedEvents(data);
       });
   };
 
@@ -73,6 +88,7 @@ function Home() {
 
   useEffect(() => {
     fetchPinBusinesses();
+    fetchEvents();
   }, []);
 
   const handleSearchBusiness = (searchPhrase: string) => {
@@ -101,6 +117,14 @@ function Home() {
       );
     }
   };
+
+  const events = useMemo(() => {
+    return fetchedEvents.map((event, idx) => (
+      <FlexItem key={idx}>
+        <EventCard {...event} className="mx-auto" />
+      </FlexItem>
+    ));
+  }, [fetchedEvents]);
 
   return (
     <>
@@ -138,6 +162,13 @@ function Home() {
             >
               {businessesSlides}
             </Swiper>
+          </Section>
+        </div>
+        <div className="mt-[2.12rem] w-full max-w-[65rem]">
+          <Section title="آخرین رویداد ها" contentClassNames="pt-[1rem] px-5">
+            <FlexBox direction="column" alignItems="stretch" gap={2}>
+              {events}
+            </FlexBox>
           </Section>
         </div>
       </div>

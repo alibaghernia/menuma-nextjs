@@ -2,6 +2,7 @@ import { IProfile } from '@/pages/[slug]/types';
 import axiosPkg, { AxiosInstance } from 'axios';
 import NError from 'next/error';
 import { CustomerClubService } from './customer_club/customer_club.service';
+import { EventsService } from './events/events.service';
 
 export class BusinessService {
   static init(slug?: string) {
@@ -32,6 +33,9 @@ export class BusinessService {
   }
   get customerClubService() {
     return CustomerClubService.init(this);
+  }
+  get eventsService() {
+    return EventsService.init(this);
   }
   private slugRoute(slug?: string) {
     if (slug && this.slug)

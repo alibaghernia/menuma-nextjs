@@ -135,7 +135,7 @@ function Search() {
                   فاصله:
                 </div>
                 <div className="text-[.725rem] text-typography/[.8] whitespace-nowrap">
-                  {getDistanceText(256)}
+                  {getDistanceText(business.distance)}
                 </div>
               </div>
             )}
@@ -153,7 +153,6 @@ function Search() {
   };
 
   const onSearch = (value: string) => {
-    console.log('search:', value);
   };
   const filterOption = (
     input: string,
@@ -189,11 +188,11 @@ function Search() {
                     },
                     {
                       value: '1000',
-                      label: 'محدوده 1000 متر',
+                      label: 'محدوده ۱ کیلومتر',
                     },
                     {
                       value: '2000',
-                      label: 'محدوده 2000 متر',
+                      label: 'محدوده ۲ کیلومتر',
                     },
                   ]}
                   name="search"

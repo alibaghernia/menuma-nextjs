@@ -13,7 +13,7 @@ import noImage from '@/assets/images/no-image.jpg';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
-import { SelectField } from '@/components/common/select_field/select_field'
+import { SelectField } from '@/components/common/select_field/select_field';
 
 function Search() {
   const [addL, removeL] = useLoadings();
@@ -56,7 +56,7 @@ function Search() {
     addL('fetch-businesses');
     axios
       .get(
-        `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=${(distance)}`,
+        `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=${distance}`,
       )
       .finally(() => {
         removeL('fetch-businesses');
@@ -85,7 +85,6 @@ function Search() {
       fetchNearBusinesses('2000');
     }
   }, [params]);
-
 
   function roundUpToNearestMultipleOf100(number: number) {
     return Math.ceil(number / 100) * 100;
@@ -150,14 +149,16 @@ function Search() {
     handleFetchBusinesses(searchPhrase);
   };
   const onChangeSelect = (value: string) => {
-    fetchNearBusinesses(value)
+    fetchNearBusinesses(value);
   };
 
   const onSearch = (value: string) => {
     console.log('search:', value);
   };
-  const filterOption = (input: string, option?: { label: string; value: string }) =>
-    (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string },
+  ) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
   return (
     <>
       <div className="mx-auto md:w-fit mt-[2.38rem] flex flex-col px-[2rem]">
@@ -172,14 +173,13 @@ function Search() {
               onSearch={handleSearchBusiness}
             />
           ) : (
-
             <Fragment>
               <div className="flex flex-col gap-[.875rem] items-center pb-4">
                 <SelectField
                   showSearch
                   style={{ width: '100%' }}
                   optionFilterProp="children"
-                  placeholder='انتخاب محدوده'
+                  placeholder="انتخاب محدوده"
                   onChange={onChangeSelect}
                   onSearch={onSearch}
                   option={[
@@ -196,17 +196,15 @@ function Search() {
                       label: 'محدوده 2000 متر',
                     },
                   ]}
-                  name='search'
+                  name="search"
                   filterOption={filterOption}
                 />
               </div>
-
 
               <div className="text-center text-typography/[.8] w-full">
                 در شعاع 2 کیلومتری شما
               </div>
             </Fragment>
-
           )}
         </div>
 

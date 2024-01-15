@@ -6,7 +6,6 @@ import { twMerge } from 'tailwind-merge';
 
 export const SelectField: ISelectField = (props) => {
   return (
-
     <Select
       style={props.style}
       showSearch={props.showSearch}
@@ -17,6 +16,5 @@ export const SelectField: ISelectField = (props) => {
       filterOption={props.filterOption}
       options={props.option}
     />
-
   );
 };

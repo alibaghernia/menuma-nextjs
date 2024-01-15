@@ -81,7 +81,6 @@ function Home() {
     router.push(`/search?search=${searchPhrase}`);
   };
   const findNearestBusinessHandler = () => {
-
     if (navigator.geolocation) {
       addL('get-location');
       const lat = 31.8974;

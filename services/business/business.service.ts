@@ -1,13 +1,14 @@
 import { IProfile } from '@/pages/[slug]/types';
 import axiosPkg, { AxiosInstance } from 'axios';
 import NError from 'next/error';
+import { CustomerClubService } from './customer_club/customer_club.service';
 
 export class BusinessService {
   static init(slug?: string) {
     return new BusinessService(slug);
   }
 
-  private axios: AxiosInstance;
+  public axios: AxiosInstance;
   private slug?: string;
 
   constructor(slug?: string) {
@@ -28,6 +29,9 @@ export class BusinessService {
         statusCode: 500,
       });
     return this.slug;
+  }
+  get customerClubService() {
+    return CustomerClubService.init(this);
   }
   private slugRoute(slug?: string) {
     if (slug && this.slug)

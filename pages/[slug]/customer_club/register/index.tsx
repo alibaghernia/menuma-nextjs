@@ -8,15 +8,30 @@ import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { Button, Form, Input, Radio, theme } from 'antd/lib';
 import classNames from 'classnames';
 import Head from 'next/head';
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo } from 'react';
 import { DatePicker } from 'zaman';
 import { createUseStyles } from 'react-jss';
+import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
+
+const registeredKey = 'register-customer-club';
 
 function CustomerClubRegisterPage() {
   const slug = useSlug(false);
+  const message = useMessage();
+  const [addL, removeL] = useLoadings();
   const [form] = Form.useForm();
-  const { state } = useContext(CoffeeShopProviderContext);
+  const { state, businessService } = useContext(CoffeeShopProviderContext);
   const designToken = theme.useToken();
+  const router = useCustomRouter();
+
+  useEffect(() => {
+    if (window) {
+      if (typeof localStorage.getItem(registeredKey) != 'undefined') {
+        message.error('کاربر گرامی ثبت نام شما قبلا انجام شده است.');
+        router.replace(document.referrer);
+      }
+    }
+  }, []);
 
   const datePickerStype = createUseStyles(
     {
@@ -37,9 +52,19 @@ function CustomerClubRegisterPage() {
   )();
 
   const onFinish = (values: any) => {
-    console.log({
-      values,
-    });
+    addL('singup-customer-club');
+    businessService.customerClubService
+      .signUp(values)
+      .finally(() => {
+        removeL('singup-customer-club');
+      })
+      .then(() => {
+        localStorage.setItem(registeredKey, '1');
+        message.success('ضمن تشکر از شما، ثبت نام با موفقیت انجام شد.');
+      })
+      .catch(() => {
+        message.error('مشکلی در ثبت نام وجود دارد.');
+      });
   };
 
   return (
@@ -74,7 +99,7 @@ function CustomerClubRegisterPage() {
               <Form form={form} onFinish={onFinish} layout="vertical">
                 <Form.Item
                   label="نام"
-                  name="fname"
+                  name="name"
                   rules={[
                     {
                       required: true,
@@ -86,7 +111,7 @@ function CustomerClubRegisterPage() {
                 </Form.Item>
                 <Form.Item
                   label="نام خانوادگی"
-                  name="lname"
+                  name="family"
                   rules={[
                     {
                       required: true,
@@ -124,7 +149,7 @@ function CustomerClubRegisterPage() {
                 </Form.Item>
                 <Form.Item
                   label="جنسیت"
-                  name="sex"
+                  name="gender"
                   rules={[
                     {
                       required: true,

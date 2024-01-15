@@ -1,51 +1,72 @@
 import { IProfile } from '@/pages/[slug]/types';
 import axiosPkg, { AxiosInstance } from 'axios';
+import NError from 'next/error';
 
 export class BusinessService {
-  static init() {
-    return new BusinessService();
+  static init(slug?: string) {
+    return new BusinessService(slug);
   }
 
   private axios: AxiosInstance;
+  private slug?: string;
 
-  constructor() {
+  constructor(slug?: string) {
     const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_API;
+    if (slug) this.slug = slug;
     if (!backendURL) {
       throw new Error('Check Backend URL!');
     }
     this.axios = axiosPkg.create({
-      baseURL: `${backendURL}/api/cafe-restaurants`,
+      baseURL: `${backendURL}/api/cafe-restaurants${slug ? `/${slug}` : ''}`,
     });
   }
 
-  get(slug: string) {
-    return this.axios.get<IProfile>(`/${slug}`).then(({ data }) => data);
+  get businessSlug() {
+    if (!this.slug)
+      throw new NError({
+        title: 'BusinessSlug is not specified!',
+        statusCode: 500,
+      });
+    return this.slug;
   }
-  getMenu(slug: string) {
-    return this.axios.get<any>(`/${slug}/menu`).then(({ data }) => data);
+  private slugRoute(slug?: string) {
+    if (slug && this.slug)
+      throw new NError({
+        statusCode: 500,
+        title: 'Only pass the slug to method or BusinessService constructor!',
+      });
+    if (slug) return `/${slug}`;
+    return '';
   }
-  getDailyOffers(slug: string) {
+  get(slug?: string) {
     return this.axios
-      .get<APIProduct[]>(`/${slug}/menu/day-offers`)
+      .get<IProfile>(this.slugRoute(slug))
       .then(({ data }) => data);
   }
-  getTable(cafe_slug: string, tableID: string) {
-    return this.axios.get<TableType>(`${cafe_slug}/tables/${tableID}`);
+  getMenu(slug?: string) {
+    return this.axios
+      .get<any>(`${this.slugRoute(slug)}/menu`)
+      .then(({ data }) => data);
   }
-  callGarson(cafe_slug: string, tableID: string) {
-    return this.axios.post(`${cafe_slug}/waiter_pager/${tableID}/call`);
+  getDailyOffers(slug?: string) {
+    return this.axios
+      .get<APIProduct[]>(`${this.slugRoute(slug)}/menu/day-offers`)
+      .then(({ data }) => data);
   }
-  cancelCallGarson(cafe_slug: string, tableID: string) {
-    return this.axios.post(`${cafe_slug}/waiter_pager/${tableID}/cancel`);
+  getTable(tableID: string, cafe_slug?: string) {
+    return this.axios.get<TableType>(
+      `${this.slugRoute(cafe_slug)}/tables/${tableID}`,
+    );
   }
-  getApisBySlug(slug: string) {
-    return {
-      get: this.get.bind(this, slug),
-      getDailyOffers: this.getDailyOffers.bind(this, slug),
-      getTable: this.getTable.bind(this, slug),
-      callGarson: this.callGarson.bind(this, slug),
-      cancelCallGarson: this.cancelCallGarson.bind(this, slug),
-    };
+  callGarson(tableID: string, cafe_slug?: string) {
+    return this.axios.post(
+      `${this.slugRoute(cafe_slug)}/waiter_pager/${tableID}/call`,
+    );
+  }
+  cancelCallGarson(tableID: string, cafe_slug?: string) {
+    return this.axios.post(
+      `${this.slugRoute(cafe_slug)}/waiter_pager/${tableID}/cancel`,
+    );
   }
   pager(business_uuid: string) {
     return {

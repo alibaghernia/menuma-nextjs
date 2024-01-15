@@ -44,10 +44,7 @@ function ProductPage() {
   const slug = useSlug(false);
 
   const productService = ProductService.init(params.slug as string);
-  const businessService = BusinessService.init();
-  const businessApisBySlug = businessService.getApisBySlug(
-    params.slug as string,
-  );
+
   const [product, setProduct] = useState<APIProduct>();
   function fetchProduct() {
     addL('fetch-product');

@@ -133,8 +133,8 @@ function CustomerClubRegisterPage() {
                   ]}
                 >
                   <Radio.Group>
-                    <Radio value="male">آقا</Radio>
-                    <Radio value="female">خانم</Radio>
+                    <Radio value="man">آقا</Radio>
+                    <Radio value="woman">خانم</Radio>
                   </Radio.Group>
                 </Form.Item>
                 <Form.Item

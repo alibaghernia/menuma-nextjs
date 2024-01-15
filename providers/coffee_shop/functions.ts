@@ -9,8 +9,7 @@ export default function functions(
   state: IProviderState,
   dispatch: (action: any) => void,
 ) {
-  const businessService = BusinessService.init();
-  const getApisBySlug = businessService.getApisBySlug(state.profile.slug);
+  const businessService = BusinessService.init(state.profile.slug);
   return {
     setProfile: (profile: any) => {
       dispatch({
@@ -34,13 +33,13 @@ export default function functions(
     },
     services: {
       callGarson: (tableID: string) => {
-        return getApisBySlug.callGarson(tableID);
+        return businessService.callGarson(tableID);
       },
       cancelCallGarson: (tableID: string) => {
-        return getApisBySlug.cancelCallGarson(tableID);
+        return businessService.cancelCallGarson(tableID);
       },
       geTable: (tableID: string) => {
-        return getApisBySlug.getTable(tableID);
+        return businessService.getTable(tableID);
       },
     },
   };

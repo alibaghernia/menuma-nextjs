@@ -4,6 +4,7 @@ import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Logo } from '@/components/common/logo';
 import { Section } from '@/components/common/section/section';
+import { Footer } from '@/components/core/footer/footer'
 import { Location } from '@/icons/location';
 import { SearchIcon } from '@/icons/search';
 import Head from 'next/head';
@@ -139,6 +140,13 @@ function Home() {
               {businessesSlides}
             </Swiper>
           </Section>
+        </div>
+        <div className=' w-full mt-auto fixed bottom-0 left-0'>
+          <Footer
+            description='میزبانی شده توسط'
+            link="https://mtserver.ir/"
+            linkTitle="MT Server"
+          />
         </div>
       </div>
     </>

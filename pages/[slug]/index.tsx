@@ -2,9 +2,11 @@ import { ProfileHeader } from '@/components/profile/header/header';
 import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg';
 import React, { useContext, useMemo } from 'react';
 import { Section } from '@/components/common/section/section';
+import { Footer } from '@/components/core/footer/footer'
 import dynamic from 'next/dynamic';
 import { GetServerSideProps } from 'next';
 import { IProfile } from './types';
+import { ProviderContext } from '@/providers/main/provider';
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import Head from 'next/head';
 import { Button } from '@/components/common/button';
@@ -35,6 +37,7 @@ const MapComponent = dynamic(() => import('@/components/common/map/map'), {
 });
 const Profile = () => {
   usePageLoading();
+  const { state: stateMain } = useContext(ProviderContext);
   const { state } = useContext(CoffeeShopProviderContext);
   const profileData: IProfile = state.profile;
   const slug = useSlug();
@@ -69,7 +72,17 @@ const Profile = () => {
       ].filter((item) => item.value),
     [profileData, resolvedTailwindConfig],
   );
-
+  const renderFooter = () => {
+    return (
+      <div className=' w-full'>
+        <Footer
+          description='میزبانی شده توسط'
+          link="https://mtserver.ir/"
+          linkTitle="MT Server"
+        />
+      </div>
+    )
+  }
   return (
     <>
       <Head>
@@ -171,6 +184,7 @@ const Profile = () => {
           )}
         </div>
       </div>
+      {!stateMain.isNotMenuma && renderFooter()}
     </>
   );
 };

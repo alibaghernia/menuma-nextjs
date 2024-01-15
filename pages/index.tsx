@@ -164,8 +164,8 @@ function Home() {
             </Swiper>
           </Section>
         </div>
-        <div className="mt-[2.12rem] w-full max-w-[65rem]">
-          <Section title="آخرین رویداد ها" contentClassNames="pt-[1rem] px-5">
+        <div className="my-[2.12rem] w-full max-w-[65rem]">
+          <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
             <FlexBox direction="column" alignItems="stretch" gap={2}>
               {events}
             </FlexBox>

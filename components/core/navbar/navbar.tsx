@@ -69,17 +69,17 @@ export const Navbar: INavBar = ({
         ),
         url: `/${slug}menu`,
       },
-      {
-        title: 'ثبت نام در باشگاه مشتریان',
-        icon: (
-          <PeopleIcon
-            color={resolvedTailwindConfig.theme?.colors?.[
-              'typography'
-            ].toString()}
-          />
-        ),
-        url: `/${slug}/customer_club/register`,
-      },
+      // {
+      //   title: 'ثبت نام در باشگاه مشتریان',
+      //   icon: (
+      //     <PeopleIcon
+      //       color={resolvedTailwindConfig.theme?.colors?.[
+      //         'typography'
+      //       ].toString()}
+      //     />
+      //   ),
+      //   url: `/${slug}/customer_club/register`,
+      // },
     ],
     [resolvedTailwindConfig, slug],
   );

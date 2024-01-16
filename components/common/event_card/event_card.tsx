@@ -26,8 +26,10 @@ export const EventCard: IEventCard = (props) => {
   }, [props.date]);
 
   const clock = useMemo(() => {
-    if (props.to) return `${props.from} تا ${props.to}`;
-    return props.from;
+    const from = moment(props.from, 'HH:mm:ss').format('HH:mm');
+    const to = moment(props.to, 'HH:mm:ss').format('HH:mm');
+    if (props.to) return `${from} تا ${to}`;
+    return from;
   }, [props.from, props.to]);
 
   return (
@@ -139,7 +141,7 @@ export const EventCard: IEventCard = (props) => {
               href={`/${props.cafe_restaurant?.slug}/event/${props.id}`}
               className="block"
             >
-              مشاهده رویداد
+              مشاهده جزئیات
             </Link>
           </Button>
         </FlexItem>

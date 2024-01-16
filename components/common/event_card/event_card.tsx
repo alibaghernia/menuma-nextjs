@@ -14,6 +14,7 @@ import { Button } from '../button';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useSlug } from '@/providers/main/hooks';
+import { serverBaseUrl } from '@/utils/axios';
 
 export const EventCard: IEventCard = (props) => {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
@@ -44,7 +45,11 @@ export const EventCard: IEventCard = (props) => {
               <Image
                 fill
                 alt={props.name}
-                src={props.banner_path ? props.banner_path : noImage.src}
+                src={
+                  props.banner_path
+                    ? `${serverBaseUrl}/storage/${props.banner_path}`
+                    : noImage.src
+                }
               />
             </FlexItem>
             <FlexItem>

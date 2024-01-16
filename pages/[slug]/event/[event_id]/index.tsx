@@ -21,6 +21,7 @@ import { Location } from '@/icons/location';
 import { Button } from '@/components/common/button';
 import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
 import Link from 'next/link';
+import { serverBaseUrl } from '@/utils/axios';
 
 function EventPage() {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
@@ -95,7 +96,15 @@ function EventPage() {
           </FlexItem>
           <FlexItem className="mt-[1.64rem]">
             <div className="relative w-[20rem] h-[20rem] rounded-[.862rem] overflow-hidden mx-auto">
-              <Image fill alt={event?.name || ''} src={noImage.src} />
+              <Image
+                fill
+                alt={event?.name || ''}
+                src={
+                  event?.banner_path
+                    ? `${serverBaseUrl}/storage/${event.banner_path}`
+                    : noImage.src
+                }
+              />
             </div>
           </FlexItem>
           <FlexItem className="mt-[1.38rem]">

@@ -41,8 +41,10 @@ function EventPage() {
 
   const clock = useMemo(() => {
     if (!event) return;
-    if (event?.to) return `${event?.from} تا ${event?.to}`;
-    return event?.from;
+    const from = moment(event?.from, 'HH:mm:ss').format('HH:mm');
+    const to = moment(event?.to, 'HH:mm:ss').format('HH:mm');
+    if (event?.to) return `${from} تا ${to}`;
+    return from;
   }, [event?.from, event?.to]);
 
   function fetchEvent() {

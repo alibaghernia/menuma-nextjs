@@ -104,6 +104,7 @@ function EventPage() {
                     ? `${serverBaseUrl}/storage/${event.banner_path}`
                     : noImage.src
                 }
+                className="object-cover"
               />
             </div>
           </FlexItem>

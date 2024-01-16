@@ -50,6 +50,7 @@ export const EventCard: IEventCard = (props) => {
                     ? `${serverBaseUrl}/storage/${props.banner_path}`
                     : noImage.src
                 }
+                className="object-cover"
               />
             </FlexItem>
             <FlexItem>

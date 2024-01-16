@@ -24,6 +24,7 @@ import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
 import { EventCard } from '@/components/common/event_card';
 import { MainService } from '@/services/main/main.service';
+import { Footer } from '@/components/core/footer/footer';
 
 function Home() {
   const [addL, removeL] = useLoadings();
@@ -127,8 +128,8 @@ function Home() {
   }, [fetchedEvents]);
 
   return (
-    <>
-      <div className="mx-auto md:w-fit mt-[2.38rem] flex flex-col items-center">
+    <FlexBox direction="column" justify="between" className="min-h-screen">
+      <div className="mx-auto md:w-fit pt-[2.38rem] flex flex-col items-center">
         <Logo />
         <div className="text-typography/[.8] text-[.875rem] font-medium">
           کافه ای که میخوای را پیدا کن
@@ -172,7 +173,8 @@ function Home() {
           </Section>
         </div>
       </div>
-    </>
+      <Footer />
+    </FlexBox>
   );
 }
 

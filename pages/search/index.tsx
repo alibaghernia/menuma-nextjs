@@ -13,13 +13,15 @@ import noImage from '@/assets/images/no-image.jpg';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
-import { SelectField } from '@/components/common/select_field/select_field';
+import { Select } from 'antd/lib';
+import { toPersianNumber } from '@/helpers/functions'
 
 function Search() {
   const [addL, removeL] = useLoadings();
   const { query: params } = useCustomRouter();
   const isNear = !!params.near;
   const [searchField, setSearchField] = useState('');
+  const [radius, setRadius] = useState('۵۰۰ متری')
   const [fetchedItems, setFetchedItems] = useState<
     {
       logo: string;
@@ -82,7 +84,7 @@ function Search() {
       setSearchField(params.search as string);
     }
     if (params.near && params.lat && params.long && isNear) {
-      fetchNearBusinesses('2000');
+      fetchNearBusinesses('500');
     }
   }, [params]);
 
@@ -98,6 +100,7 @@ function Search() {
       return `کمتر از${roundUpToNearestMultipleOf100(distance)}متر`;
     }
   };
+
 
   const renderBusinesses = () => {
     return fetchedItems.map((business, idx) => (
@@ -119,16 +122,16 @@ function Search() {
             {business.title}
           </Link>
           <div className="flex gap-[1rem] items-end justify-between w-full">
-            {business.address && (
-              <div className="flex flex-col gap-[.25rem]">
-                <div className="text-[.725rem] text-typography font-bold">
-                  آدرس:
-                </div>
-                <div className="text-[.725rem] text-typography/[.8]">
-                  {business.address}
-                </div>
+
+            <div className="flex flex-col gap-[.25rem]">
+              <div className="text-[.725rem] text-typography font-bold">
+                {business.address && 'آدرس:'}
               </div>
-            )}
+              <div className="text-[.725rem] text-typography/[.8]">
+                {business.address && business.address}
+              </div>
+            </div>
+
             {business.distance && (
               <div className="flex gap-[.25rem]">
                 <div className="text-[.725rem] text-typography font-bold">
@@ -148,8 +151,15 @@ function Search() {
   const handleSearchBusiness = (searchPhrase: string) => {
     handleFetchBusinesses(searchPhrase);
   };
+
   const onChangeSelect = (value: string) => {
     fetchNearBusinesses(value);
+    if (value == '500') {
+      setRadius(`${toPersianNumber(Number(value))}متری`)
+    } else {
+      setRadius(`${toPersianNumber(Number(value) / 1000)}کیلومتری`)
+    }
+
   };
 
   const onSearch = (value: string) => {
@@ -174,17 +184,19 @@ function Search() {
           ) : (
             <Fragment>
               <div className="flex flex-col gap-[.875rem] items-center pb-4">
-                <SelectField
-                  showSearch
+                <Select
                   style={{ width: '100%' }}
-                  optionFilterProp="children"
+                  defaultValue="500"
+                  showSearch
                   placeholder="انتخاب محدوده"
+                  optionFilterProp="children"
                   onChange={onChangeSelect}
                   onSearch={onSearch}
-                  option={[
+                  filterOption={filterOption}
+                  options={[
                     {
                       value: '500',
-                      label: 'محدوده 500 متر',
+                      label: 'محدوده ۵۰۰ متر',
                     },
                     {
                       value: '1000',
@@ -195,13 +207,11 @@ function Search() {
                       label: 'محدوده ۲ کیلومتر',
                     },
                   ]}
-                  name="search"
-                  filterOption={filterOption}
                 />
               </div>
 
               <div className="text-center text-typography/[.8] w-full">
-                در شعاع 2 کیلومتری شما
+                در شعاع {radius} شما
               </div>
             </Fragment>
           )}

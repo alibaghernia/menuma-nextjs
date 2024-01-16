@@ -57,7 +57,7 @@ export const EventCard: IEventCard = (props) => {
                   {props.name}
                 </FlexItem>
                 <FlexItem className="bg-typography/[.9] text-white text-[.689rem] px-[.5rem] py-[.2rem] rounded-[.3125rem] w-fit">
-                  کافه دایا
+                  {props.cafe_restaurant?.name}
                 </FlexItem>
                 <FlexItem className="text-typography text-[.862rem] line-clamp-[3]">
                   {props.short_description}
@@ -126,7 +126,9 @@ export const EventCard: IEventCard = (props) => {
         </FlexItem>
         <FlexItem>
           <Button className="w-full text-center text-[.862rem]" type="primary">
-            <Link href={`/demo/event/${props.id}`}>مشاهده رویداد</Link>
+            <Link href={`/${props.cafe_restaurant?.slug}/event/${props.id}`}>
+              مشاهده رویداد
+            </Link>
           </Button>
         </FlexItem>
       </FlexBox>

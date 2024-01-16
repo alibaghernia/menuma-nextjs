@@ -19,11 +19,9 @@ export class MainService {
   }
 
   getEvents(): Promise<EventType[]> {
-    // return this.axios
-    //   .get<IResponseType<GetCategoriesTypes>>(`/`, {
-    //     params: {},
-    //   })
-    //   .then(({ data }) => data);
+    return this.axios
+      .get(`/api/events?limit=5&ispinned=1`)
+      .then(({ data }) => data);
     return new Promise<EventType[]>((resolve, rej) => {
       resolve([
         {

@@ -11,15 +11,18 @@ export class BusinessService {
 
   public axios: AxiosInstance;
   private slug?: string;
+  public backendURL?: string;
 
   constructor(slug?: string) {
-    const backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_API;
+    this.backendURL = process.env.NEXT_PUBLIC_BACKEND_BASE_API;
     if (slug) this.slug = slug;
-    if (!backendURL) {
+    if (!this.backendURL) {
       throw new Error('Check Backend URL!');
     }
     this.axios = axiosPkg.create({
-      baseURL: `${backendURL}/api/cafe-restaurants${slug ? `/${slug}` : ''}`,
+      baseURL: `${this.backendURL}/api/cafe-restaurants${
+        slug ? `/${slug}` : ''
+      }`,
     });
   }
 

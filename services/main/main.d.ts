@@ -11,4 +11,5 @@ declare type EventType = {
   from: string;
   to?: string;
   cafe_restaurant_id: number;
+  cafe_restaurant?: any;
 };

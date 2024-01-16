@@ -54,8 +54,13 @@ function EventPage() {
       .then((data) => {
         setEvent(data);
       })
-      .catch(() => {
-        message.error('مشکلی در دریافت اطلاعات رویداد وجود دارد!');
+      .catch((err) => {
+        if (err == 404) {
+          message.error('رویداد مورد نظر یافت نشد');
+          setTimeout(() => {
+            router.back();
+          }, 1000);
+        } else message.error('مشکلی در دریافت اطلاعات رویداد وجود دارد!');
       });
   }
 
@@ -105,7 +110,7 @@ function EventPage() {
                 />
               </FlexItem>
               <FlexItem className="text-[1rem] text-typography">
-                کافه دایا
+                {state.profile?.name}
               </FlexItem>
             </FlexBox>
           </FlexItem>

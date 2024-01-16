@@ -4,7 +4,7 @@ import '@/assets/styles/global.scss';
 import classNames from 'classnames';
 import Provider from '@/providers/main/provider';
 import { GeneralProvider } from '@/providers/general/provider';
-
+import { ConfigProvider } from 'antd/lib';
 const vazirMatn = LocalFont({
   src: [
     {
@@ -39,7 +39,6 @@ const vazirMatn = LocalFont({
     },
   ],
 });
-
 export default function App({ Component, pageProps }: AppProps) {
   //@ts-ignore
   const PageProvider = Component.provider || Provider;
@@ -47,11 +46,25 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <main className={classNames('z-10', vazirMatn.className)}>
-        <PageProvider>
-          <GeneralProvider>
-            <Component {...pageProps} />
-          </GeneralProvider>
-        </PageProvider>
+        <ConfigProvider
+          theme={{
+            token: {
+              fontFamily: vazirMatn.style.fontFamily,
+              colorPrimary: '#3177FF',
+            },
+            components: {
+              Input: {
+                paddingBlock: 6,
+              },
+            },
+          }}
+        >
+          <PageProvider>
+            <GeneralProvider>
+              <Component {...pageProps} />
+            </GeneralProvider>
+          </PageProvider>
+        </ConfigProvider>
       </main>
     </>
   );

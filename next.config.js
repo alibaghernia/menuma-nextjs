@@ -6,6 +6,8 @@ const nextConfig = {
     '@ant-design/icons',
     'zustand',
     'leva',
+    'zaman',
+    'react-jss',
   ],
   images: {
     remotePatterns: [

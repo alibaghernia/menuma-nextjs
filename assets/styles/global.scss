@@ -3,11 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
+html,
+body {
   font-size: 16px;
-  font-family:
-    Vazir FD,
-    sans-serif;
+  font-family: 'Vazir FD' !important;
 
   @media screen and (max-width: 768px) {
     font-size: 90%;
@@ -19,4 +18,8 @@ html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
+}
+
+.rdp__modal {
+  z-index: 100 !important;
 }

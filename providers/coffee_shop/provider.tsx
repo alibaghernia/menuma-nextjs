@@ -32,6 +32,7 @@ export const CoffeeShopProviderContext = createContext<{
   disbleCancelGarsonCallInterval: () => void;
   handleCallGarson: () => void;
   cancelGarsonCallButton: boolean;
+  businessService: BusinessService;
   // @ts-ignore
 }>({});
 
@@ -51,7 +52,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     (state: IProviderState, action: any) => reducer(_.cloneDeep(state), action),
     getInitialState(),
   );
-  const businessService = BusinessService.init();
+  const businessService = BusinessService.init(params.slug as string);
   const functions = Functions(state, dispatch);
 
   // garson call
@@ -76,7 +77,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
   function profileFetcher() {
     addL('fetch-business');
     businessService
-      .get(params.slug as string)
+      .get()
       .then()
       .finally(() => removeL('fetch-business'))
       .then((data) => {
@@ -201,6 +202,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
           disbleCancelGarsonCallInterval,
           handleCallGarson,
           cancelGarsonCallButton,
+          businessService,
         }}
       >
         {children}

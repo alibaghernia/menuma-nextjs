@@ -52,16 +52,13 @@ function MenuPage() {
   const { query: params } = useCustomRouter();
   const [dailyOffers, setDailyOffers] = useState<APIProduct[]>();
   const slug = useSlug(false);
-  const businessService = BusinessService.init();
+  const businessService = BusinessService.init(params.slug as string);
   const [selectedCategory, setSelectedCategory] = useState<string | number>();
-  const businessApisBySlug = businessService.getApisBySlug(
-    params.slug as string,
-  );
 
   function menuFetcher() {
     addL('fetch-menu');
     businessService
-      .getMenu(params.slug as string)
+      .getMenu()
       .finally(() => {
         removeL('fetch-menu');
       })
@@ -75,7 +72,7 @@ function MenuPage() {
 
   function fetchDaiulyOffers() {
     addL('fetch-offers');
-    businessApisBySlug
+    businessService
       .getDailyOffers()
       .then((data) => {
         setDailyOffers(data);

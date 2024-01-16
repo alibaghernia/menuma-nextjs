@@ -22,11 +22,15 @@ import { useRouter } from 'next/router';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
+import { EventCard } from '@/components/common/event_card';
+import { MainService } from '@/services/main/main.service';
+import { Footer } from '@/components/core/footer/footer';
 
 function Home() {
   const [addL, removeL] = useLoadings();
   const router = useCustomRouter();
   const [searchField, setSearchField] = useState('');
+  const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
   const [pinBusinesses, setPinBusinesses] = useState<
     {
       slug: string;
@@ -34,6 +38,7 @@ function Home() {
       title: string;
     }[]
   >([]);
+  const mainService = MainService.init();
 
   const fetchPinBusinesses = () => {
     addL('pin-businesses');
@@ -50,6 +55,17 @@ function Home() {
               : noImage.src,
           })),
         );
+      });
+  };
+  const fetchEvents = () => {
+    addL('fetch-events');
+    mainService
+      .getEvents()
+      .finally(() => {
+        removeL('fetch-events');
+      })
+      .then((data) => {
+        setFetchedEvents(data);
       });
   };
 
@@ -73,6 +89,7 @@ function Home() {
 
   useEffect(() => {
     fetchPinBusinesses();
+    fetchEvents();
   }, []);
 
   const handleSearchBusiness = (searchPhrase: string) => {
@@ -102,9 +119,17 @@ function Home() {
     }
   };
 
+  const events = useMemo(() => {
+    return fetchedEvents.map((event, idx) => (
+      <FlexItem key={idx}>
+        <EventCard {...event} className="mx-auto" />
+      </FlexItem>
+    ));
+  }, [fetchedEvents]);
+
   return (
-    <>
-      <div className="mx-auto md:w-fit mt-[2.38rem] flex flex-col items-center">
+    <FlexBox direction="column" justify="between" className="min-h-screen">
+      <div className="mx-auto md:w-fit pt-[2.38rem] flex flex-col items-center">
         <Logo />
         <div className="text-typography/[.8] text-[.875rem] font-medium">
           کافه ای که میخوای را پیدا کن
@@ -140,8 +165,16 @@ function Home() {
             </Swiper>
           </Section>
         </div>
+        <div className="my-[2.12rem] w-full max-w-[65rem]">
+          <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
+            <FlexBox direction="column" alignItems="stretch" gap={2}>
+              {events}
+            </FlexBox>
+          </Section>
+        </div>
       </div>
-    </>
+      <Footer />
+    </FlexBox>
   );
 }
 

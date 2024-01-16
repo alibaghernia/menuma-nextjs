@@ -130,9 +130,15 @@ export const EventCard: IEventCard = (props) => {
             )}
           </FlexBox>
         </FlexItem>
-        <FlexItem>
-          <Button className="w-full text-center text-[.862rem]" type="primary">
-            <Link href={`/${props.cafe_restaurant?.slug}/event/${props.id}`}>
+        <FlexItem className="mt-[.5rem]">
+          <Button
+            className="w-full text-center text-[.862rem] py-[.5rem]"
+            type="primary"
+          >
+            <Link
+              href={`/${props.cafe_restaurant?.slug}/event/${props.id}`}
+              className="block"
+            >
               مشاهده رویداد
             </Link>
           </Button>

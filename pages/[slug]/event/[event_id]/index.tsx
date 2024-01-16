@@ -219,7 +219,9 @@ function EventPage() {
           )}
           <FlexItem className="mt-[3rem]">
             <Button className="w-full py-[.5rem] text-center">
-              <Link href={`/${slug}`}>مشاهده پروفایل کافه</Link>
+              <Link href={`/${slug}`} className="block">
+                مشاهده پروفایل کافه
+              </Link>
             </Button>
           </FlexItem>
         </FlexBox>

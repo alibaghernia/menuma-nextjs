@@ -40,12 +40,13 @@ export const GeneralProvider: IGeneralProvider = ({ children, ...props }) => {
       addLoading(LOADING_KEYS.pageLoading);
     };
     const handleHashChangeComplete = () => {
+      console.log('remove');
       removeLoading(LOADING_KEYS.pageLoading);
     };
+    router.events.on('routeChangeComplete', handleHashChangeComplete);
+    router.events.on('routeChangeStart', handleHashChangeStart);
     router.events.on('hashChangeStart', handleHashChangeStart);
     router.events.on('hashChangeComplete', handleHashChangeComplete);
-    router.events.on('routeChangeStart', handleHashChangeStart);
-    router.events.on('routeChangeComplete', handleHashChangeComplete);
     return () => {
       router.events.off('hashChangeStart', handleHashChangeStart);
       router.events.off('hashChangeComplete', handleHashChangeComplete);

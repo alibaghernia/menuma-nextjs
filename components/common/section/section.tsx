@@ -20,6 +20,11 @@ const Section: ISection = ({ children, ...props }) => {
           justify="between"
           className="px-[1.9rem]"
         >
+          {props.centerTitle && (
+            <FlexItem grow>
+              <hr className="border-black/10 w-full" />
+            </FlexItem>
+          )}
           <FlexItem
             grow={false}
             className="text-[1rem] text-typography w-fit whitespace-nowrap font-bold"

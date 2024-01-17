@@ -1,5 +1,5 @@
 import { Logo } from '@/components/common/logo';
-import { useContext, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -13,12 +13,15 @@ import noImage from '@/assets/images/no-image.jpg';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
+import { Select } from 'antd/lib';
+import { toPersianNumber } from '@/helpers/functions'
 
 function Search() {
   const [addL, removeL] = useLoadings();
   const { query: params } = useCustomRouter();
   const isNear = !!params.near;
   const [searchField, setSearchField] = useState('');
+  const [radius, setRadius] = useState('۵۰۰ متری')
   const [fetchedItems, setFetchedItems] = useState<
     {
       logo: string;
@@ -51,11 +54,11 @@ function Search() {
       });
   };
 
-  const fetchNearBusinesses = () => {
+  const fetchNearBusinesses = (distance: string) => {
     addL('fetch-businesses');
     axios
       .get(
-        `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=2000`,
+        `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=${distance}`,
       )
       .finally(() => {
         removeL('fetch-businesses');
@@ -81,18 +84,23 @@ function Search() {
       setSearchField(params.search as string);
     }
     if (params.near && params.lat && params.long && isNear) {
-      fetchNearBusinesses();
+      fetchNearBusinesses('500');
     }
   }, [params]);
 
+  function roundUpToNearestMultipleOf100(number: number) {
+    return Math.ceil(number / 100) * 100;
+  }
+
   const getDistanceText = (distance: number) => {
     const km = distance / 1000;
-    if (km > 0) {
+    if (km > 1) {
       return `کمتر از ${Math.floor(km) + 1} کیلومتر`;
     } else {
-      return `کمتر از 1 کیلومتر`;
+      return `کمتر از${roundUpToNearestMultipleOf100(distance)}متر`;
     }
   };
+
 
   const renderBusinesses = () => {
     return fetchedItems.map((business, idx) => (
@@ -114,16 +122,16 @@ function Search() {
             {business.title}
           </Link>
           <div className="flex gap-[1rem] items-end justify-between w-full">
-            {business.address && (
-              <div className="flex flex-col gap-[.25rem]">
-                <div className="text-[.725rem] text-typography font-bold">
-                  آدرس:
-                </div>
-                <div className="text-[.725rem] text-typography/[.8]">
-                  {business.address}
-                </div>
+
+            <div className="flex flex-col gap-[.25rem]">
+              <div className="text-[.725rem] text-typography font-bold">
+                {business.address && 'آدرس:'}
               </div>
-            )}
+              <div className="text-[.725rem] text-typography/[.8]">
+                {business.address && business.address}
+              </div>
+            </div>
+
             {business.distance && (
               <div className="flex gap-[.25rem]">
                 <div className="text-[.725rem] text-typography font-bold">
@@ -144,6 +152,22 @@ function Search() {
     handleFetchBusinesses(searchPhrase);
   };
 
+  const onChangeSelect = (value: string) => {
+    fetchNearBusinesses(value);
+    if (value == '500') {
+      setRadius(`${toPersianNumber(Number(value))}متری`)
+    } else {
+      setRadius(`${toPersianNumber(Number(value) / 1000)}کیلومتری`)
+    }
+
+  };
+
+  const onSearch = (value: string) => {
+  };
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string },
+  ) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
   return (
     <>
       <div className="mx-auto md:w-fit mt-[2.38rem] flex flex-col px-[2rem]">
@@ -158,9 +182,38 @@ function Search() {
               onSearch={handleSearchBusiness}
             />
           ) : (
-            <div className="text-center text-typography/[.8] w-full">
-              در شعاع 2 کیلومتری شما
-            </div>
+            <Fragment>
+              <div className="flex flex-col gap-[.875rem] items-center pb-4">
+                <Select
+                  style={{ width: '100%' }}
+                  defaultValue="500"
+                  showSearch
+                  placeholder="انتخاب محدوده"
+                  optionFilterProp="children"
+                  onChange={onChangeSelect}
+                  onSearch={onSearch}
+                  filterOption={filterOption}
+                  options={[
+                    {
+                      value: '500',
+                      label: 'محدوده ۵۰۰ متر',
+                    },
+                    {
+                      value: '1000',
+                      label: 'محدوده ۱ کیلومتر',
+                    },
+                    {
+                      value: '2000',
+                      label: 'محدوده ۲ کیلومتر',
+                    },
+                  ]}
+                />
+              </div>
+
+              <div className="text-center text-typography/[.8] w-full">
+                در شعاع {radius} شما
+              </div>
+            </Fragment>
           )}
         </div>
 

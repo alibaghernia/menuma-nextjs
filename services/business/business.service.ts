@@ -3,6 +3,7 @@ import axiosPkg, { AxiosInstance } from 'axios';
 import NError from 'next/error';
 import { CustomerClubService } from './customer_club/customer_club.service';
 import { EventsService } from './events/events.service';
+import { ConditionsService } from './conditions/conditions.service';
 
 export class BusinessService {
   static init(slug?: string) {
@@ -20,9 +21,8 @@ export class BusinessService {
       throw new Error('Check Backend URL!');
     }
     this.axios = axiosPkg.create({
-      baseURL: `${this.backendURL}/api/cafe-restaurants${
-        slug ? `/${slug}` : ''
-      }`,
+      baseURL: `${this.backendURL}/api/cafe-restaurants${slug ? `/${slug}` : ''
+        }`,
     });
   }
 
@@ -39,6 +39,9 @@ export class BusinessService {
   }
   get eventsService() {
     return EventsService.init(this);
+  }
+  get conditionsService() {
+    return ConditionsService.init(this);
   }
   private slugRoute(slug?: string) {
     if (slug && this.slug)

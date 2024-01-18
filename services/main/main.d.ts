@@ -13,3 +13,13 @@ declare type EventType = {
   cafe_restaurant_id: number;
   cafe_restaurant?: any;
 };
+
+declare type ConditionType = {
+  id: number;
+  name: string;
+  banner_path?: string;
+  short_description?: string;
+  long_description?: string;
+  cafe_restaurant_id: number;
+  cafe_restaurant?: any;
+};

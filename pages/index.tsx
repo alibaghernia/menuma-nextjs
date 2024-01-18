@@ -25,12 +25,14 @@ import Link from 'next/link';
 import { EventCard } from '@/components/common/event_card';
 import { MainService } from '@/services/main/main.service';
 import { Footer } from '@/components/core/footer/footer';
+import { ConditionCard } from '@/components/common/condition_card';
 
 function Home() {
   const [addL, removeL] = useLoadings();
   const router = useCustomRouter();
   const [searchField, setSearchField] = useState('');
   const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
+  const [fetchedConditions, setFetchedConditions] = useState<ConditionType[]>([]);
   const [pinBusinesses, setPinBusinesses] = useState<
     {
       slug: string;
@@ -69,6 +71,18 @@ function Home() {
       });
   };
 
+  const fetchConditions = () => {
+    addL('fetch-condition');
+    mainService
+      .getConditions()
+      .finally(() => {
+        removeL('fetch-condition');
+      })
+      .then((data) => {
+        setFetchedConditions(data);
+      });
+  };
+
   const businessesSlides = useMemo(() => {
     return pinBusinesses.map((slide, idx) => {
       return (
@@ -90,6 +104,7 @@ function Home() {
   useEffect(() => {
     fetchPinBusinesses();
     fetchEvents();
+    fetchConditions();
   }, []);
 
   const handleSearchBusiness = (searchPhrase: string) => {
@@ -126,6 +141,15 @@ function Home() {
       </FlexItem>
     ));
   }, [fetchedEvents]);
+
+
+  const conditions = useMemo(() => {
+    return fetchedConditions.map((conditions, idx) => (
+      <FlexItem key={idx}>
+        <ConditionCard {...conditions} className="mx-auto" />
+      </FlexItem>
+    ));
+  }, [fetchedConditions]);
 
   return (
     <FlexBox direction="column" justify="between" className="min-h-screen">
@@ -169,6 +193,13 @@ function Home() {
           <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
             <FlexBox direction="column" alignItems="stretch" gap={2}>
               {events}
+            </FlexBox>
+          </Section>
+        </div>
+        <div className="my-[2.12rem] w-full max-w-[65rem]">
+          <Section title="تخفیف های شرطی" contentClassNames="pt-[.5rem] px-5">
+            <FlexBox direction="column" alignItems="stretch" gap={2}>
+              {conditions}
             </FlexBox>
           </Section>
         </div>

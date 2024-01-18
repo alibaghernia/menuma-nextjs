@@ -115,8 +115,7 @@ function ConditionPage() {
               justify="center"
               alignItems="center"
               className="gap-[.75rem]"
-            >
-            </FlexBox>
+            ></FlexBox>
           </FlexItem>
           <FlexItem className="mt-[1.21rem]">
             <FlexBox alignItems="center">

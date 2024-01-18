@@ -8,12 +8,12 @@ export class ConditionsService {
     return new ConditionsService(businessService);
   }
 
-  constructor(private businessService: BusinessService) { }
+  constructor(private businessService: BusinessService) {}
 
   async getCondition(id: string | number): Promise<ConditionType> {
-    const { data: conditions } = await this.businessService.axios.get<ConditionType[]>(
-      `${this.businessService.backendURL}/api/conditions?limit=5&ispinned=1`,
-    );
+    const { data: conditions } = await this.businessService.axios.get<
+      ConditionType[]
+    >(`${this.businessService.backendURL}/api/conditions?limit=5&ispinned=1`);
     return new Promise((resolve, rej) => {
       const condition = conditions.find((condition) => condition.id == id);
       if (condition) resolve(condition);

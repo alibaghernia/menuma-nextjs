@@ -59,7 +59,6 @@ export class MainService {
     });
   }
 
-
   getConditions(): Promise<ConditionType[]> {
     // return this.axios
     //   .get(`/api/conditions?limit=5&ispinned=1`)
@@ -72,7 +71,7 @@ export class MainService {
           cafe_restaurant_id: 1,
           cafe_restaurant: {
             name: 'کافه دمو',
-            slug: 'demo'
+            slug: 'demo',
           },
           banner_path: '',
           long_description:
@@ -86,7 +85,7 @@ export class MainService {
           cafe_restaurant_id: 1,
           cafe_restaurant: {
             name: 'کافه دمو',
-            slug: 'demo'
+            slug: 'demo',
           },
           banner_path: '',
           long_description:

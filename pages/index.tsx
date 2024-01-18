@@ -32,7 +32,9 @@ function Home() {
   const router = useCustomRouter();
   const [searchField, setSearchField] = useState('');
   const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
-  const [fetchedConditions, setFetchedConditions] = useState<ConditionType[]>([]);
+  const [fetchedConditions, setFetchedConditions] = useState<ConditionType[]>(
+    [],
+  );
   const [pinBusinesses, setPinBusinesses] = useState<
     {
       slug: string;
@@ -141,7 +143,6 @@ function Home() {
       </FlexItem>
     ));
   }, [fetchedEvents]);
-
 
   const conditions = useMemo(() => {
     return fetchedConditions.map((conditions, idx) => (

@@ -21,8 +21,9 @@ export class BusinessService {
       throw new Error('Check Backend URL!');
     }
     this.axios = axiosPkg.create({
-      baseURL: `${this.backendURL}/api/cafe-restaurants${slug ? `/${slug}` : ''
-        }`,
+      baseURL: `${this.backendURL}/api/cafe-restaurants${
+        slug ? `/${slug}` : ''
+      }`,
     });
   }
 

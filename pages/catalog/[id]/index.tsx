@@ -18,6 +18,7 @@ import { serverBaseUrl } from '@/utils/axios';
 import { MainService } from '@/services/main/main.service';
 import { Footer } from '@/components/core/footer/footer';
 import { Logo } from '@/components/common/logo';
+import Head from 'next/head';
 
 type Service = Catalog;
 
@@ -62,66 +63,71 @@ const ServicePage: FC = () => {
   }, [service?.label]);
 
   return (
-    <FlexBox
-      className="pt-[2.5rem] px-[2rem] min-h-screen"
-      direction="column"
-      justify="between"
-    >
-      <FlexItem>
-        <FlexBox direction="column">
-          <FlexItem className="mx-auto">
-            <Logo />
-          </FlexItem>
-          <FlexItem className="mt-[2rem]">
-            <FlexBox
-              className={twMerge(
-                classNames(
-                  'max-w-lg mx-auto bg-white rounded-[1.37rem] p-[1.38rem] border border-gray-300  !justify-between',
-                ),
-              )}
-              alignItems="center"
-              direction="column"
-              gap={2}
-            >
-              <FlexItem grow>
-                <FlexBox
-                  direction="column"
-                  alignItems="center"
-                  className={twMerge(classNames('gap-[.95rem] h-full'))}
-                >
-                  <FlexItem className="relative w-[10rem] h-[10rem] rounded-[.625rem] overflow-hidden">
-                    {service?.image && (
-                      <Image
-                        fill
-                        alt={service.title}
-                        src={`${serverBaseUrl}/storage/${service.image}`}
-                      />
-                    )}
-                  </FlexItem>
-                  <FlexItem className="text-[1rem] text-typography text-center font-semibold">
-                    {service?.title}
-                  </FlexItem>
-                  <FlexItem
-                    className="text-[.862rem] text-typography text-center font-light"
-                    grow
+    <>
+      <Head>
+        <title>{service?.title} - منوما</title>
+      </Head>
+      <FlexBox
+        className="pt-[2.5rem] px-[2rem] min-h-screen"
+        direction="column"
+        justify="between"
+      >
+        <FlexItem>
+          <FlexBox direction="column">
+            <FlexItem className="mx-auto">
+              <Logo />
+            </FlexItem>
+            <FlexItem className="mt-[2rem]">
+              <FlexBox
+                className={twMerge(
+                  classNames(
+                    'max-w-lg mx-auto bg-white rounded-[1.37rem] p-[1.38rem] border border-gray-300  !justify-between',
+                  ),
+                )}
+                alignItems="center"
+                direction="column"
+                gap={2}
+              >
+                <FlexItem grow>
+                  <FlexBox
+                    direction="column"
+                    alignItems="center"
+                    className={twMerge(classNames('gap-[.95rem] h-full'))}
                   >
-                    {service?.long_description}
-                  </FlexItem>
-                  <FlexItem>
-                    <FlexBox gap={2} justify="center" className="flex-wrap">
-                      {labels}
-                    </FlexBox>
-                  </FlexItem>
-                </FlexBox>
-              </FlexItem>
-            </FlexBox>
-          </FlexItem>
-        </FlexBox>
-      </FlexItem>
-      <FlexItem>
-        <Footer />
-      </FlexItem>
-    </FlexBox>
+                    <FlexItem className="relative w-[10rem] h-[10rem] rounded-[.625rem] overflow-hidden">
+                      {service?.image && (
+                        <Image
+                          fill
+                          alt={service.title}
+                          src={`${serverBaseUrl}/storage/${service.image}`}
+                        />
+                      )}
+                    </FlexItem>
+                    <FlexItem className="text-[1rem] text-typography text-center font-semibold">
+                      {service?.title}
+                    </FlexItem>
+                    <FlexItem
+                      className="text-[.862rem] text-typography text-center font-light"
+                      grow
+                    >
+                      {service?.long_description}
+                    </FlexItem>
+                    <FlexItem>
+                      <FlexBox gap={2} justify="center" className="flex-wrap">
+                        {labels}
+                      </FlexBox>
+                    </FlexItem>
+                  </FlexBox>
+                </FlexItem>
+              </FlexBox>
+            </FlexItem>
+          </FlexBox>
+        </FlexItem>
+        <FlexItem>
+          <Footer />
+        </FlexItem>
+      </FlexBox>
+    </>
   );
 };
 

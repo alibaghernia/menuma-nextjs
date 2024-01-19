@@ -59,7 +59,7 @@ function CatalogPage() {
   return (
     <>
       <Head>
-        <title>کاتالوگ</title>
+        <title>کاتالوگ - منوما</title>
       </Head>
       <FlexBox
         justify="between"
@@ -107,7 +107,9 @@ function CatalogPage() {
                 centerTitle
               >
                 <Button className="py-[.8rem] px-[2rem] text-[1.2rem] w-full md:w-fit md:mx-auto rounded-[1.03rem]">
-                  درخواست منوی رایگان
+                  <Link href="/register_form" className="w-full">
+                    درخواست منوی رایگان
+                  </Link>
                 </Button>
               </Section>
             </FlexItem>

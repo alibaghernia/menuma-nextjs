@@ -28,6 +28,7 @@ import {
 import { ProductService } from '@/services/product/product.service';
 
 import { BusinessService } from '@/services/business/business.service';
+import classNames from 'classnames';
 
 function ProductPage() {
   usePageLoading();
@@ -134,7 +135,10 @@ function ProductPage() {
             <FlexBox
               justify="between"
               alignItems="center"
-              className="p-[.5rem] px-[1.5rem] pl-[.875rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto"
+              className={classNames(
+                'p-[.5rem] px-[1.5rem] pl-[.875rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto',
+                { grayscale: foundTagSoldOut },
+              )}
             >
               <FlexItem className="text-[1.3rem] text-typography">
                 <FlexBox gap={2} alignItems="center">
@@ -147,14 +151,15 @@ function ProductPage() {
                 </FlexBox>
               </FlexItem>
               {!order ? (
-                !foundTagSoldOut && (
-                  <FlexItem
-                    className="rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]"
-                    onClick={() => orderItem(price)}
-                  >
-                    سفارش
-                  </FlexItem>
-                )
+                <FlexItem
+                  className={classNames(
+                    'rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]',
+                    { 'grayscale pointer-events-none': foundTagSoldOut },
+                  )}
+                  onClick={() => orderItem(price)}
+                >
+                  {foundTagSoldOut ? 'اتمام موجودی' : 'سفارش'}
+                </FlexItem>
               ) : (
                 <FlexItem>
                   <FlexBox gap={2} alignItems="center">
@@ -243,13 +248,11 @@ function ProductPage() {
               <FlexItem className="text-[1rem] font-[400] mt-[1.5rem] text-typography md:text-center text-justify">
                 {product?.description}
               </FlexItem>
-              {!foundTagSoldOut && (
-                <FlexItem className="mt-[3rem]">
-                  <FlexBox direction="column" gap={2}>
-                    {prices}
-                  </FlexBox>
-                </FlexItem>
-              )}
+              <FlexItem className="mt-[3rem]">
+                <FlexBox direction="column" gap={2}>
+                  {prices}
+                </FlexBox>
+              </FlexItem>
             </FlexBox>
           </FlexItem>
         </FlexBox>

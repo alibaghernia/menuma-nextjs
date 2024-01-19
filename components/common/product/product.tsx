@@ -103,7 +103,7 @@ export const Product: IProduct = (props) => {
                         !foundTagSoldOut && 'cursor-pointer'
                       }  transition-all duration-[.3s]`,
                       {
-                        'active:scale-[.8]': !order,
+                        'active:scale-[.8]': !order && !foundTagSoldOut,
                       },
                     )}
                     onClick={() => !foundTagSoldOut && orderItem(price)}
@@ -113,33 +113,36 @@ export const Product: IProduct = (props) => {
                         {`${parseInt(price.price).toLocaleString('IR-fa')} ت`}
                       </div>
                     </FlexItem>
-                    <FlexItem>
-                      {order ? (
-                        <FlexBox alignItems="center" gap={2}>
-                          <FlexItem
-                            className="relative w-6 h-6 bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              !foundTagSoldOut && decreasOrderItemCount(price);
-                            }}
-                          >
-                            <Container center>-</Container>
-                          </FlexItem>
-                          {order.count}
-                          <FlexItem
-                            className="relative w-6 h-6 bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
-                            onClick={_.throttle((e) => {
-                              e.stopPropagation();
-                              increaseOrderItemCount(price);
-                            }, 500)}
-                          >
-                            <Container center>+</Container>
-                          </FlexItem>
-                        </FlexBox>
-                      ) : (
-                        !foundTagSoldOut && <LinedAddIcon color="#434343" />
-                      )}
-                    </FlexItem>
+                    {!foundTagSoldOut && (
+                      <FlexItem>
+                        {order ? (
+                          <FlexBox alignItems="center" gap={2}>
+                            <FlexItem
+                              className="relative w-6 h-6 bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                !foundTagSoldOut &&
+                                  decreasOrderItemCount(price);
+                              }}
+                            >
+                              <Container center>-</Container>
+                            </FlexItem>
+                            {order.count}
+                            <FlexItem
+                              className="relative w-6 h-6 bg-white/[.4] rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
+                              onClick={_.throttle((e) => {
+                                e.stopPropagation();
+                                increaseOrderItemCount(price);
+                              }, 500)}
+                            >
+                              <Container center>+</Container>
+                            </FlexItem>
+                          </FlexBox>
+                        ) : (
+                          <LinedAddIcon color="#434343" />
+                        )}
+                      </FlexItem>
+                    )}
                   </FlexBox>
                 </FlexItem>
               </FlexBox>
@@ -174,9 +177,9 @@ export const Product: IProduct = (props) => {
             fill
             src={props.image!}
             alt={props.title}
-            className={`z-0 object-cover relative ${
-              foundTagSoldOut && 'grayscale'
-            }`}
+            className={classNames(`z-0 object-cover relative`, {
+              grayscale: foundTagSoldOut,
+            })}
           />
 
           {props.single_mode && (

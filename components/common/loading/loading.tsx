@@ -7,6 +7,7 @@ function Loading() {
   return (
     <div className="fixed inset-0 bg-white z-[10000] ">
       <Image
+        priority
         width={coffeeLoadingGIF.width}
         height={coffeeLoadingGIF.height}
         alt="Loading"

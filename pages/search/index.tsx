@@ -14,14 +14,14 @@ import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
 import { Select } from 'antd/lib';
-import { toPersianNumber } from '@/helpers/functions'
+import { toPersianNumber } from '@/helpers/functions';
 
 function Search() {
   const [addL, removeL] = useLoadings();
   const { query: params } = useCustomRouter();
   const isNear = !!params.near;
   const [searchField, setSearchField] = useState('');
-  const [radius, setRadius] = useState('۵۰۰ متری')
+  const [radius, setRadius] = useState('۵۰۰ متری');
   const [fetchedItems, setFetchedItems] = useState<
     {
       logo: string;
@@ -101,7 +101,6 @@ function Search() {
     }
   };
 
-
   const renderBusinesses = () => {
     return fetchedItems.map((business, idx) => (
       <div
@@ -122,7 +121,6 @@ function Search() {
             {business.title}
           </Link>
           <div className="flex gap-[1rem] items-end justify-between w-full">
-
             <div className="flex flex-col gap-[.25rem]">
               <div className="text-[.725rem] text-typography font-bold">
                 {business.address && 'آدرس:'}
@@ -155,15 +153,13 @@ function Search() {
   const onChangeSelect = (value: string) => {
     fetchNearBusinesses(value);
     if (value == '500') {
-      setRadius(`${toPersianNumber(Number(value))}متری`)
+      setRadius(`${toPersianNumber(Number(value))}متری`);
     } else {
-      setRadius(`${toPersianNumber(Number(value) / 1000)}کیلومتری`)
+      setRadius(`${toPersianNumber(Number(value) / 1000)}کیلومتری`);
     }
-
   };
 
-  const onSearch = (value: string) => {
-  };
+  const onSearch = (value: string) => {};
   const filterOption = (
     input: string,
     option?: { label: string; value: string },

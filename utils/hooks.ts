@@ -53,3 +53,9 @@ export const useCustomRouter = () => {
     },
   };
 };
+
+export const useCustomParams = () => {
+  const { query: params } = useRouter();
+
+  return params;
+};

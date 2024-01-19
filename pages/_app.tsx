@@ -46,25 +46,25 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <main className={classNames('z-10', vazirMatn.className)}>
-        <ConfigProvider
-          theme={{
-            token: {
-              fontFamily: vazirMatn.style.fontFamily,
-              colorPrimary: '#3177FF',
-            },
-            components: {
-              Input: {
-                paddingBlock: 6,
+        <GeneralProvider>
+          <ConfigProvider
+            theme={{
+              token: {
+                fontFamily: vazirMatn.style.fontFamily,
+                colorPrimary: '#3177FF',
               },
-            },
-          }}
-        >
-          <PageProvider>
-            <GeneralProvider>
+              components: {
+                Input: {
+                  paddingBlock: 6,
+                },
+              },
+            }}
+          >
+            <PageProvider>
               <Component {...pageProps} />
-            </GeneralProvider>
-          </PageProvider>
-        </ConfigProvider>
+            </PageProvider>
+          </ConfigProvider>
+        </GeneralProvider>
       </main>
     </>
   );

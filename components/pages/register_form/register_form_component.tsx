@@ -24,13 +24,7 @@ export const RegisterFormComponent = () => {
   };
   return (
     <Fragment>
-      <Head>
-        <title>{'منوما'}</title>
-      </Head>
-      <Container
-        center
-        className="w-full bg-white rounded-lg shadow ddd:border md:mt-0 sm:max-w-md xl:p-0 ddd:bg-gray-800 ddd:border-gray-700"
-      >
+      <div className="w-full bg-white rounded-lg shadow ddd:border md:mt-0 sm:max-w-md xl:p-0 ddd:bg-gray-800 ddd:border-gray-700">
         {formSubmited ? (
           <div>
             <FlexBox className="flex flex-col items-center justify-center px-6 mx-auto lg:py-0">
@@ -63,11 +57,6 @@ export const RegisterFormComponent = () => {
           </div>
         ) : (
           <div>
-            <FlexBox className="flex flex-col items-center justify-center px-6 mx-auto lg:py-0">
-              <FlexItem className="mx-auto mb-7 text-[2rem] text-gray-800">
-                <Link href={{ pathname: '/' }}>منوما</Link>
-              </FlexItem>
-            </FlexBox>
             <FlexBox className="">
               <FlexItem className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ddd:text-white">
@@ -131,7 +120,7 @@ export const RegisterFormComponent = () => {
             </FlexBox>
           </div>
         )}
-      </Container>
+      </div>
     </Fragment>
   );
 };

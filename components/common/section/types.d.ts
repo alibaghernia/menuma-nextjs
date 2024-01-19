@@ -6,6 +6,7 @@ declare interface ISectionProps {
   className?: string;
   contentClassNames?: string;
   append?: JSX.Element;
+  centerTitle?: boolean;
 }
 declare interface IAppentRegularButtonProps {
   title: sting;

@@ -19,7 +19,7 @@ export const Button: IButton = ({
           'cursor-pointer',
           classNames(
             twMerge(
-              'text-[1rem] rounded-[.625rem] px-[.8rem] py-[.3rem] text-typography bg-white cursor-pointer whitespace-nowrap  w-fit select-none',
+              'text-[1rem] text-center rounded-[.625rem] px-[.8rem] py-[.3rem] text-typography bg-white cursor-pointer whitespace-nowrap  w-fit select-none',
               props.className,
             ),
             {

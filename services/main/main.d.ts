@@ -13,3 +13,14 @@ declare type EventType = {
   cafe_restaurant_id: number;
   cafe_restaurant?: any;
 };
+
+declare type Catalog = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  title: string;
+  short_description: string;
+  long_description: string;
+  image: string;
+  label: string;
+};

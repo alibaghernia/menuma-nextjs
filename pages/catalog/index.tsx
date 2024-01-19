@@ -4,10 +4,10 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Logo } from '@/components/common/logo';
 import { Section } from '@/components/common/section/section';
 import { Footer } from '@/components/core/footer/footer';
-import { usePageLoading } from '@/utils/hooks';
+import { useLoadings, useMessage, usePageLoading } from '@/utils/hooks';
 import Head from 'next/head';
 import Link from 'next/link';
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import menuImage from '@/assets/images/services/menu.png';
 import pagerImage from '@/assets/images/services/pager.png';
@@ -17,50 +17,36 @@ import Image from 'next/image';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import { MainService } from '@/services/main/main.service';
+import { serverBaseUrl } from '@/utils/axios';
 
-type Service = {
-  image: string;
-  title: string;
-  free: boolean;
-  descriptions: string;
-};
+type Service = Catalog;
 
 function CatalogPage() {
   usePageLoading();
+  const [addL, removeL] = useLoadings();
+  const message = useMessage();
+  const [services, setServices] = useState<Service[]>([]);
+  const mainService = MainService.init();
 
-  const services = useMemo<Service[]>(
-    () => [
-      {
-        image: menuImage.src,
-        title: 'منوی آنلاین',
-        free: true,
-        descriptions:
-          'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک',
-      },
-      {
-        image: pagerImage.src,
-        title: 'پیجر سالن',
-        free: false,
-        descriptions:
-          'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک',
-      },
-      {
-        image: menuImage.src,
-        title: 'منوی آنلاین',
-        free: true,
-        descriptions:
-          'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک',
-      },
-      {
-        image: pagerImage.src,
-        title: 'پیجر سالن',
-        free: false,
-        descriptions:
-          'لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک',
-      },
-    ],
-    [],
-  );
+  function fetchServices() {
+    addL('fetch-services');
+    mainService
+      .getCatalogs()
+      .finally(() => {
+        removeL('fetch-services');
+      })
+      .then((data) => {
+        setServices(data);
+      })
+      .catch(() => {
+        message.error('مشکلی در دریافت اطلاعات وجود دارد.');
+      });
+  }
+
+  useEffect(() => {
+    fetchServices();
+  }, []);
 
   const servicesSlides = useMemo(() => {
     return services.map((service, idx) => (
@@ -108,9 +94,6 @@ function CatalogPage() {
                   slidesOffsetBefore={24}
                   slidesOffsetAfter={24}
                   spaceBetween={16}
-                  // centeredSlides
-                  centerInsufficientSlides
-                  // centeredSlidesBounds
                 >
                   {servicesSlides}
                 </Swiper>
@@ -164,46 +147,67 @@ function CatalogPage() {
 export default CatalogPage;
 
 const ServiceCard: FC<Service> = (service) => {
+  const labels = useMemo(() => {
+    return service.label
+      .split(',')
+      .filter(Boolean)
+      .map((label, idx) => (
+        <FlexItem
+          key={idx}
+          className="py-[.34rem] px-[1.64rem] font-bold rounded-[.689rem] bg-green-600/[.1] text-green-700 text-[.689rem]"
+        >
+          {label.trim()}
+        </FlexItem>
+      ));
+  }, []);
+
   return (
     <FlexBox
       className={twMerge(
         classNames(
           ' w-[14rem] h-[23rem] bg-white rounded-[1.37rem] p-[1.38rem] border border-gray-300 !justify-between',
-          { 'border-green-300': service.free },
         ),
       )}
       alignItems="center"
       direction="column"
+      gap={2}
     >
-      <FlexItem>
+      <FlexItem grow>
         <FlexBox
           direction="column"
           alignItems="center"
-          className={twMerge(classNames('gap-[.95rem]'))}
+          className={twMerge(classNames('gap-[.95rem] h-full'))}
         >
-          <FlexItem className="relative w-[7rem] h-[7rem]">
-            <Image fill alt={service.title} src={service.image} />
+          <FlexItem className="relative w-[7rem] h-[7rem] rounded-[.625rem] overflow-hidden">
+            {service.image && (
+              <Image
+                fill
+                alt={service.title}
+                src={`${serverBaseUrl}/storage/${service.image}`}
+              />
+            )}
           </FlexItem>
           <FlexItem className="text-[1rem] text-typography text-center font-semibold">
             {service.title}
           </FlexItem>
-          <FlexItem className="text-[.689rem] text-typography text-center font-light">
-            {service.descriptions}
+          <FlexItem
+            className="text-[.689rem] text-typography text-center font-light"
+            grow
+          >
+            {service.short_description}
           </FlexItem>
           <FlexItem>
             <FlexBox gap={2} justify="center">
-              {service.free && (
-                <FlexItem className="py-[.34rem] px-[1.64rem] font-bold rounded-[.689rem] bg-green-600/[.1] text-green-700 text-[.689rem]">
-                  رایگان
-                </FlexItem>
-              )}
+              {labels}
             </FlexBox>
           </FlexItem>
         </FlexBox>
       </FlexItem>
       <FlexItem>
         <Button type="ghost" color="primary">
-          اطلاعات بیشتر
+          <Link href={`/catalog/${service.id}`} className="w-full">
+            اطلاعات بیشتر
+          </Link>
         </Button>
       </FlexItem>
     </FlexBox>

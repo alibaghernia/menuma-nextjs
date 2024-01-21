@@ -1,22 +1,44 @@
+declare type ConditionalDiscount = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  title: string;
+  description: string;
+  cafe_restaurant_id: number;
+};
+
 declare type BusinessType = {
-  uuid: string;
+  id: number;
+  created_at: string;
+  updated_at: string;
   name: string;
+  logo_path?: string;
+  banner_path?: string;
   slug: string;
   status: string;
-  pager: boolean;
-  address: any;
-  description: any;
-  location_lat: any;
-  location_long: any;
-  phone_number: any;
-  email: any;
-  working_hours: any[];
-  logo: any;
-  banner: any;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: any;
-  socials: Social[];
+  social_media?: string;
+  working_hour1?: string;
+  working_hour2?: string;
+  address?: null;
+  location_lat?: string;
+  location_long?: string;
+  description?: string;
+  instagram?: string;
+  telegram?: string;
+  twitter?: string;
+  has_pager: number;
+  phone_number?: string;
+  email?: string;
+  whatsapp?: string;
+  has_customer_club: number;
+  enabled_customer_club: number;
+  domain_address?: string;
+  has_domain_address: number;
+  enabled_pager: number;
+  is_pinned: number;
+  is_hidden: number;
+  conditional_discounts?: ConditionalDiscount[];
+  events?: any[];
 };
 
 declare type Social = {

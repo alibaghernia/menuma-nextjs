@@ -23,6 +23,11 @@ export class MainService {
       .get(`/api/events?limit=5&ispinned=1`)
       .then(({ data }) => data);
   }
+  searchBusiness(args?: ISearchBusiness): Promise<BusinessType[]> {
+    return this.axios
+      .get(`/api/cafe-restaurants`, { params: args })
+      .then(({ data }) => data);
+  }
   getCatalogs(): Promise<Catalog[]> {
     return this.axios.get(`/api/catalogs`).then(({ data }) => data);
   }

@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { useSlug } from '@/providers/main/hooks';
 import { serverBaseUrl } from '@/utils/axios';
+import { twMerge } from 'tailwind-merge';
 
 export const EventCard: IEventCard = (props) => {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
@@ -35,9 +36,11 @@ export const EventCard: IEventCard = (props) => {
   return (
     <>
       <FlexBox
-        className={classNames(
-          'p-[1rem] bg-white gap-[.62rem] rounded-[1rem] shadow w-full max-w-[30rem]',
-          props.className,
+        className={twMerge(
+          classNames(
+            'p-[1rem] bg-white gap-[.62rem] rounded-[1rem] shadow w-[30rem]',
+            props.className,
+          ),
         )}
         direction="column"
       >
@@ -138,7 +141,7 @@ export const EventCard: IEventCard = (props) => {
             type="primary"
           >
             <Link
-              href={`/${props.cafe_restaurant?.slug}/event/${props.id}`}
+              href={`/${props.cafe_restaurant?.slug}/events/${props.id}`}
               className="block"
             >
               مشاهده جزئیات

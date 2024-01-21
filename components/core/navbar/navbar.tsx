@@ -23,6 +23,7 @@ import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
 import { PeopleIcon } from '@/icons/people';
+import { DiscountIcon } from '@/icons/discount';
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false });
 export const Navbar: INavBar = ({
@@ -45,8 +46,8 @@ export const Navbar: INavBar = ({
 
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
 
-  const menuItems = useMemo(
-    () => [
+  const menuItems = useMemo(() => {
+    const menu = [
       {
         title: 'پروفایل',
         icon: (
@@ -69,20 +70,37 @@ export const Navbar: INavBar = ({
         ),
         url: `/${slug}menu`,
       },
-      // {
-      //   title: 'ثبت نام در باشگاه مشتریان',
-      //   icon: (
-      //     <PeopleIcon
-      //       color={resolvedTailwindConfig.theme?.colors?.[
-      //         'typography'
-      //       ].toString()}
-      //     />
-      //   ),
-      //   url: `/${slug}/customer_club/register`,
-      // },
-    ],
-    [resolvedTailwindConfig, slug],
-  );
+    ];
+
+    if (coffeShopState.profile.conditional_discounts_exists) {
+      menu.push({
+        title: 'تخفیف های ویژه',
+        icon: (
+          <DiscountIcon
+            color={resolvedTailwindConfig.theme?.colors?.[
+              'typography'
+            ].toString()}
+          />
+        ),
+        url: `/${slug}/discounts`,
+      });
+    }
+    if (coffeShopState.profile.events_exists) {
+      menu.push({
+        title: 'دورهمی ها',
+        icon: (
+          <PeopleIcon
+            color={resolvedTailwindConfig.theme?.colors?.[
+              'typography'
+            ].toString()}
+          />
+        ),
+        url: `/${slug}/events`,
+      });
+    }
+
+    return menu;
+  }, [resolvedTailwindConfig, slug]);
 
   const renderMenuItems = useMemo(() => {
     return menuItems.map((menuItem, key) => (
@@ -149,7 +167,10 @@ export const Navbar: INavBar = ({
         <FlexItem>
           <FlexBox alignItems="center" gap=".5rem">
             <FlexItem
-              className="cursor-pointer"
+              className={classNames('cursor-pointer', {
+                'py-[.2rem] px-[.4rem] bg-typography/[.3] rounded-[.5rem]':
+                  props.menuButtonOverlay,
+              })}
               onClick={() => {
                 setMenuOpen(!menuOpen);
                 setOverlay(!overlay);

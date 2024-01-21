@@ -9,6 +9,7 @@ declare interface INavBarProps {
   fixed?: boolean;
   background?: boolean;
   callPager?: boolean;
+  menuButtonOverlay?: boolean;
 }
 
 declare type INavBar = FC<INavBarProps>;

@@ -1,3 +1,4 @@
+import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
 import axiosPkg, { AxiosInstance } from 'axios';
 import moment from 'moment';
 
@@ -27,6 +28,25 @@ export class MainService {
     return this.axios
       .get(`/api/cafe-restaurants`, { params: args })
       .then(({ data }) => data);
+  }
+  getDiscounts(): Promise<ISpecialDiscountProps[]> {
+    return this.axios
+      .get<BusinessType[]>(`/api/cafe-restaurants`, {
+        params: { discounts: true },
+      })
+      .then(({ data }) => {
+        const discounts = data
+          .map((bus) =>
+            bus.conditional_discounts!.map((dis) => ({
+              ...dis,
+              business_slug: bus.slug,
+              business_title: bus.name,
+              business_logo: bus.logo_path,
+            })),
+          )
+          .flat();
+        return discounts;
+      });
   }
   getCatalogs(): Promise<Catalog[]> {
     return this.axios.get(`/api/catalogs`).then(({ data }) => data);

@@ -13,9 +13,6 @@ import dynamic from 'next/dynamic';
 import { message } from 'antd/lib';
 import { useRouter } from 'next/router';
 import Loading from '@/components/common/loading/loading';
-// const Loading = dynamic(() => import('@/components/common/loading/loading'), {
-//   ssr: false,
-// });
 //@ts-ignore
 export const GeneralContext = createContext<IGeneralContext>({});
 

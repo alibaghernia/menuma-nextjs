@@ -3,6 +3,7 @@ import axiosPkg, { AxiosInstance } from 'axios';
 import NError from 'next/error';
 import { CustomerClubService } from './customer_club/customer_club.service';
 import { EventsService } from './events/events.service';
+import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
 
 export class BusinessService {
   static init(slug?: string) {
@@ -62,6 +63,16 @@ export class BusinessService {
   getDailyOffers(slug?: string) {
     return this.axios
       .get<APIProduct[]>(`${this.slugRoute(slug)}/menu/day-offers`)
+      .then(({ data }) => data);
+  }
+  getDiscounts(slug?: string): Promise<ConditionalDiscount[]> {
+    return this.axios
+      .get<ConditionalDiscount[]>(`${this.slugRoute(slug)}/discounts`)
+      .then(({ data }) => data);
+  }
+  getEvents(slug?: string): Promise<EventType[]> {
+    return this.axios
+      .get<EventType[]>(`${this.slugRoute(slug)}/events`)
       .then(({ data }) => data);
   }
   getTable(tableID: string, cafe_slug?: string) {

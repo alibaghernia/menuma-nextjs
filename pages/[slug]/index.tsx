@@ -1,6 +1,6 @@
 import { ProfileHeader } from '@/components/profile/header/header';
 import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Section } from '@/components/common/section/section';
 import dynamic from 'next/dynamic';
 import { GetServerSideProps } from 'next';
@@ -20,12 +20,18 @@ import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { MetaTags } from '@/components/common/metatags';
 import _ from 'lodash';
-import { usePageLoading } from '@/utils/hooks';
+import { useLoadings, usePageLoading } from '@/utils/hooks';
 import Navbar from '@/components/core/navbar/navbar';
 import Link from 'next/link';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Footer } from '@/components/core/footer/footer';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { SpecialDiscount } from '@/components/common/special_discount';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import { EventCard } from '@/components/common/event_card';
 
 const WorkingHours = dynamic(
   () => import('@/components/profile/working_hours/working_hours'),
@@ -35,11 +41,13 @@ const MapComponent = dynamic(() => import('@/components/common/map/map'), {
   ssr: false,
 });
 const Profile = () => {
+  const [addL, removeL] = useLoadings();
   usePageLoading();
-  const { state } = useContext(CoffeeShopProviderContext);
+  const { state, businessService } = useContext(CoffeeShopProviderContext);
   const profileData: IProfile = state.profile;
   const slug = useSlug();
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
+  const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
 
   const locationCoordinates: [number, number] = [
     parseFloat(profileData.location_lat || '0'),
@@ -71,10 +79,41 @@ const Profile = () => {
     [profileData, resolvedTailwindConfig],
   );
 
+  const events = useMemo(() => {
+    return fetchedEvents.map((event, idx) => (
+      <SwiperSlide
+        className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-[30rem]"
+        key={idx}
+      >
+        <EventCard {...event} className="mx-auto shadow-none border" />
+      </SwiperSlide>
+    ));
+  }, [fetchedEvents]);
+
+  const fetchEvents = () => {
+    addL('fetch-events');
+    businessService
+      .getEvents()
+      .finally(() => {
+        removeL('fetch-events');
+      })
+      .then((data) => {
+        setFetchedEvents(data);
+      });
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
   return (
     <>
       <Head>
         <title>{`${profileData.name + (slug ? ' - منوما' : '')}`}</title>
+        <link
+          rel="manifest"
+          href={`${serverBaseUrl}/api/cafe-restaurants/${state.profile.slug}/manifest.json`}
+        />
       </Head>
       <MetaTags
         metatags={[
@@ -94,7 +133,7 @@ const Profile = () => {
           },
         ]}
       />
-      <Navbar dark background={false} callPager={false} />
+      <Navbar dark background={false} callPager={false} menuButtonOverlay />
       <FlexBox
         className="min-h-screen"
         direction="column"
@@ -116,6 +155,32 @@ const Profile = () => {
             <div className="mt-[1rem]">
               <WorkingHours data={profileData.working_hours || []} />
             </div>
+
+            {/* {!!fetchedEvents?.length && (
+              <div className="mt-[2.12rem] pb-[1rem]  w-full" id="discounts">
+                <Section
+                  title="دورهمی ها"
+                  contentClassNames="pt-[1rem] relative"
+                >
+                  <Swiper
+                    id="events"
+                    slidesPerView={'auto'}
+                    spaceBetween={8}
+                    grabCursor={true}
+                    scrollbar
+                    slidesOffsetBefore={20}
+                    slidesOffsetAfter={20}
+                    breakpoints={{
+                      768: {
+                        centeredSlides: true
+                      }
+                    }}
+                  >
+                    {events}
+                  </Swiper>
+                </Section>
+              </div>
+            )} */}
             <Section
               title="موقعیت مکانی"
               className="mt-[1rem]"

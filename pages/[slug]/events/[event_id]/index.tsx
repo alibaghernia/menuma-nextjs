@@ -4,7 +4,6 @@ import { useSlug } from '@/providers/main/hooks';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import Head from 'next/head';
 import { Navbar } from '@/components/core/navbar/navbar';
-import { ProviderContext } from '@/providers/main/provider';
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -184,29 +183,31 @@ function EventPage() {
               )}
             </FlexBox>
           </FlexItem>
-          <FlexItem className="mt-[1.21rem]">
-            <FlexBox alignItems="center">
-              <FlexItem>
-                <FlexBox alignItems="center" className="gap-[.38rem]">
-                  <FlexItem>
-                    <Location
-                      color={resolvedTailwindConfig.theme?.colors![
-                        'typography'
-                      ].toString()}
-                      width={16}
-                      height={16}
-                    />
-                  </FlexItem>
-                  <FlexItem className="text-[.862rem] text-typography">
-                    آدرس:
-                  </FlexItem>
-                </FlexBox>
-              </FlexItem>
-              <FlexItem className="text-[.862rem] text-typography">
-                {state.profile?.address}
-              </FlexItem>
-            </FlexBox>
-          </FlexItem>
+          {!!state.profile?.address && (
+            <FlexItem className="mt-[1.21rem]">
+              <FlexBox alignItems="center">
+                <FlexItem>
+                  <FlexBox alignItems="center" className="gap-[.38rem]">
+                    <FlexItem>
+                      <Location
+                        color={resolvedTailwindConfig.theme?.colors![
+                          'typography'
+                        ].toString()}
+                        width={16}
+                        height={16}
+                      />
+                    </FlexItem>
+                    <FlexItem className="text-[.862rem] text-typography">
+                      آدرس:
+                    </FlexItem>
+                  </FlexBox>
+                </FlexItem>
+                <FlexItem className="text-[.862rem] text-typography">
+                  {state.profile?.address}
+                </FlexItem>
+              </FlexBox>
+            </FlexItem>
+          )}
           {event?.long_description && (
             <FlexItem className="mt-[1.21rem]">
               <FlexBox direction="column" className="gap-[.34rem]">

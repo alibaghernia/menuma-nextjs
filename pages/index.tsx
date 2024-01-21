@@ -26,13 +26,8 @@ import { EventCard } from '@/components/common/event_card';
 import { MainService } from '@/services/main/main.service';
 import { Footer } from '@/components/core/footer/footer';
 import classNames from 'classnames';
-
-type CustomConditionalDiscount = ConditionalDiscount &
-  Partial<{
-    business_title: string;
-    business_slug: string;
-    business_logo: string;
-  }>;
+import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
+import { SpecialDiscount } from '@/components/common/special_discount';
 
 function Home() {
   const [addL, removeL] = useLoadings();
@@ -47,7 +42,7 @@ function Home() {
     }[]
   >([]);
   const [conditinalDiscounts, setConditinalDiscounts] = useState<
-    CustomConditionalDiscount[]
+    ISpecialDiscountProps[]
   >([]);
   const mainService = MainService.init();
 
@@ -82,22 +77,12 @@ function Home() {
   function fetchHasDiscountBusinesses() {
     addL('fetch-has-discount-businesses');
     mainService
-      .searchBusiness({ discounts: true })
+      .getDiscounts()
       .finally(() => {
         removeL('fetch-has-discount-businesses');
       })
       .then((data) => {
-        const discounts = data
-          .map((bus) =>
-            bus.conditional_discounts!.map((dis) => ({
-              ...dis,
-              business_slug: bus.slug,
-              business_title: bus.name,
-              business_logo: bus.logo_path,
-            })),
-          )
-          .flat();
-        setConditinalDiscounts(discounts);
+        setConditinalDiscounts(data);
       });
   }
 
@@ -119,64 +104,18 @@ function Home() {
     });
   }, [pinBusinesses]);
 
-  const discountsSlides = conditinalDiscounts.map((discount, idx) => (
-    <SwiperSlide
-      className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-[20rem] "
-      key={idx}
-    >
-      <FlexBox
-        className={classNames(
-          'p-[1rem] bg-white gap-[.62rem] w-full max-w-[30rem] !overflow-hidden !rounded-[1rem] border ',
-        )}
-        direction="column"
-      >
-        <FlexItem>
-          <FlexBox className="gap-[.81rem]">
-            <FlexItem className="w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0">
-              <Image
-                fill
-                alt={discount.title}
-                src={
-                  discount.business_logo
-                    ? `${serverBaseUrl}/storage/${discount.business_logo}`
-                    : noImage.src
-                }
-                className="object-cover"
-              />
-            </FlexItem>
-            <FlexItem>
-              <FlexBox
-                direction="column"
-                className="gap-[.3rem]"
-                alignItems="start"
-              >
-                <FlexItem className="text-[1.2rem] text-typography font-semibold">
-                  {discount.title}
-                </FlexItem>
-                <FlexItem className="bg-typography/[.9] text-white text-[.689rem] px-[.5rem] py-[.2rem] rounded-[.3125rem] w-fit">
-                  {discount.business_title}
-                </FlexItem>
-                <FlexItem className="text-typography text-[.862rem] line-clamp-[3]">
-                  {discount.description}
-                </FlexItem>
-              </FlexBox>
-            </FlexItem>
-          </FlexBox>
-        </FlexItem>
-
-        <FlexItem className="mt-[.5rem]">
-          <Button
-            className="w-full text-center text-[.862rem] py-[.5rem]"
-            type="primary"
-          >
-            <Link href={`/${discount.business_slug}`} className="block">
-              مشاهده کافه
-            </Link>
-          </Button>
-        </FlexItem>
-      </FlexBox>
-    </SwiperSlide>
-  ));
+  const discountsSlides = useMemo(
+    () =>
+      conditinalDiscounts.map((discount, idx) => (
+        <SwiperSlide
+          className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-[20rem] "
+          key={idx}
+        >
+          <SpecialDiscount key={idx} {...discount} />
+        </SwiperSlide>
+      )),
+    [conditinalDiscounts],
+  );
 
   useEffect(() => {
     fetchPinBusinesses();
@@ -243,38 +182,42 @@ function Home() {
             پیدا کردن نزدیکترین کافه
           </Button>
         </div>
-        <div className="mt-[2.12rem] w-full max-w-[65rem]">
-          <Section title="کافه های پیشنهادی" contentClassNames="pt-[1rem]">
-            <Swiper
-              slidesPerView={'auto'}
-              spaceBetween={8}
-              grabCursor={true}
-              scrollbar
-              slidesOffsetBefore={20}
-              slidesOffsetAfter={20}
+        {!!pinBusinesses?.length && (
+          <div className="mt-[2.12rem] w-full max-w-[65rem]">
+            <Section title="کافه های پیشنهادی" contentClassNames="pt-[1rem]">
+              <Swiper
+                slidesPerView={'auto'}
+                spaceBetween={8}
+                grabCursor={true}
+                scrollbar
+                slidesOffsetBefore={20}
+                slidesOffsetAfter={20}
+              >
+                {businessesSlides}
+              </Swiper>
+            </Section>
+          </div>
+        )}
+        {!!conditinalDiscounts?.length && (
+          <div className="mt-[2.12rem] w-full max-w-[65rem]">
+            <Section
+              title="تخفیف های ویژه"
+              contentClassNames="pt-[1rem] relative"
             >
-              {businessesSlides}
-            </Swiper>
-          </Section>
-        </div>
-        <div className="mt-[2.12rem] w-full max-w-[65rem]">
-          <Section
-            title="تخفیف های ویژه"
-            contentClassNames="pt-[1rem] relative"
-          >
-            <Swiper
-              id="discounts"
-              slidesPerView={'auto'}
-              spaceBetween={8}
-              grabCursor={true}
-              scrollbar
-              slidesOffsetBefore={20}
-              slidesOffsetAfter={20}
-            >
-              {discountsSlides}
-            </Swiper>
-          </Section>
-        </div>
+              <Swiper
+                id="discounts"
+                slidesPerView={'auto'}
+                spaceBetween={8}
+                grabCursor={true}
+                scrollbar
+                slidesOffsetBefore={20}
+                slidesOffsetAfter={20}
+              >
+                {discountsSlides}
+              </Swiper>
+            </Section>
+          </div>
+        )}
         <div className="my-[2.12rem] w-full max-w-[65rem]">
           <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
             <FlexBox direction="column" alignItems="stretch" gap={2}>

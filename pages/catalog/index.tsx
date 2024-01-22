@@ -151,7 +151,7 @@ export default CatalogPage;
 const ServiceCard: FC<Service> = (service) => {
   const labels = useMemo(() => {
     return service.label
-      .split(',')
+      ?.split(',')
       .filter(Boolean)
       .map((label, idx) => (
         <FlexItem

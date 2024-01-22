@@ -19,10 +19,16 @@ import { MainService } from '@/services/main/main.service';
 import { Footer } from '@/components/core/footer/footer';
 import { Logo } from '@/components/common/logo';
 import Head from 'next/head';
+import { ArrowBackIcon } from '@/icons/arrow-back';
+import tailwindConfig from '@/tailwind.config';
+import resolveConfig from 'tailwindcss/resolveConfig';
+import { useRouter } from 'next/router';
 
 type Service = Catalog;
 
 const ServicePage: FC = () => {
+  const resolvedTailwindConfig = resolveConfig(tailwindConfig);
+  const router = useRouter();
   usePageLoading();
   const params = useCustomParams();
   const [addL, removeL] = useLoadings();
@@ -50,14 +56,14 @@ const ServicePage: FC = () => {
   }, [params]);
   const labels = useMemo(() => {
     return service?.label
-      .split(',')
+      ?.split(',')
       .filter(Boolean)
       .map((label, idx) => (
         <FlexItem
           key={idx}
           className="py-[.34rem] px-[1.64rem] font-bold rounded-[.689rem] bg-green-600/[.1] text-green-700 text-[.800rem]"
         >
-          {label.trim()}
+          {label?.trim()}
         </FlexItem>
       ));
   }, [service?.label]);
@@ -84,17 +90,39 @@ const ServicePage: FC = () => {
                     'max-w-lg mx-auto bg-white rounded-[1.37rem] p-[1.38rem] border border-gray-300  !justify-between',
                   ),
                 )}
-                alignItems="center"
                 direction="column"
                 gap={2}
               >
-                <FlexItem grow>
+                <FlexItem>
                   <FlexBox
                     direction="column"
-                    alignItems="center"
                     className={twMerge(classNames('gap-[.95rem] h-full'))}
                   >
-                    <FlexItem className="relative w-[10rem] h-[10rem] rounded-[.625rem] overflow-hidden">
+                    <FlexItem>
+                      <FlexBox justify="end">
+                        <FlexItem>
+                          <FlexBox
+                            alignItems="center"
+                            className="rounded bg-typography/[.1] pr-[.5rem] py-1 cursor-pointer"
+                          >
+                            <FlexItem
+                              className="text-typography"
+                              onClick={() => router.back()}
+                            >
+                              بازگشت
+                            </FlexItem>
+                            <FlexItem>
+                              <ArrowBackIcon
+                                color={resolvedTailwindConfig.theme?.colors![
+                                  'typography'
+                                ].toString()}
+                              />
+                            </FlexItem>
+                          </FlexBox>
+                        </FlexItem>
+                      </FlexBox>
+                    </FlexItem>
+                    <FlexItem className="relative w-[10rem] h-[10rem] rounded-[.625rem] overflow-hidden mx-auto">
                       {service?.image && (
                         <Image
                           fill
@@ -109,9 +137,10 @@ const ServicePage: FC = () => {
                     <FlexItem
                       className="text-[.862rem] text-typography text-center font-light"
                       grow
-                    >
-                      {service?.long_description}
-                    </FlexItem>
+                      dangerouslySetInnerHTML={{
+                        __html: service?.long_description || '',
+                      }}
+                    />
                     <FlexItem>
                       <FlexBox gap={2} justify="center" className="flex-wrap">
                         {labels}

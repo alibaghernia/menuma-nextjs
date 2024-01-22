@@ -10,6 +10,9 @@
 /coverage
 
 sw.*.map
+public/workbox-*.js
+public/sw.js
+public/worker-*.js
 
 # next.js
 /.next/

@@ -221,13 +221,15 @@ function Home() {
             </Section>
           </div>
         )}
-        <div className="my-[2.12rem] w-full max-w-[65rem]">
-          <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
-            <FlexBox direction="column" alignItems="stretch" gap={2}>
-              {events}
-            </FlexBox>
-          </Section>
-        </div>
+        {Boolean(fetchedEvents?.length) && (
+          <div className="my-[2.12rem] w-full max-w-[65rem]">
+            <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
+              <FlexBox direction="column" alignItems="stretch" gap={2}>
+                {events}
+              </FlexBox>
+            </Section>
+          </div>
+        )}
       </div>
       <Footer />
     </FlexBox>

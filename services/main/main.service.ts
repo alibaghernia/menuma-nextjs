@@ -19,9 +19,11 @@ export class MainService {
     });
   }
 
-  getEvents(): Promise<EventType[]> {
+  getEvents(args?: IGetEvents): Promise<EventType[]> {
     return this.axios
-      .get(`/api/events?limit=5&ispinned=1`)
+      .get(`/api/events`, {
+        params: args,
+      })
       .then(({ data }) => data);
   }
   searchBusiness(args?: ISearchBusiness): Promise<BusinessType[]> {

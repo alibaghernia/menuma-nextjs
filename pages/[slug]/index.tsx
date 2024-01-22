@@ -79,21 +79,23 @@ const Profile = () => {
     [profileData, resolvedTailwindConfig],
   );
 
-  const events = useMemo(() => {
-    return fetchedEvents.map((event, idx) => (
-      <SwiperSlide
-        className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-[30rem]"
-        key={idx}
-      >
-        <EventCard {...event} className="mx-auto shadow-none border" />
-      </SwiperSlide>
-    ));
-  }, [fetchedEvents]);
+  // const events = useMemo(() => {
+  //   return fetchedEvents.map((event, idx) => (
+  //     <SwiperSlide
+  //       className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-[30rem]"
+  //       key={idx}
+  //     >
+  //       <EventCard {...event} className="mx-auto shadow-none border" />
+  //     </SwiperSlide>
+  //   ));
+  // }, [fetchedEvents]);
 
   const fetchEvents = () => {
     addL('fetch-events');
     businessService
-      .getEvents()
+      .getEvents({
+        limit: 5,
+      })
       .finally(() => {
         removeL('fetch-events');
       })
@@ -103,7 +105,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetchEvents();
+    // fetchEvents();
   }, []);
 
   return (

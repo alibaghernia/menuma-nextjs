@@ -9,6 +9,8 @@
 # testing
 /coverage
 
+sw.*.map
+
 # next.js
 /.next/
 /out/

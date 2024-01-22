@@ -66,7 +66,10 @@ function Home() {
   const fetchEvents = () => {
     addL('fetch-events');
     mainService
-      .getEvents()
+      .getEvents({
+        limit: 5,
+        is_pinned: true,
+      })
       .finally(() => {
         removeL('fetch-events');
       })

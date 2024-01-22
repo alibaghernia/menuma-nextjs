@@ -70,9 +70,9 @@ export class BusinessService {
       .get<ConditionalDiscount[]>(`${this.slugRoute(slug)}/discounts`)
       .then(({ data }) => data);
   }
-  getEvents(slug?: string): Promise<EventType[]> {
+  getEvents(args?: IGetEvents, slug?: string): Promise<EventType[]> {
     return this.axios
-      .get<EventType[]>(`${this.slugRoute(slug)}/events`)
+      .get<EventType[]>(`${this.slugRoute(slug)}/events`, { params: args })
       .then(({ data }) => data);
   }
   getTable(tableID: string, cafe_slug?: string) {

@@ -182,7 +182,7 @@ function Home() {
             پیدا کردن نزدیکترین کافه
           </Button>
         </div>
-        {!!pinBusinesses?.length && (
+        {Boolean(pinBusinesses?.length) && (
           <div className="mt-[2.12rem] w-full max-w-[65rem]">
             <Section title="کافه های پیشنهادی" contentClassNames="pt-[1rem]">
               <Swiper
@@ -198,7 +198,7 @@ function Home() {
             </Section>
           </div>
         )}
-        {!!conditinalDiscounts?.length && (
+        {Boolean(conditinalDiscounts?.length) && (
           <div className="mt-[2.12rem] w-full max-w-[65rem]">
             <Section
               title="تخفیف های ویژه"

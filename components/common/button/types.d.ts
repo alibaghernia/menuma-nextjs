@@ -1,6 +1,6 @@
-import { FC, PropsWithChildren } from 'react';
+import { FC, HTMLAttributes, PropsWithChildren } from 'react';
 
-declare interface IButtonProps {
+declare interface IButtonProps extends HTMLAttributes<HTMLButtonElement> {
   className?: string;
   link?: string;
   linkTarget?: string;

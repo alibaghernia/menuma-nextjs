@@ -1,31 +1,25 @@
 import { Button } from '@/components/common/button';
-import { Container } from '@/components/common/container/container';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Logo } from '@/components/common/logo';
 import { Section } from '@/components/common/section/section';
 import { Location } from '@/icons/location';
-import { SearchIcon } from '@/icons/search';
-import Head from 'next/head';
 import Image from 'next/image';
 import noImage from '@/assets/images/no-image.jpg';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import provider, { ProviderContext } from '@/providers/main/provider';
 import { axios, serverBaseUrl } from '@/utils/axios';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { SearchBusinessBox } from '@/components/common/search_business_box/search_business_box';
-import { useRouter } from 'next/router';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
 import { EventCard } from '@/components/common/event_card';
 import { MainService } from '@/services/main/main.service';
 import { Footer } from '@/components/core/footer/footer';
-import classNames from 'classnames';
 import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
 import { SpecialDiscount } from '@/components/common/special_discount';
 
@@ -162,77 +156,79 @@ function Home() {
   }, [fetchedEvents]);
 
   return (
-    <FlexBox direction="column" justify="between" className="min-h-screen">
-      <div className="mx-auto md:w-fit pt-[2.38rem] flex flex-col items-center">
-        <Logo />
-        <div className="text-typography/[.8] text-[.875rem] font-medium">
-          کافه ای که میخوای را پیدا کن
-        </div>
-        <div className="mt-[2.12rem] w-full px-[1.9rem]">
-          <SearchBusinessBox
-            value={searchField}
-            onChange={setSearchField}
-            onSearch={handleSearchBusiness}
-          />
-        </div>
-        <div className="mt-[2.12rem]">
-          <Button
-            color="secondary"
-            className="py-[.5rem] px-[.8rem] flex items-center"
-            onClick={findNearestBusinessHandler}
-          >
-            <Location />
-            پیدا کردن نزدیکترین کافه
-          </Button>
-        </div>
-        {Boolean(pinBusinesses?.length) && (
-          <div className="mt-[2.12rem] w-full max-w-[65rem]">
-            <Section title="کافه های پیشنهادی" contentClassNames="pt-[1rem]">
-              <Swiper
-                slidesPerView={'auto'}
-                spaceBetween={8}
-                grabCursor={true}
-                scrollbar
-                slidesOffsetBefore={20}
-                slidesOffsetAfter={20}
-              >
-                {businessesSlides}
-              </Swiper>
-            </Section>
+    <>
+      <FlexBox direction="column" justify="between" className="min-h-screen">
+        <div className="mx-auto md:w-fit pt-[2.38rem] flex flex-col items-center">
+          <Logo />
+          <div className="text-typography/[.8] text-[.875rem] font-medium">
+            کافه ای که میخوای را پیدا کن
           </div>
-        )}
-        {Boolean(conditinalDiscounts?.length) && (
-          <div className="mt-[2.12rem] w-full max-w-[65rem]">
-            <Section
-              title="تخفیف های ویژه"
-              contentClassNames="pt-[1rem] relative"
+          <div className="mt-[2.12rem] w-full px-[1.9rem]">
+            <SearchBusinessBox
+              value={searchField}
+              onChange={setSearchField}
+              onSearch={handleSearchBusiness}
+            />
+          </div>
+          <div className="mt-[2.12rem]">
+            <Button
+              color="secondary"
+              className="py-[.5rem] px-[.8rem] flex items-center"
+              onClick={findNearestBusinessHandler}
             >
-              <Swiper
-                id="discounts"
-                slidesPerView={'auto'}
-                spaceBetween={8}
-                grabCursor={true}
-                scrollbar
-                slidesOffsetBefore={20}
-                slidesOffsetAfter={20}
+              <Location />
+              پیدا کردن نزدیکترین کافه
+            </Button>
+          </div>
+          {Boolean(pinBusinesses?.length) && (
+            <div className="mt-[2.12rem] w-full max-w-[65rem]">
+              <Section title="کافه های پیشنهادی" contentClassNames="pt-[1rem]">
+                <Swiper
+                  slidesPerView={'auto'}
+                  spaceBetween={8}
+                  grabCursor={true}
+                  scrollbar
+                  slidesOffsetBefore={20}
+                  slidesOffsetAfter={20}
+                >
+                  {businessesSlides}
+                </Swiper>
+              </Section>
+            </div>
+          )}
+          {Boolean(conditinalDiscounts?.length) && (
+            <div className="mt-[2.12rem] w-full max-w-[65rem]">
+              <Section
+                title="تخفیف های ویژه"
+                contentClassNames="pt-[1rem] relative"
               >
-                {discountsSlides}
-              </Swiper>
-            </Section>
-          </div>
-        )}
-        {Boolean(fetchedEvents?.length) && (
-          <div className="my-[2.12rem] w-full max-w-[65rem]">
-            <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
-              <FlexBox direction="column" alignItems="stretch" gap={2}>
-                {events}
-              </FlexBox>
-            </Section>
-          </div>
-        )}
-      </div>
-      <Footer />
-    </FlexBox>
+                <Swiper
+                  id="discounts"
+                  slidesPerView={'auto'}
+                  spaceBetween={8}
+                  grabCursor={true}
+                  scrollbar
+                  slidesOffsetBefore={20}
+                  slidesOffsetAfter={20}
+                >
+                  {discountsSlides}
+                </Swiper>
+              </Section>
+            </div>
+          )}
+          {Boolean(fetchedEvents?.length) && (
+            <div className="my-[2.12rem] w-full max-w-[65rem]">
+              <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
+                <FlexBox direction="column" alignItems="stretch" gap={2}>
+                  {events}
+                </FlexBox>
+              </Section>
+            </div>
+          )}
+        </div>
+        <Footer />
+      </FlexBox>
+    </>
   );
 }
 

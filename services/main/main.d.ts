@@ -70,6 +70,7 @@ declare type BusinessType = {
 
 declare interface ISearchBusiness {
   discounts?: boolean;
+  all_fields?: string;
   has_event?: boolean;
   pin?: boolean;
   distance?: number;

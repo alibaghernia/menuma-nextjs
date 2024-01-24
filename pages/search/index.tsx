@@ -100,7 +100,7 @@ function Search() {
       setSearchField(params.search as string);
     }
     if (params.near && params.lat && params.long && isNear) {
-      fetchNearBusinesses('500');
+      fetchNearBusinesses('2000');
     }
   }, [params]);
 
@@ -172,9 +172,9 @@ function Search() {
   const onChangeSelect = (value: string) => {
     fetchNearBusinesses(value);
     if (value == '500') {
-      setRadius(`${toPersianNumber(Number(value))}متری`);
+      setRadius(`${toPersianNumber(Number(value))} متری`);
     } else {
-      setRadius(`${toPersianNumber(Number(value) / 1000)}کیلومتری`);
+      setRadius(`${toPersianNumber(Number(value) / 1000)} کیلومتری`);
     }
   };
 
@@ -202,7 +202,7 @@ function Search() {
               <div className="flex flex-col gap-[.875rem] items-center pb-4">
                 <Select
                   style={{ width: '100%' }}
-                  defaultValue="500"
+                  defaultValue="2000"
                   showSearch
                   placeholder="انتخاب محدوده"
                   optionFilterProp="children"

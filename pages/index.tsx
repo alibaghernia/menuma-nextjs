@@ -42,10 +42,12 @@ function Home() {
 
   const fetchPinBusinesses = () => {
     addL('pin-businesses');
-    axios
-      .get(`/api/cafe-restaurants?pin=1`)
+    mainService
+      .searchBusiness({
+        pin: true,
+      })
       .finally(() => removeL('pin-businesses'))
-      .then(({ data }) => {
+      .then((data) => {
         setPinBusinesses(
           data?.map((business: any) => ({
             title: business.name,
@@ -61,7 +63,6 @@ function Home() {
     addL('fetch-events');
     mainService
       .getEvents({
-        limit: 5,
         is_pinned: true,
       })
       .finally(() => {

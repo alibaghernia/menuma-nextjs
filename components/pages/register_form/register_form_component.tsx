@@ -24,7 +24,7 @@ export const RegisterFormComponent = () => {
   };
   return (
     <Fragment>
-      <div className="w-full bg-white rounded-lg shadow ddd:border md:mt-0 sm:max-w-md xl:p-0 ddd:bg-gray-800 ddd:border-gray-700">
+      <div className="w-full bg-white rounded-lg shadow ddd:border md:mt-0 sm:max-w-md xl:p-0 ddd:bg-gray-800 ddd:border-gray-700 mx-auto">
         {formSubmited ? (
           <div>
             <FlexBox className="flex flex-col items-center justify-center px-6 mx-auto lg:py-0">

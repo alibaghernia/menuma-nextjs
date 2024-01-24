@@ -84,4 +84,6 @@ declare interface IGetDiscounts {
 declare interface IGetEvents {
   is_pinned?: boolean;
   limit?: number;
+  from?: string;
+  to?: string;
 }

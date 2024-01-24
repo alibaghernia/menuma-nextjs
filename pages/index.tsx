@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import { axios, serverBaseUrl } from '@/utils/axios';
+import { serverBaseUrl } from '@/utils/axios';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { SearchBusinessBox } from '@/components/common/search_business_box/search_business_box';
 import { useCustomRouter, useLoadings } from '@/utils/hooks';
@@ -20,10 +20,10 @@ import Link from 'next/link';
 import { EventCard } from '@/components/common/event_card';
 import { MainService } from '@/services/main/main.service';
 import { Footer } from '@/components/core/footer/footer';
-import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
 import { SpecialDiscount } from '@/components/common/special_discount';
 import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import ConfirmModal from '@/components/common/confirm_modal/confirm_modal';
+import moment from 'moment';
 
 function Home() {
   const [addL, removeL] = useLoadings();
@@ -67,6 +67,7 @@ function Home() {
     mainService
       .getEvents({
         is_pinned: true,
+        from: moment().format('YYYY-MM-DD'),
       })
       .finally(() => {
         removeL('fetch-events');

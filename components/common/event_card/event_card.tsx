@@ -46,17 +46,28 @@ export const EventCard: IEventCard = (props) => {
       >
         <FlexItem>
           <FlexBox className="gap-[.81rem]">
-            <FlexItem className="w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0">
-              <Image
-                fill
-                alt={props.name}
-                src={
-                  props.banner_path
-                    ? `${serverBaseUrl}/storage/${props.banner_path}`
-                    : noImage.src
-                }
-                className="object-cover"
-              />
+            <FlexItem
+              className={twMerge(
+                classNames(
+                  'w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0',
+                  {
+                    'bg-gray-100': !!!props.banner_path,
+                  },
+                ),
+              )}
+            >
+              {props.banner_path ? (
+                <Image
+                  fill
+                  alt={props.name}
+                  src={`${serverBaseUrl}/storage/${props.banner_path}`}
+                  className="object-cover"
+                />
+              ) : (
+                <div className="text-gray-400 font-bold text-[1rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                  دورهمی
+                </div>
+              )}
             </FlexItem>
             <FlexItem>
               <FlexBox

@@ -22,12 +22,15 @@ import { MainService } from '@/services/main/main.service';
 import { Footer } from '@/components/core/footer/footer';
 import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
 import { SpecialDiscount } from '@/components/common/special_discount';
+import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
+import ConfirmModal from '@/components/common/confirm_modal/confirm_modal';
 
 function Home() {
   const [addL, removeL] = useLoadings();
   const router = useCustomRouter();
   const [searchField, setSearchField] = useState('');
   const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
+  const [confirmModal, setConfirmModal] = useState<IConfirmModalProps>();
   const [pinBusinesses, setPinBusinesses] = useState<
     {
       slug: string;
@@ -127,6 +130,21 @@ function Home() {
     router.push(`/search?search=${searchPhrase}`);
   };
   const findNearestBusinessHandler = () => {
+    function showErrorModal(title: string, error: string) {
+      setConfirmModal({
+        open: true,
+        title,
+        dangerConfirm: false,
+        primaryConfirm: true,
+        dismissButton: false,
+        content: (
+          <div className="text-[1rem] text-typography text-center">{error}</div>
+        ),
+        onClose() {
+          setConfirmModal(undefined);
+        },
+      });
+    }
     if (navigator.geolocation) {
       addL('get-location');
       navigator.geolocation.getCurrentPosition(
@@ -142,7 +160,22 @@ function Home() {
           console.log({
             error,
           });
-          alert(JSON.stringify(error.message));
+          if (error.code == 1) {
+            showErrorModal(
+              'خطای دسترسی',
+              'دسترسی به خواندن موقعیت مکانی داده نشده است.',
+            );
+          } else if (error.code == 2) {
+            showErrorModal(
+              'خطا',
+              'امکان دریافت اطلاعات موقعیت مکانی از سرویس دهنده وجود ندارد.',
+            );
+          } else {
+            showErrorModal(
+              'خطا',
+              'خطایی در دریافت اطلاعات موقعیت مکانی رخ داد.',
+            );
+          }
         },
       );
     }
@@ -229,6 +262,7 @@ function Home() {
         </div>
         <Footer />
       </FlexBox>
+      {confirmModal && <ConfirmModal {...confirmModal} />}
     </>
   );
 }

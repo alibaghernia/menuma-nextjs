@@ -144,7 +144,7 @@ export const EventCard: IEventCard = (props) => {
               href={`/${props.cafe_restaurant?.slug}/events/${props.id}`}
               className="block"
             >
-              مشاهده جزئیات
+              مشاهده
             </Link>
           </Button>
         </FlexItem>

@@ -59,16 +59,16 @@ function EventPage() {
       .catch((err) => {
         if (err == 404) {
           message.error('رویداد مورد نظر یافت نشد');
-          setTimeout(() => {
-            router.back();
-          }, 1000);
+          // setTimeout(() => {
+          //   router.back();
+          // }, 1000);
         } else message.error('مشکلی در دریافت اطلاعات رویداد وجود دارد!');
       });
   }
 
   useEffect(() => {
-    fetchEvent();
-  }, []);
+    if (params.event_id) fetchEvent();
+  }, [params]);
   console.log('render');
 
   return (
@@ -96,7 +96,7 @@ function EventPage() {
             </FlexBox>
           </FlexItem>
           <FlexItem className="mt-[1.64rem]">
-            <div className="relative w-[20rem] h-[20rem] rounded-[.862rem] overflow-hidden mx-auto">
+            <div className="relative w-[20rem] h-[20rem] rounded-[.862rem] overflow-hidden mx-auto border">
               <Image
                 fill
                 alt={event?.name || ''}

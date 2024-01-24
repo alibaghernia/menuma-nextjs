@@ -12,6 +12,7 @@ export const ConfirmModal: IConfirmModal = ({
   confirmText = 'باشه',
   dismissButton = true,
   dangerConfirm = true,
+  primaryConfirm = false,
   outClose = true,
   dismissText = 'بیخیال',
   title,
@@ -62,6 +63,7 @@ export const ConfirmModal: IConfirmModal = ({
                       {
                         'bg-red-100 text-red-600': dangerConfirm,
                         'bg-green-100 text-green-600': !dangerConfirm,
+                        'bg-primary/[.05] text-primary': primaryConfirm,
                       },
                     )}
                     onClick={onConfirm}

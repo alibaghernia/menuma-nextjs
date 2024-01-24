@@ -166,6 +166,30 @@ const ServicePage: FC = () => {
                 </Button>
               </Section>
             </FlexItem>
+
+            <FlexItem className="my-[2.7rem]">
+              <Section
+                title="مشاوره"
+                contentClassNames="text-center"
+                className="text-typography text-[1rem]]"
+                centerTitle
+              >
+                <FlexBox gap={2} direction="column" alignItems="center">
+                  <FlexItem className="text-typography text-[.862rem]">
+                    جهت دریافت مشاوره با شماره زیر تماس بگیرید:
+                  </FlexItem>
+                  <FlexItem>
+                    <Link
+                      href="tel:09999924319"
+                      target="_blank"
+                      className="font-bold"
+                    >
+                      09999924319
+                    </Link>
+                  </FlexItem>
+                </FlexBox>
+              </Section>
+            </FlexItem>
           </FlexBox>
         </FlexItem>
         <FlexItem>

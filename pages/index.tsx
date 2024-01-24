@@ -39,7 +39,7 @@ function Home() {
     }[]
   >([]);
   const [conditinalDiscounts, setConditinalDiscounts] = useState<
-    ISpecialDiscountProps[]
+    ConditionalDiscount[]
   >([]);
   const mainService = MainService.init();
 
@@ -78,7 +78,9 @@ function Home() {
   function fetchHasDiscountBusinesses() {
     addL('fetch-has-discount-businesses');
     mainService
-      .getDiscounts()
+      .getDiscounts({
+        is_pinned: true,
+      })
       .finally(() => {
         removeL('fetch-has-discount-businesses');
       })
@@ -112,7 +114,18 @@ function Home() {
           className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-[20rem] "
           key={idx}
         >
-          <SpecialDiscount key={idx} {...discount} />
+          <SpecialDiscount
+            key={idx}
+            cafe_restaurant_id={discount.cafe_restaurant_id}
+            title={discount.title}
+            description={discount.description}
+            id={discount.id}
+            created_at={discount.created_at}
+            updated_at={discount.updated_at}
+            business_logo={discount.cafe_restaurant?.logo_path}
+            business_slug={discount.cafe_restaurant?.slug}
+            business_title={discount.cafe_restaurant?.name}
+          />
         </SwiperSlide>
       )),
     [conditinalDiscounts],

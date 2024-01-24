@@ -32,7 +32,7 @@ function Search() {
   const { query: params } = useCustomRouter();
   const isNear = !!params.near;
   const [searchField, setSearchField] = useState('');
-  const [radius, setRadius] = useState('۵۰۰ متری');
+  const [radius, setRadius] = useState('2 کیلومتری');
   const [fetchedItems, setFetchedItems] = useState<
     {
       logo: string;

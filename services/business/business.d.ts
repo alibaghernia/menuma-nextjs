@@ -5,6 +5,12 @@ declare type ConditionalDiscount = {
   title: string;
   description: string;
   cafe_restaurant_id: number;
+  cafe_restaurant?: {
+    id: number;
+    logo_path: string;
+    slug: string;
+    name: string;
+  };
 };
 
 declare type BusinessType = {

@@ -31,24 +31,12 @@ export class MainService {
       .get(`/api/cafe-restaurants`, { params: args })
       .then(({ data }) => data);
   }
-  getDiscounts(): Promise<ISpecialDiscountProps[]> {
+  getDiscounts(args: IGetDiscounts = {}): Promise<ISpecialDiscountProps[]> {
     return this.axios
-      .get<BusinessType[]>(`/api/cafe-restaurants`, {
-        params: { discounts: true },
+      .get<ConditionalDiscount[]>(`/api/discounts`, {
+        params: args,
       })
-      .then(({ data }) => {
-        const discounts = data
-          .map((bus) =>
-            bus.conditional_discounts!.map((dis) => ({
-              ...dis,
-              business_slug: bus.slug,
-              business_title: bus.name,
-              business_logo: bus.logo_path,
-            })),
-          )
-          .flat();
-        return discounts;
-      });
+      .then(({ data }) => data);
   }
   getCatalogs(): Promise<Catalog[]> {
     return this.axios.get(`/api/catalogs`).then(({ data }) => data);

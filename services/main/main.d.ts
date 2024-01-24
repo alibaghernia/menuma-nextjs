@@ -77,6 +77,10 @@ declare interface ISearchBusiness {
   lat?: string;
   long?: string;
 }
+declare interface IGetDiscounts {
+  is_pinned?: boolean;
+  limit?: number;
+}
 declare interface IGetEvents {
   is_pinned?: boolean;
   limit?: number;

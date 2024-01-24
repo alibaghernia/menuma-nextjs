@@ -53,9 +53,9 @@ function DiscountsPage() {
       <FlexItem key={idx}>
         <SpecialDiscount
           {...event}
-          business_logo={state.profile.logo_path}
-          business_slug={state.profile.slug}
-          business_title={state.profile.name}
+          business_logo={event.cafe_restaurant?.logo_path}
+          business_slug={event.cafe_restaurant?.slug}
+          business_title={event.cafe_restaurant?.name}
           className="md:w-[25rem]"
         />
       </FlexItem>

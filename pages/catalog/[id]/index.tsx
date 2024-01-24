@@ -23,6 +23,8 @@ import { ArrowBackIcon } from '@/icons/arrow-back';
 import tailwindConfig from '@/tailwind.config';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import { useRouter } from 'next/router';
+import { Section } from '@/components/common/section/section';
+import Link from 'next/link';
 
 type Service = Catalog;
 
@@ -103,7 +105,7 @@ const ServicePage: FC = () => {
                         <FlexItem>
                           <FlexBox
                             alignItems="center"
-                            className="rounded bg-typography/[.1] pr-[.5rem] py-1 cursor-pointer"
+                            className="rounded-lg bg-typography/[.05] px-[.5rem] pr-[1rem] py-1 cursor-pointer"
                           >
                             <FlexItem
                               className="text-typography"
@@ -149,6 +151,20 @@ const ServicePage: FC = () => {
                   </FlexBox>
                 </FlexItem>
               </FlexBox>
+            </FlexItem>
+            <FlexItem className="mt-[2.7rem]">
+              <Section
+                title="همین حالا به منوما بپیوندید!"
+                contentClassNames="px-[2.07rem] pt-[1.03rem]"
+                className="text-typography text-[1rem]]"
+                centerTitle
+              >
+                <Button className="py-[.8rem] px-[2rem] text-[1.2rem] w-full md:w-fit md:mx-auto rounded-[1.03rem]">
+                  <Link href="/register_form" className="w-full">
+                    درخواست منوی رایگان
+                  </Link>
+                </Button>
+              </Section>
             </FlexItem>
           </FlexBox>
         </FlexItem>

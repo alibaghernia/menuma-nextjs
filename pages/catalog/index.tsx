@@ -9,8 +9,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import menuImage from '@/assets/images/services/menu.png';
-import pagerImage from '@/assets/images/services/pager.png';
 import classNames from 'classnames';
 import { twMerge } from 'tailwind-merge';
 import Image from 'next/image';
@@ -78,7 +76,8 @@ function CatalogPage() {
                   <Logo />
                 </FlexItem>
                 <FlexItem className="text-typography text-[.862rem]">
-                  پلتفرم مدیریت، مقایسه و تعامل آنلاین با کافه ها و رستوران ها
+                  هدف منوما افزایش مشتریان حضوری کافه شما و کاهش هزینه هایتان
+                  است
                 </FlexItem>
               </FlexBox>
             </FlexItem>
@@ -167,12 +166,11 @@ const ServiceCard: FC<Service> = (service) => {
     <FlexBox
       className={twMerge(
         classNames(
-          ' w-[14rem] h-[23rem] bg-white rounded-[1.37rem] p-[1.38rem] border border-gray-300 !justify-between',
+          ' w-[14rem] h-[23rem] bg-white rounded-[1.37rem] p-[1.38rem] border border-gray-300 !justify-between gap-[1.5rem]',
         ),
       )}
       alignItems="center"
       direction="column"
-      gap={2}
     >
       <FlexItem grow>
         <FlexBox
@@ -206,7 +204,7 @@ const ServiceCard: FC<Service> = (service) => {
         </FlexBox>
       </FlexItem>
       <FlexItem>
-        <Button type="ghost" color="primary">
+        <Button type="ghost" color="primary" className="outline-none">
           <Link href={`/catalog/${service.id}`} className="w-full">
             اطلاعات بیشتر
           </Link>

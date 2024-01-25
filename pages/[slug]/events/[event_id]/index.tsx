@@ -97,16 +97,22 @@ function EventPage() {
           </FlexItem>
           <FlexItem className="mt-[1.64rem]">
             <div className="relative w-[20rem] h-[20rem] rounded-[.862rem] overflow-hidden mx-auto border">
-              <Image
-                fill
-                alt={event?.name || ''}
-                src={
-                  event?.banner_path
-                    ? `${serverBaseUrl}/storage/${event.banner_path}`
-                    : noImage.src
-                }
-                className="object-cover"
-              />
+              {event?.banner_path ? (
+                <Image
+                  fill
+                  alt={event?.name || ''}
+                  src={
+                    event?.banner_path
+                      ? `${serverBaseUrl}/storage/${event.banner_path}`
+                      : noImage.src
+                  }
+                  className="object-cover"
+                />
+              ) : (
+                <div className="text-gray-400 font-bold text-[2rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                  دورهمی
+                </div>
+              )}
             </div>
           </FlexItem>
           <FlexItem className="mt-[1.38rem]">

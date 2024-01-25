@@ -24,7 +24,7 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
       >
         <FlexItem>
           <FlexBox className="gap-[.81rem]">
-            <FlexItem className="w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0">
+            <FlexItem className="w-[7rem] h-[7rem] relative rounded-full overflow-hidden shrink-0 border">
               <Image
                 fill
                 alt={discount.title}

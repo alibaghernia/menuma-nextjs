@@ -49,13 +49,13 @@ function DiscountsPage() {
   }, []);
 
   const discounts = useMemo(() => {
-    return fetchedDiscounts.map((event, idx) => (
+    return fetchedDiscounts.map((discount, idx) => (
       <FlexItem key={idx}>
         <SpecialDiscount
-          {...event}
-          business_logo={event.cafe_restaurant?.logo_path}
-          business_slug={event.cafe_restaurant?.slug}
-          business_title={event.cafe_restaurant?.name}
+          {...discount}
+          business_logo={state.profile?.logo_path}
+          business_slug={state.profile?.slug}
+          business_title={state.profile?.name}
           className="md:w-[25rem]"
         />
       </FlexItem>
@@ -77,7 +77,7 @@ function DiscountsPage() {
         <FlexItem>
           <FlexBox direction="column">
             <FlexItem>
-              <div className="relative w-[7rem] h-[7rem] rounded-full overflow-hidden mx-auto">
+              <div className="relative w-[7rem] h-[7rem] rounded-full overflow-hidden mx-auto border">
                 <Link href={`/${state.profile.slug}`}>
                   <Image
                     alt={state.profile.name}

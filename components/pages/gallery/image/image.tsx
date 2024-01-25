@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useState } from 'react';
-import { GalleryImageProps, IGalleryImage } from './types';
+import { GalleryImage, GalleryImageProps, IGalleryImage } from './types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { PanZoomIcon } from '@/icons/pan-zoom';
@@ -9,7 +9,14 @@ import classNames from 'classnames';
 import { useCurrentBreakpoints, useTailwindColor } from '@/utils/hooks';
 import { LinedCloseIcon } from '@/icons/lined_close';
 import { createPortal } from 'react-dom';
-import { Button } from 'antd/lib';
+import { Button, Spin } from 'antd/lib';
+import { Pannellum } from 'pannellum-react';
+import image360 from '@/assets/images/360-image.jpg';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import Image from 'next/image';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
 
 const GalleryImage: IGalleryImage = (props) => {
   const [showZoom, setShowZoom] = useState(false);
@@ -43,7 +50,7 @@ const GalleryImage: IGalleryImage = (props) => {
             )}
           </FlexBox>
         )}
-        {props.isPanorama && (
+        {props.is_panorama && (
           <div className="absolute left-[50%] translate-x-[-50%] bottom-[1rem] pointer-events-none">
             <View360 />
           </div>
@@ -66,30 +73,106 @@ export default GalleryImage;
 const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
   const currentBreakpoints = useCurrentBreakpoints();
   const typographyColor = useTailwindColor('typography');
+  const [current, setCurrent] = useState<GalleryImage>(props);
+  const [loadingImage, setLoadingImage] = useState(true);
 
   const image = useMemo(() => {
-    if (props.isPanorama) {
-      return <></>;
-    } else return <img src={props.src} alt={props.alt} />;
+    if (current.is_panorama) {
+      return (
+        <Pannellum
+          width="100%"
+          height="100%"
+          image={current.src}
+          autoLoad
+          onError={(err: any) => {
+            console.log({
+              err,
+            });
+            setLoadingImage(false);
+          }}
+          onLoad={() => {
+            setLoadingImage(false);
+          }}
+        ></Pannellum>
+      );
+    } else
+      return (
+        <img
+          src={current.src}
+          onLoad={() => setLoadingImage(false)}
+          alt={current.alt}
+          className="w-full object-cover rounded-[.865rem] "
+        />
+      );
+  }, [current]);
+
+  const childSlides = useMemo(() => {
+    return props.childs?.map((image, idx) => (
+      <SwiperSlide className="!w-fit" key={idx}>
+        <FlexBox
+          direction="column"
+          alignItems="center"
+          gap={2}
+          className="bg-white cursor-pointer"
+          onClick={() => {
+            setLoadingImage(true);
+            setCurrent(image);
+          }}
+        >
+          <FlexItem className="relative w-[8rem] h-[8rem] rounded-[.5rem] overflow-hidden border">
+            <Image
+              src={image.thumb_src ? image.thumb_src : image.src}
+              fill
+              alt={image.title || ''}
+              className="object-cover"
+            />
+            {image.is_panorama && (
+              <div className="absolute left-[50%] bottom-[.5rem] translate-x-[-50%]">
+                <View360 />
+              </div>
+            )}
+          </FlexItem>
+          <FlexItem className="text-typography text-[.865rem] font-semibold">
+            {image.title}
+          </FlexItem>
+        </FlexBox>
+      </SwiperSlide>
+    ));
   }, []);
 
   return createPortal(
     <>
+      <div
+        className={twMerge(
+          classNames('z-50 fixed bg-black/[.4] inset-0', {
+            'flex justify-center items-center': currentBreakpoints.isMd,
+          }),
+        )}
+        onClick={(e) => {
+          e.preventDefault();
+          props.onClose();
+        }}
+      ></div>
       <FlexBox
         direction="column"
         gap={2}
         className={twMerge(
-          classNames('z-50 fixed bg-white p-[1rem]', {
-            'inset-0': currentBreakpoints.isXs,
+          classNames('z-50 bg-white p-[2rem] max-h-screen', {
+            'inset-0 fixed': currentBreakpoints.isXs,
+            'w-[40rem] max-h-[calc(100vh - 5rem)] rounded-[1rem] absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]':
+              currentBreakpoints.isSm,
           }),
         )}
       >
         <FlexItem>
           <FlexBox justify="between">
             <FlexItem className="text-typography font-semibold text-[1rem]">
-              {props.title}
+              {current.title}
             </FlexItem>
-            <FlexItem onClick={() => props.onClose()}>
+            <FlexItem
+              onClick={() => props.onClose()}
+              className="cursor-pointer"
+            >
               <LinedCloseIcon color={typographyColor} width={28} height={28} />
             </FlexItem>
           </FlexBox>
@@ -97,15 +180,45 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
         <FlexItem>
           <hr />
         </FlexItem>
-        <FlexItem grow className="p-[1rem] relative">
+        <FlexItem grow className="relative overflow-y-auto">
           <FlexBox direction="column" justify="center" className="h-full">
-            <FlexItem className="rounded-[.865rem] overflow-hidden">
+            <FlexItem className="overflow-hidden h-full  overflow-y-auto">
               {image}
             </FlexItem>
           </FlexBox>
+          {loadingImage && (
+            <div className="absolute inset-0 bg-white flex justify-center items-center">
+              <Spin />
+            </div>
+          )}
         </FlexItem>
+        {Boolean(current.information) && (
+          <FlexItem className="text-typography text-center py-2 text-[1rem]">
+            {current.information}
+          </FlexItem>
+        )}
+        <FlexItem className="">
+          <hr />
+        </FlexItem>
+        {Boolean(props.childs?.length) && (
+          <FlexItem>
+            <Swiper
+              slidesPerView={'auto'}
+              spaceBetween={16}
+              centerInsufficientSlides
+            >
+              {childSlides}
+            </Swiper>
+          </FlexItem>
+        )}
         <FlexItem>
-          <Button ghost type={'primary'} block onClick={() => props.onClose()}>
+          <Button
+            ghost
+            type={'primary'}
+            block
+            onClick={() => props.onClose()}
+            size="large"
+          >
             بستن
           </Button>
         </FlexItem>

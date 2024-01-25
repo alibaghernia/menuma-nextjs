@@ -1,14 +1,19 @@
 import { FC } from 'react';
 
-declare interface GalleryImageProps {
-  title?: string;
-  zoomable?: boolean;
-  information?: string;
+declare type GalleryImage = {
   src: string;
-  alt?: string;
+  thumb_src?: string;
   width?: number | string;
   height?: number | string;
-  isPanorama?: boolean;
+  alt?: string;
+  title: string;
+  information?: string;
+  childs?: GalleryImageProps[];
+  is_panorama?: boolean;
+};
+
+declare interface GalleryImageProps extends GalleryImage {
+  zoomable?: boolean;
 }
 
 declare type IGalleryImage = FC<GalleryImageProps>;

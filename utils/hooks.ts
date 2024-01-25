@@ -8,6 +8,8 @@ import { nextTick } from 'process';
 import { useContext, useEffect, useMemo } from 'react';
 import { TransitionOptions } from './page_hooks_types';
 import { Grid } from 'antd/lib';
+import tailwindConfig from '@/tailwind.config';
+import resolveConfig from 'tailwindcss/resolveConfig';
 
 export const useLoadings = () => {
   const { addLoading, removeLoading } = useContext(GeneralContext);
@@ -81,4 +83,10 @@ export const useCurrentBreakpoints = () => {
     isXlg: currentBreakpoints.includes('xlg'),
     last: currentBreakpoints.slice(-1).toString(),
   };
+};
+
+export const useTailwindColor = (color: string) => {
+  const resolvedTailwindConfig = resolveConfig(tailwindConfig);
+
+  return resolvedTailwindConfig.theme?.colors![color].toString();
 };

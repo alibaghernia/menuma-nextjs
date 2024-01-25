@@ -5,8 +5,9 @@ import { Url } from 'next/dist/shared/lib/router/router';
 import Error from 'next/error';
 import { useRouter } from 'next/router';
 import { nextTick } from 'process';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { TransitionOptions } from './page_hooks_types';
+import { Grid } from 'antd/lib';
 
 export const useLoadings = () => {
   const { addLoading, removeLoading } = useContext(GeneralContext);
@@ -58,4 +59,26 @@ export const useCustomParams = () => {
   const { query: params } = useRouter();
 
   return params;
+};
+
+export const useCurrentBreakpoints = () => {
+  const breakpoints = Grid.useBreakpoint();
+
+  const currentBreakpoints = useMemo(
+    () =>
+      Object.entries(breakpoints)
+        .filter(([, v]) => !!v)
+        .map(([k]) => k),
+    [breakpoints],
+  );
+
+  return {
+    breakpoints: currentBreakpoints,
+    isXs: currentBreakpoints.includes('xs'),
+    isSm: currentBreakpoints.includes('sm'),
+    isMd: currentBreakpoints.includes('md'),
+    isLg: currentBreakpoints.includes('lg'),
+    isXlg: currentBreakpoints.includes('xlg'),
+    last: currentBreakpoints.slice(-1).toString(),
+  };
 };

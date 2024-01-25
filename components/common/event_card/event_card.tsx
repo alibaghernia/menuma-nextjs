@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { useSlug } from '@/providers/main/hooks';
 import { serverBaseUrl } from '@/utils/axios';
+import { twMerge } from 'tailwind-merge';
 
 export const EventCard: IEventCard = (props) => {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
@@ -35,25 +36,38 @@ export const EventCard: IEventCard = (props) => {
   return (
     <>
       <FlexBox
-        className={classNames(
-          'p-[1rem] bg-white gap-[.62rem] rounded-[1rem] shadow w-full max-w-[30rem]',
-          props.className,
+        className={twMerge(
+          classNames(
+            'p-[1rem] bg-white gap-[.62rem] rounded-[1rem] shadow w-[30rem]',
+            props.className,
+          ),
         )}
         direction="column"
       >
         <FlexItem>
           <FlexBox className="gap-[.81rem]">
-            <FlexItem className="w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0">
-              <Image
-                fill
-                alt={props.name}
-                src={
-                  props.banner_path
-                    ? `${serverBaseUrl}/storage/${props.banner_path}`
-                    : noImage.src
-                }
-                className="object-cover"
-              />
+            <FlexItem
+              className={twMerge(
+                classNames(
+                  'w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0',
+                  {
+                    'bg-gray-100': !!!props.banner_path,
+                  },
+                ),
+              )}
+            >
+              {props.banner_path ? (
+                <Image
+                  fill
+                  alt={props.name}
+                  src={`${serverBaseUrl}/storage/${props.banner_path}`}
+                  className="object-cover"
+                />
+              ) : (
+                <div className="text-gray-400 font-bold text-[1rem] absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                  دورهمی
+                </div>
+              )}
             </FlexItem>
             <FlexItem>
               <FlexBox
@@ -138,10 +152,10 @@ export const EventCard: IEventCard = (props) => {
             type="primary"
           >
             <Link
-              href={`/${props.cafe_restaurant?.slug}/event/${props.id}`}
+              href={`/${props.cafe_restaurant?.slug}/events/${props.id}`}
               className="block"
             >
-              مشاهده جزئیات
+              مشاهده
             </Link>
           </Button>
         </FlexItem>

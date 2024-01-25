@@ -24,6 +24,8 @@ declare interface IProfile {
   has_pager?: string;
   phone_number?: string;
   email?: string;
+  conditional_discounts_exists: boolean;
+  events_exists: boolean;
 }
 
 declare type WorkignHour = {

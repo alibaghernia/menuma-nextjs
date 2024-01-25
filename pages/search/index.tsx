@@ -15,13 +15,24 @@ import { LOADING_KEYS } from '@/providers/general/contants';
 import Link from 'next/link';
 import { Select } from 'antd/lib';
 import { toPersianNumber } from '@/helpers/functions';
+import AdvancedSearch from '@/components/common/advanced_search/advanced_search';
+import { GeneralContext } from '@/providers/general/provider';
+import { MainService } from '@/services/main/main.service';
+
+type SearchArgs = {
+  is_pinned?: boolean;
+  search_field?: string;
+};
 
 function Search() {
   const [addL, removeL] = useLoadings();
+  const { loadings } = useContext(GeneralContext);
+  const [advancedSearch, setAdvancedSearch] = useState(false);
+  const [advancedSearchArgs, setAdvancedSearchArgs] = useState({});
   const { query: params } = useCustomRouter();
   const isNear = !!params.near;
   const [searchField, setSearchField] = useState('');
-  const [radius, setRadius] = useState('۵۰۰ متری');
+  const [radius, setRadius] = useState('2 کیلومتری');
   const [fetchedItems, setFetchedItems] = useState<
     {
       logo: string;
@@ -31,16 +42,21 @@ function Search() {
       distance?: number;
     }[]
   >([]);
+  const mainService = MainService.init();
 
-  const handleFetchBusinesses = (searchPhrase: string) => {
-    if (!searchPhrase) return;
+  const handleFetchBusinesses = (args: SearchArgs = {}) => {
+    if (!!!Object.keys(args).length) return;
     addL('fetch-businesses');
-    axios
-      .get(`/api/cafe-restaurants?all_fields=${searchPhrase}`)
+    mainService
+      .searchBusiness({
+        all_fields: args.search_field,
+        pin: args.is_pinned,
+      })
       .finally(() => {
         removeL('fetch-businesses');
       })
-      .then(({ data }) => {
+      .then((data) => {
+        setAdvancedSearch(false);
         setFetchedItems(
           (data as any[]).map((business) => ({
             logo: business.logo_path
@@ -80,11 +96,11 @@ function Search() {
 
   useEffect(() => {
     if (params.search) {
-      handleFetchBusinesses(params.search as string);
+      handleFetchBusinesses({ search_field: params.search as string });
       setSearchField(params.search as string);
     }
     if (params.near && params.lat && params.long && isNear) {
-      fetchNearBusinesses('500');
+      fetchNearBusinesses('2000');
     }
   }, [params]);
 
@@ -147,15 +163,18 @@ function Search() {
   };
 
   const handleSearchBusiness = (searchPhrase: string) => {
-    handleFetchBusinesses(searchPhrase);
+    handleFetchBusinesses({
+      ...advancedSearchArgs,
+      search_field: searchPhrase,
+    });
   };
 
   const onChangeSelect = (value: string) => {
     fetchNearBusinesses(value);
     if (value == '500') {
-      setRadius(`${toPersianNumber(Number(value))}متری`);
+      setRadius(`${toPersianNumber(Number(value))} متری`);
     } else {
-      setRadius(`${toPersianNumber(Number(value) / 1000)}کیلومتری`);
+      setRadius(`${toPersianNumber(Number(value) / 1000)} کیلومتری`);
     }
   };
 
@@ -173,6 +192,7 @@ function Search() {
         <div className="mt-[2.12rem]">
           {!isNear ? (
             <SearchBusinessBox
+              onAdvancedSearchClick={() => setAdvancedSearch(true)}
               value={searchField}
               onChange={setSearchField}
               onSearch={handleSearchBusiness}
@@ -182,7 +202,7 @@ function Search() {
               <div className="flex flex-col gap-[.875rem] items-center pb-4">
                 <Select
                   style={{ width: '100%' }}
-                  defaultValue="500"
+                  defaultValue="2000"
                   showSearch
                   placeholder="انتخاب محدوده"
                   optionFilterProp="children"
@@ -223,6 +243,25 @@ function Search() {
           )}
         </div>
       </div>
+
+      <AdvancedSearch
+        loading={!!loadings.includes('fetch-businesses')}
+        onClose={() => setAdvancedSearch(false)}
+        open={advancedSearch}
+        float
+        fields={[
+          {
+            name: 'is_pinned',
+            title: 'منتخب',
+            type: 'check',
+            checkValue: '1',
+          },
+        ]}
+        onSearch={(data) => {
+          setAdvancedSearchArgs(data);
+          handleFetchBusinesses({ ...data, search_field: searchField });
+        }}
+      />
     </>
   );
 }

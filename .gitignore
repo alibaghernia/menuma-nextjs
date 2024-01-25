@@ -9,6 +9,13 @@
 # testing
 /coverage
 
+sw.*.map
+public/workbox-*.js
+public/sw.js
+public/worker-*.js
+public/*worker-*.js
+public/workbox-*
+
 # next.js
 /.next/
 /out/

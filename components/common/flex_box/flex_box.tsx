@@ -32,7 +32,7 @@ export const FlexBox: IFlexBox = ({
       )}
       style={{
         gap: typeof props.gap == 'string' ? props.gap : undefined,
-        justifyContent: justify,
+        justifyContent: justify == 'between' ? 'space-between' : justify,
         ...(style || {}),
       }}
       {...props}

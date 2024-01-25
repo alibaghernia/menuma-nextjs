@@ -12,10 +12,7 @@ export class EventsService {
   constructor(private businessService: BusinessService) {}
 
   async getEvent(id: string | number): Promise<EventType> {
-    const { data: events } = await this.businessService.axios.get<EventType[]>(
-      `${this.businessService.backendURL}/api/events?limit=5&ispinned=1`,
-    );
-    // return this.businessService.axios.post('/customer-club/register', args);
+    const events = await this.businessService.getEvents();
     return new Promise((resolve, rej) => {
       const event = events.find((event) => event.id == id);
       if (event) resolve(event);

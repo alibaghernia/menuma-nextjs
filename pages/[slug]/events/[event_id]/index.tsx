@@ -4,7 +4,6 @@ import { useSlug } from '@/providers/main/hooks';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import Head from 'next/head';
 import { Navbar } from '@/components/core/navbar/navbar';
-import { ProviderContext } from '@/providers/main/provider';
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -60,16 +59,16 @@ function EventPage() {
       .catch((err) => {
         if (err == 404) {
           message.error('رویداد مورد نظر یافت نشد');
-          setTimeout(() => {
-            router.back();
-          }, 1000);
+          // setTimeout(() => {
+          //   router.back();
+          // }, 1000);
         } else message.error('مشکلی در دریافت اطلاعات رویداد وجود دارد!');
       });
   }
 
   useEffect(() => {
-    fetchEvent();
-  }, []);
+    if (params.event_id) fetchEvent();
+  }, [params]);
   console.log('render');
 
   return (
@@ -97,7 +96,7 @@ function EventPage() {
             </FlexBox>
           </FlexItem>
           <FlexItem className="mt-[1.64rem]">
-            <div className="relative w-[20rem] h-[20rem] rounded-[.862rem] overflow-hidden mx-auto">
+            <div className="relative w-[20rem] h-[20rem] rounded-[.862rem] overflow-hidden mx-auto border">
               <Image
                 fill
                 alt={event?.name || ''}
@@ -184,29 +183,31 @@ function EventPage() {
               )}
             </FlexBox>
           </FlexItem>
-          <FlexItem className="mt-[1.21rem]">
-            <FlexBox alignItems="center">
-              <FlexItem>
-                <FlexBox alignItems="center" className="gap-[.38rem]">
-                  <FlexItem>
-                    <Location
-                      color={resolvedTailwindConfig.theme?.colors![
-                        'typography'
-                      ].toString()}
-                      width={16}
-                      height={16}
-                    />
-                  </FlexItem>
-                  <FlexItem className="text-[.862rem] text-typography">
-                    آدرس:
-                  </FlexItem>
-                </FlexBox>
-              </FlexItem>
-              <FlexItem className="text-[.862rem] text-typography">
-                {state.profile?.address}
-              </FlexItem>
-            </FlexBox>
-          </FlexItem>
+          {!!state.profile?.address && (
+            <FlexItem className="mt-[1.21rem]">
+              <FlexBox alignItems="center">
+                <FlexItem>
+                  <FlexBox alignItems="center" className="gap-[.38rem]">
+                    <FlexItem>
+                      <Location
+                        color={resolvedTailwindConfig.theme?.colors![
+                          'typography'
+                        ].toString()}
+                        width={16}
+                        height={16}
+                      />
+                    </FlexItem>
+                    <FlexItem className="text-[.862rem] text-typography">
+                      آدرس:
+                    </FlexItem>
+                  </FlexBox>
+                </FlexItem>
+                <FlexItem className="text-[.862rem] text-typography">
+                  {state.profile?.address}
+                </FlexItem>
+              </FlexBox>
+            </FlexItem>
+          )}
           {event?.long_description && (
             <FlexItem className="mt-[1.21rem]">
               <FlexBox direction="column" className="gap-[.34rem]">

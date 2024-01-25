@@ -14,5 +14,6 @@ declare interface IConfirmModalProps {
   content?: any;
   outClose?: boolean;
   dangerConfirm?: boolean;
+  primaryConfirm?: boolean;
 }
 declare type IConfirmModal = FC<PropsWithChildren<IConfirmModalProps>>;

@@ -19,6 +19,7 @@ import { DatePicker } from 'zaman';
 import { createUseStyles } from 'react-jss';
 import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
 import moment from 'moment';
+import Link from 'next/link';
 
 const registeredKey = 'register-customer-club';
 
@@ -92,9 +93,16 @@ function CustomerClubRegisterPage() {
           title={state.profile.name}
         />
         {alreadyRegistred ? (
-          <FlexBox justify="center" alignItems="center" className="h-full px-6">
-            <FlexItem className="text-typography font-semibold text-[1.2rem] text-center">
+          <FlexBox direction="column" justify="center" className="h-full px-6">
+            <FlexItem className="text-typography font-semibold text-[1.2rem] text-center mt-[40vh]">
               کاربر گرامی ثبت نام شما در باشگاه مشتریان قبلا انجام شده است!
+            </FlexItem>
+            <FlexItem className="mt-[1rem]">
+              <Link href={`/${slug}`}>
+                <Button block type="primary">
+                  بازگشت به پروفایل
+                </Button>
+              </Link>
             </FlexItem>
           </FlexBox>
         ) : (

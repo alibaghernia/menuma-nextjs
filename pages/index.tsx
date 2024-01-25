@@ -157,6 +157,9 @@ function Home() {
         onClose() {
           setConfirmModal(undefined);
         },
+        onConfirm() {
+          setConfirmModal(undefined);
+        },
       });
     }
     if (navigator.geolocation) {

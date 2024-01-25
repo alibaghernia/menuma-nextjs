@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { INavBar } from './types';
 import { MenuIcon } from '@/icons/menu';
 import classNames from 'classnames';
@@ -10,8 +10,6 @@ import tailwindConfig from '@/tailwind.config';
 import { HomeIcon } from '@/icons/home';
 import { MenuCircleIcon } from '@/icons/menu-circle';
 import { ProviderContext } from '@/providers/main/provider';
-import { useRouter } from 'next/router';
-import { useParams } from 'next/navigation';
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
@@ -19,11 +17,11 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Container } from '@/components/common/container/container';
 import dynamic from 'next/dynamic';
 import { CallGarson } from '@/components/common/call_garson/call_garson';
-import { useCustomRouter, useLoadings } from '@/utils/hooks';
-import { LOADING_KEYS } from '@/providers/general/contants';
+import { useCustomRouter, useLoadings, useTailwindColor } from '@/utils/hooks';
 import Link from 'next/link';
 import { PeopleIcon } from '@/icons/people';
 import { DiscountIcon } from '@/icons/discount';
+import { AwardOutlineIcon } from '@/icons/award-outline';
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false });
 export const Navbar: INavBar = ({
@@ -43,6 +41,7 @@ export const Navbar: INavBar = ({
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [overlay, setOverlay] = useState(false);
+  const typographyColor = useTailwindColor('typography');
 
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
 
@@ -75,27 +74,25 @@ export const Navbar: INavBar = ({
     if (coffeShopState.profile.conditional_discounts_exists) {
       menu.push({
         title: 'تخفیف های ویژه',
-        icon: (
-          <DiscountIcon
-            color={resolvedTailwindConfig.theme?.colors?.[
-              'typography'
-            ].toString()}
-          />
-        ),
+        icon: <DiscountIcon color={typographyColor} />,
         url: `/${slug}/discounts`,
       });
     }
     if (coffeShopState.profile.events_exists) {
       menu.push({
         title: 'دورهمی ها',
-        icon: (
-          <PeopleIcon
-            color={resolvedTailwindConfig.theme?.colors?.[
-              'typography'
-            ].toString()}
-          />
-        ),
+        icon: <PeopleIcon color={typographyColor} />,
         url: `/${slug}/events`,
+      });
+    }
+    if (
+      coffeShopState.profile.has_customer_club &&
+      coffeShopState.profile.enabled_customer_club
+    ) {
+      menu.push({
+        title: 'باشگاه مشتریان',
+        icon: <AwardOutlineIcon color={typographyColor} />,
+        url: `/${slug}/customer_club/register`,
       });
     }
 

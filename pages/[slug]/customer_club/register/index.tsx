@@ -8,10 +8,17 @@ import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { Button, Form, Input, Radio, theme } from 'antd/lib';
 import classNames from 'classnames';
 import Head from 'next/head';
-import React, { useCallback, useContext, useEffect, useMemo } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { DatePicker } from 'zaman';
 import { createUseStyles } from 'react-jss';
 import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
+import moment from 'moment';
 
 const registeredKey = 'register-customer-club';
 
@@ -23,12 +30,12 @@ function CustomerClubRegisterPage() {
   const { state, businessService } = useContext(CoffeeShopProviderContext);
   const designToken = theme.useToken();
   const router = useCustomRouter();
+  const [alreadyRegistred, setAlreadyRegistred] = useState(false);
 
   useEffect(() => {
     if (window) {
-      if (typeof localStorage.getItem(registeredKey) != 'undefined') {
-        message.error('کاربر گرامی ثبت نام شما قبلا انجام شده است.');
-        router.replace(document.referrer);
+      if (localStorage.getItem(registeredKey)) {
+        setAlreadyRegistred(true);
       }
     }
   }, []);
@@ -61,6 +68,7 @@ function CustomerClubRegisterPage() {
       .then(() => {
         localStorage.setItem(registeredKey, '1');
         message.success('ضمن تشکر از شما، ثبت نام با موفقیت انجام شد.');
+        router.replace(`/${slug}`);
       })
       .catch(() => {
         message.error('مشکلی در ثبت نام وجود دارد.');
@@ -83,108 +91,124 @@ function CustomerClubRegisterPage() {
           back
           title={state.profile.name}
         />
-        <div className="px-10">
-          <FlexBox
-            className="max-w-lg mx-auto mt-2 gap-[1rem]"
-            alignItems="stretch"
-            direction="column"
-          >
-            <FlexItem
-              className="text-typography text-center text-[1.2rem] font-bold"
-              grow
-            >
-              ثبت نام در باشگاه مشتریان
-            </FlexItem>
-            <FlexItem>
-              <Form form={form} onFinish={onFinish} layout="vertical">
-                <Form.Item
-                  label="نام"
-                  name="name"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'نام اجباری است!',
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="نام خانوادگی"
-                  name="family"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'نام خانوادگی اجباری است!',
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="تاریخ تولد"
-                  name="birth_date"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'تاریخ تولد اجباری است!',
-                    },
-                  ]}
-                >
-                  <div
-                    className={classNames({
-                      'is-invalid': !!form.getFieldError('birth_date').length,
-                    })}
-                  >
-                    <DatePicker
-                      className="date"
-                      round="x2"
-                      accentColor={designToken.token.colorPrimary}
-                      onChange={(e) => {
-                        form.setFieldValue('birth_date', e.value.toISOString());
-                      }}
-                      inputClass={datePickerStype.input}
-                    />
-                  </div>
-                </Form.Item>
-                <Form.Item
-                  label="جنسیت"
-                  name="gender"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'انتخاب جنسیت اجباری است!',
-                    },
-                  ]}
-                >
-                  <Radio.Group>
-                    <Radio value="man">آقا</Radio>
-                    <Radio value="woman">خانم</Radio>
-                  </Radio.Group>
-                </Form.Item>
-                <Form.Item
-                  label="شماره تماس"
-                  name="mobile"
-                  rules={[
-                    {
-                      required: true,
-                      message: 'شماره تماس اجباری است!',
-                    },
-                    {
-                      pattern: /^(09|989|00989|9)\d{9}$/,
-                      message: 'شماره موبایل درست نیست!',
-                    },
-                  ]}
-                >
-                  <Input />
-                </Form.Item>
-                <Button block htmlType="submit" type="primary" className="mt-4">
-                  ثبت نام
-                </Button>
-              </Form>
+        {alreadyRegistred ? (
+          <FlexBox justify="center" alignItems="center" className="h-full px-6">
+            <FlexItem className="text-typography font-semibold text-[1.2rem] text-center">
+              کاربر گرامی ثبت نام شما در باشگاه مشتریان قبلا انجام شده است!
             </FlexItem>
           </FlexBox>
-        </div>
+        ) : (
+          <div className="px-10">
+            <FlexBox
+              className="max-w-lg mx-auto mt-2 gap-[1rem]"
+              alignItems="stretch"
+              direction="column"
+            >
+              <FlexItem
+                className="text-typography text-center text-[1.2rem] font-bold"
+                grow
+              >
+                ثبت نام در باشگاه مشتریان
+              </FlexItem>
+              <FlexItem>
+                <Form form={form} onFinish={onFinish} layout="vertical">
+                  <Form.Item
+                    label="نام"
+                    name="name"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'نام اجباری است!',
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label="نام خانوادگی"
+                    name="family"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'نام خانوادگی اجباری است!',
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item
+                    label="تاریخ تولد"
+                    name="birth_date"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'تاریخ تولد اجباری است!',
+                      },
+                    ]}
+                  >
+                    <div
+                      className={classNames({
+                        'is-invalid': !!form.getFieldError('birth_date').length,
+                      })}
+                    >
+                      <DatePicker
+                        className="date"
+                        round="x2"
+                        accentColor={designToken.token.colorPrimary}
+                        onChange={(e) => {
+                          form.setFieldValue(
+                            'birth_date',
+                            moment(e.value.toISOString()).format('YYYY-MM-DD'),
+                          );
+                        }}
+                        inputClass={datePickerStype.input}
+                      />
+                    </div>
+                  </Form.Item>
+                  <Form.Item
+                    label="جنسیت"
+                    name="gender"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'انتخاب جنسیت اجباری است!',
+                      },
+                    ]}
+                  >
+                    <Radio.Group>
+                      <Radio value="man">آقا</Radio>
+                      <Radio value="woman">خانم</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                  <Form.Item
+                    label="شماره تماس"
+                    name="mobile"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'شماره تماس اجباری است!',
+                      },
+                      {
+                        pattern: /^(09|989|00989|9)\d{9}$/,
+                        message: 'شماره موبایل درست نیست!',
+                      },
+                    ]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Button
+                    block
+                    htmlType="submit"
+                    type="primary"
+                    className="mt-4"
+                  >
+                    ثبت نام
+                  </Button>
+                </Form>
+              </FlexItem>
+            </FlexBox>
+          </div>
+        )}
       </div>
     </>
   );

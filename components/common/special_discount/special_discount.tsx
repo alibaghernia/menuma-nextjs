@@ -9,6 +9,7 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { serverBaseUrl } from '@/utils/axios';
 import { twMerge } from 'tailwind-merge';
+import discountPlaceholer from '@/assets/images/discount-placeholder.png';
 
 export const SpecialDiscount: ISpecialDiscount = (discount) => {
   return (
@@ -24,16 +25,12 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
       >
         <FlexItem>
           <FlexBox className="gap-[.81rem]">
-            <FlexItem className="w-[7rem] h-[7rem] relative rounded-full overflow-hidden shrink-0 border">
+            <FlexItem className="w-[7rem] h-[7rem] relative rounded-[1rem] overflow-hidden shrink-0 border">
               <Image
                 fill
                 alt={discount.title}
-                src={
-                  discount.business_logo
-                    ? `${serverBaseUrl}/storage/${discount.business_logo}`
-                    : noImage.src
-                }
-                className="object-cover"
+                src={discountPlaceholer.src}
+                className="object-cover bg-gray-100"
               />
             </FlexItem>
             <FlexItem>

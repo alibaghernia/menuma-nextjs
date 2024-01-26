@@ -57,6 +57,7 @@ function DiscountsPage() {
           business_slug={state.profile?.slug}
           business_title={state.profile?.name}
           className="md:w-[25rem]"
+          in_scope
         />
       </FlexItem>
     ));
@@ -92,7 +93,11 @@ function DiscountsPage() {
               </div>
             </FlexItem>
             <FlexItem className="mt-[2rem]">
-              <Section title="تخفیف های ویژه" contentClassNames="px-[1.2rem]">
+              <Section
+                title="تخفیف های ویژه"
+                contentClassNames="px-[1.2rem] pt-2"
+                centerTitle
+              >
                 <FlexBox direction="column" gap={2} className="md:items-center">
                   {discounts}
                 </FlexBox>

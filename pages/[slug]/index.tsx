@@ -145,15 +145,15 @@ const Profile = () => {
         <div className="z-0">
           <ProfileHeader />
           <div className="mt-[4.3rem]">
-            <Link href={`/${slug}menu`} className="mx-auto">
-              <Button
-                className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
-                rounded
-                color="#fff"
-              >
+            <Button
+              className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
+              rounded
+              color="#fff"
+            >
+              <Link href={`/${slug}menu`} className="mx-auto">
                 مشاهده مـنـو
-              </Button>
-            </Link>
+              </Link>
+            </Button>
             <div className="mt-[1rem]">
               <WorkingHours data={profileData.working_hours || []} />
             </div>

@@ -5,9 +5,9 @@ import { axios, serverBaseUrl } from '@/utils/axios';
 import { Container } from '@/components/common/container/container';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
-import { Button } from '@/components/common/button';
 import { Label } from '@/components/common/label';
 import { TextField } from '@/components/common/text_field';
+import { Button } from '@/components/common/button';
 
 export const RegisterFormComponent = () => {
   const [input, setInput] = useState({

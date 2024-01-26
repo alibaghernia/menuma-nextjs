@@ -66,14 +66,14 @@ function EventsPage() {
   const events = useMemo(() => {
     return fetchedEvents.map((event, idx) => (
       <FlexItem key={idx}>
-        <EventCard {...event} className="w-full md:w-[30rem]" />
+        <EventCard {...event} className="w-full md:w-[30rem]" in_scope />
       </FlexItem>
     ));
   }, [fetchedEvents]);
   const renderPastEvents = useMemo(() => {
     return pastEvents.map((event, idx) => (
       <FlexItem key={idx}>
-        <EventCard {...event} className="w-full md:w-[30rem]" />
+        <EventCard {...event} className="w-full md:w-[30rem]" in_scope />
       </FlexItem>
     ));
   }, [fetchedEvents]);
@@ -110,7 +110,7 @@ function EventsPage() {
             <FlexItem className="mt-[1rem]">
               <Section
                 title="دورهمی ها آینده"
-                contentClassNames="px-[1.2rem]"
+                contentClassNames="px-[1.2rem] pt-2"
                 centerTitle
               >
                 {!!events.length ? (
@@ -132,7 +132,7 @@ function EventsPage() {
               <FlexItem className="mt-[2rem]">
                 <Section
                   title="دورهمی ها گذشته"
-                  contentClassNames="px-[1.2rem]"
+                  contentClassNames="px-[1.2rem] pt-2"
                   centerTitle
                 >
                   <FlexBox

@@ -15,11 +15,16 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { DatePicker } from 'zaman';
+// import { DatePicker } from 'zaman';
 import { createUseStyles } from 'react-jss';
 import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
-import moment from 'moment';
+import moment from 'jalali-moment';
 import Link from 'next/link';
+import persian from 'react-date-object/calendars/persian';
+import persian_fa from 'react-date-object/locales/persian_fa';
+import 'react-multi-date-picker/styles/layouts/mobile.css';
+import DatePicker from 'react-multi-date-picker';
+import DateObject from 'react-date-object';
 
 const registeredKey = 'register-customer-club';
 
@@ -32,6 +37,9 @@ function CustomerClubRegisterPage() {
   const designToken = theme.useToken();
   const router = useCustomRouter();
   const [alreadyRegistred, setAlreadyRegistred] = useState(false);
+  const [birthDate, setBirthDate] = useState<
+    DateObject | DateObject[] | null
+  >();
 
   useEffect(() => {
     if (window) {
@@ -40,7 +48,9 @@ function CustomerClubRegisterPage() {
       }
     }
   }, []);
-
+  console.log({
+    designToken,
+  });
   const datePickerStype = createUseStyles(
     {
       input: {
@@ -58,6 +68,13 @@ function CustomerClubRegisterPage() {
     },
     { name: 'date-picker' },
   )();
+  const datePickerFormItem = createUseStyles({
+    input: {
+      '& .ant-form-item-control-input-content': {
+        flex: 'unset !important',
+      },
+    },
+  })();
 
   const onFinish = (values: any) => {
     addL('singup-customer-club');
@@ -147,6 +164,14 @@ function CustomerClubRegisterPage() {
                   <Form.Item
                     label="تاریخ تولد"
                     name="birth_date"
+                    className={'w-full'}
+                    getValueFromEvent={(date: DateObject) => {
+                      return moment(date?.toDate().toISOString()).format(
+                        'YYYY-MM-DD',
+                      );
+                    }}
+                    valuePropName=""
+                    initialValue={''}
                     rules={[
                       {
                         required: true,
@@ -154,24 +179,18 @@ function CustomerClubRegisterPage() {
                       },
                     ]}
                   >
-                    <div
-                      className={classNames({
-                        'is-invalid': !!form.getFieldError('birth_date').length,
-                      })}
-                    >
-                      <DatePicker
-                        className="date"
-                        round="x2"
-                        accentColor={designToken.token.colorPrimary}
-                        onChange={(e) => {
-                          form.setFieldValue(
-                            'birth_date',
-                            moment(e.value.toISOString()).format('YYYY-MM-DD'),
-                          );
-                        }}
-                        inputClass={datePickerStype.input}
-                      />
-                    </div>
+                    <DatePicker
+                      inputClass={classNames('ant-input', designToken.hashId)}
+                      containerClassName="w-full"
+                      className="rmdp-mobile w-full"
+                      calendar={persian}
+                      locale={persian_fa}
+                      calendarPosition="bottom-right"
+                      value={birthDate}
+                      onChange={(date: DateObject) => {
+                        setBirthDate(date);
+                      }}
+                    />
                   </Form.Item>
                   <Form.Item
                     label="جنسیت"

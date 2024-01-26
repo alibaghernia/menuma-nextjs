@@ -45,9 +45,11 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
                 <FlexItem className="text-[1.2rem] text-typography font-semibold">
                   {discount.title}
                 </FlexItem>
-                <FlexItem className="bg-typography/[.9] text-white text-[.689rem] px-[.5rem] py-[.2rem] rounded-[.3125rem] w-fit">
-                  {discount.business_title}
-                </FlexItem>
+                {!discount.in_scope && (
+                  <FlexItem className="bg-typography/[.9] text-white text-[.689rem] px-[.5rem] py-[.2rem] rounded-[.3125rem] w-fit">
+                    {discount.business_title}
+                  </FlexItem>
+                )}
                 <FlexItem className="text-typography text-[.862rem] line-clamp-[3]">
                   {discount.description}
                 </FlexItem>
@@ -55,17 +57,18 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
             </FlexItem>
           </FlexBox>
         </FlexItem>
-
-        <FlexItem className="mt-[.5rem]">
-          <Button
-            className="w-full text-center text-[.862rem] py-[.5rem]"
-            type="primary"
-          >
-            <Link href={`/${discount.business_slug}`} className="block">
-              مشاهده کافه
-            </Link>
-          </Button>
-        </FlexItem>
+        {!discount.in_scope && (
+          <FlexItem className="mt-[.5rem]">
+            <Button
+              className="w-full text-center text-[.862rem] py-[.5rem]"
+              type="primary"
+            >
+              <Link href={`/${discount.business_slug}`} className="block">
+                مشاهده کافه
+              </Link>
+            </Button>
+          </FlexItem>
+        )}
       </FlexBox>
     </>
   );

@@ -187,6 +187,7 @@ function CustomerClubRegisterPage() {
                       locale={persian_fa}
                       calendarPosition="bottom-right"
                       value={birthDate}
+                      highlightToday={false}
                       onChange={(date: DateObject) => {
                         setBirthDate(date);
                       }}

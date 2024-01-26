@@ -145,6 +145,10 @@ function CustomerClubRegisterPage() {
                         required: true,
                         message: 'نام اجباری است!',
                       },
+                      {
+                        max: 20,
+                        message: 'طول نام نباید بیشتر از 20 کاراکتر باشد!',
+                      },
                     ]}
                   >
                     <Input />
@@ -156,6 +160,11 @@ function CustomerClubRegisterPage() {
                       {
                         required: true,
                         message: 'نام خانوادگی اجباری است!',
+                      },
+                      {
+                        max: 20,
+                        message:
+                          'طول نام خانوادگی نباید بیشتر از 20 کاراکتر باشد!',
                       },
                     ]}
                   >

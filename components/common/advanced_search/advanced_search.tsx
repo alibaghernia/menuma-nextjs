@@ -18,21 +18,12 @@ import _ from 'lodash';
 import { LinedCloseIcon } from '@/icons/lined_close';
 import tailwindConfig from '@/tailwind.config';
 import resolveConfig from 'tailwindcss/resolveConfig';
+import { useCurrentBreakpoints } from '@/utils/hooks';
 
 const AdvancedSearch: IAdvancedSearch = (props) => {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
-  const breakpoints = Grid.useBreakpoint();
   const [form] = Form.useForm();
-
-  useEffect(() => {}, []);
-
-  const currentBreakpoint = useMemo(
-    () =>
-      Object.entries(breakpoints)
-        .filter(([, v]) => !!v)
-        .map(([k]) => k),
-    [breakpoints],
-  );
+  const breakpoins = useCurrentBreakpoints();
 
   function onFinish(data: any) {
     const validData = _(data)
@@ -79,7 +70,7 @@ const AdvancedSearch: IAdvancedSearch = (props) => {
         })}
       </Row>
     );
-  }, [currentBreakpoint]);
+  }, [breakpoins.breakpoints]);
 
   const _form = useMemo(
     () => (
@@ -114,12 +105,11 @@ const AdvancedSearch: IAdvancedSearch = (props) => {
                 'fixed bg-white z-10 p-[1rem] px-[1.5rem] rounded-[.862rem] max-h-[90vh]',
                 {
                   'top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[20rem]':
-                    currentBreakpoint.includes('sm'),
-                  hidden: currentBreakpoint.includes('sm') && !props.open,
+                    breakpoins.isSm,
+                  hidden: breakpoins.isSm && !props.open,
                   'w-full pb-[2rem] transition-all duration-[.3s] bottom-0':
-                    currentBreakpoint.includes('xs'),
-                  'bottom-[-100%]':
-                    currentBreakpoint.includes('xs') && !props.open,
+                    breakpoins.isXs,
+                  'bottom-[-100%]': breakpoins.isXs && !props.open,
                 },
               ),
             )}
@@ -130,7 +120,7 @@ const AdvancedSearch: IAdvancedSearch = (props) => {
                   جستحوی پیشرفته
                 </FlexItem>
                 <FlexItem>
-                  {currentBreakpoint.includes('xs') && (
+                  {breakpoins.isXs && (
                     <LinedCloseIcon
                       color={resolvedTailwindConfig.theme?.colors![
                         'typography'
@@ -145,9 +135,7 @@ const AdvancedSearch: IAdvancedSearch = (props) => {
             <FlexItem className="overflow-y-auto py-[.5rem]">{_form}</FlexItem>
             <FlexItem>
               <FlexBox
-                justify={
-                  currentBreakpoint.includes('sm') ? 'between' : 'normal'
-                }
+                justify={breakpoins.isSm ? 'between' : 'normal'}
                 alignItems="center"
                 gap={2}
               >
@@ -179,7 +167,7 @@ const AdvancedSearch: IAdvancedSearch = (props) => {
       );
     } else {
     }
-  }, [props.float, currentBreakpoint, props.open]);
+  }, [props.float, breakpoins.breakpoints, props.open]);
 
   return (
     <div

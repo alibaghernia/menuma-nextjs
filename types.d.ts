@@ -5,3 +5,6 @@ declare module 'next/server' {
     isNotMenuma?: boolean;
   }
 }
+declare module 'pannellum-react' {
+  function Pannellum(props: any): JSX.Element;
+}

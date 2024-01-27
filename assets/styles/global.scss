@@ -23,3 +23,8 @@ body {
 .rdp__modal {
   z-index: 100 !important;
 }
+
+input {
+  text-align: start !important;
+  unicode-bidi: plaintext !important;
+}

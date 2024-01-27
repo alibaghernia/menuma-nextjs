@@ -5,7 +5,7 @@ import coffeeLoadingGIF from '@/assets/images/coffee_animation.gif';
 
 function Loading() {
   return (
-    <div className="fixed inset-0 bg-white z-[10000] ">
+    <div className="fixed inset-0 bg-white z-[2009] ">
       <Image
         priority
         width={coffeeLoadingGIF.width}

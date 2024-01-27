@@ -78,9 +78,11 @@ export const EventCard: IEventCard = (props) => {
                 <FlexItem className="text-[1.2rem] text-typography font-semibold">
                   {props.name}
                 </FlexItem>
-                <FlexItem className="bg-typography/[.9] text-white text-[.689rem] px-[.5rem] py-[.2rem] rounded-[.3125rem] w-fit">
-                  {props.cafe_restaurant?.name}
-                </FlexItem>
+                {!props.in_scope && (
+                  <FlexItem className="bg-typography/[.9] text-white text-[.689rem] px-[.5rem] py-[.2rem] rounded-[.3125rem] w-fit">
+                    {props.cafe_restaurant?.name}
+                  </FlexItem>
+                )}
                 <FlexItem className="text-typography text-[.862rem] line-clamp-[3]">
                   {props.short_description}
                 </FlexItem>

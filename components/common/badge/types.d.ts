@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 
 declare interface IBadgeProps {
-  type?: TagType;
+  type?: string;
 }
 enum TagType {
   new = 'new',

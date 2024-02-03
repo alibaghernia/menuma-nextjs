@@ -81,7 +81,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
       .then()
       .finally(() => removeL('fetch-business'))
       .then((data) => {
-        functions.setProfile(data);
+        functions.setProfile(data.data);
       })
       .catch(() => {
         message.error('خطا در دریافت اطلاعات کافه');

@@ -16,19 +16,19 @@ import { useCustomRouter } from '@/utils/hooks';
 import Link from 'next/link';
 
 export const Product: IProduct = (props) => {
-  const foundTagSoldOut = !!props.tags?.find(
+  const foundTagSoldOut = !!props.metadata?.find(
     (tag: string) => tag === 'sold_out',
   );
   const { query: params } = useCustomRouter();
   const slug = useSlug();
   const { functions } = useContext(ProviderContext);
   const productSlug = useMemo(
-    () => (params ? `/${slug}menu/${props.categoryId}/${props.id}` : '#'),
+    () => (params ? `/${slug}menu/${props.category_uuid}/${props.uuid}` : '#'),
     [params, props, slug],
   );
   const orderItem = useCallback(
     (price: any) => {
-      const key = `${props.id}-${price.id}`;
+      const key = `${props.uuid}-${price.value}`;
       functions.cart.addItem({
         id: key,
         image: props.image || noImage.src,
@@ -44,26 +44,26 @@ export const Product: IProduct = (props) => {
 
   const increaseOrderItemCount = useCallback(
     (price: any) => {
-      const key = `${props.id}-${price.id}`;
+      const key = `${props.uuid}-${price.value}`;
       functions.cart.increaseCount(key);
     },
-    [functions, props.id],
+    [functions, props.uuid],
   );
 
   const decreasOrderItemCount = useCallback(
     (price: any) => {
-      const key = `${props.id}-${price.id}`;
+      const key = `${props.uuid}-${price.value}`;
       const item = functions.cart.getItem(key);
       if (item!.count == 1) {
         functions.cart.removeItem(key);
       } else functions.cart.decreaseCount(key);
     },
-    [functions, props.id],
+    [functions, props.uuid],
   );
   const renderPrices = useCallback(
     () =>
       props.prices.map((price, key) => {
-        const itemId = `${props.id}-${price.id}`;
+        const itemId = `${props.uuid}-${price.value}`;
         const order = functions.cart.getItem(itemId);
         return (
           <div
@@ -73,7 +73,7 @@ export const Product: IProduct = (props) => {
             style={{
               zIndex: ~key,
             }}
-            key={price.id}
+            key={price.value}
           >
             <span className="absolute inset-0 bg-typography/[.20] z-0 pointer-events-none"></span>
             <Container className="bottom-0 left-0 right-0 py-[.5rem] px-[1.7rem] z-10">
@@ -110,7 +110,7 @@ export const Product: IProduct = (props) => {
                   >
                     <FlexItem>
                       <div className="text-[1rem] font-[500] text-typography">
-                        {`${parseInt(price.price).toLocaleString('IR-fa')} ت`}
+                        {`${price.value.toLocaleString('IR-fa')} ت`}
                       </div>
                     </FlexItem>
                     {!foundTagSoldOut && (
@@ -192,7 +192,7 @@ export const Product: IProduct = (props) => {
                 }}
               ></span>
               <div className="text-[1.2rem] text-typography absolute bottom-[.3rem] left-[50%] translate-x-[-50%] font-bold z-20">
-                {`${parseInt(props.prices[0].price).toLocaleString('IR-fa')} ت`}
+                {`${props.prices[0].value.toLocaleString('IR-fa')} ت`}
               </div>
             </>
           )}
@@ -213,10 +213,10 @@ export const Product: IProduct = (props) => {
   };
 
   const renderTags = useCallback(() => {
-    return props.tags?.map((tag: TagType, idx: number) => (
+    return props.metadata?.map((tag, idx: number) => (
       <Badge type={tag} key={idx} />
     ));
-  }, [props.tags]);
+  }, [props.metadata]);
   return (
     <div
       className={classNames(
@@ -258,7 +258,7 @@ export const Product: IProduct = (props) => {
                     {props.title}
                   </Link>
                 </FlexItem>
-                {Boolean(props.tags?.length) && (
+                {Boolean(props.metadata?.length) && (
                   <FlexItem>
                     <FlexBox gap={2}>{renderTags()}</FlexBox>
                   </FlexItem>
@@ -269,7 +269,7 @@ export const Product: IProduct = (props) => {
                       'text-[0.8rem] font-[300] text-typography w-full line-clamp-[4]',
                     )}
                   >
-                    {props.descriptions}
+                    {props.description}
                   </div>
                 </FlexItem>
 

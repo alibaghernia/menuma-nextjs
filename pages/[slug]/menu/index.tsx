@@ -38,13 +38,16 @@ import {
 import { BusinessService } from '@/services/business/business.service';
 import { DailyOffers } from '@/components/menu/dayli_offers';
 import { ProviderContext } from '@/providers/main/provider';
+import { CategoryEntity } from '@/services/business/business';
 
 function MenuPage() {
   const [addL, removeL] = useLoadings();
   usePageLoading();
   const message = useMessage();
   const [scrolled, setScrolled] = useState(false);
-  const [menuData, setMenuData] = useState<APICateogory[]>([]);
+  const [menuData, setMenuData] = useState<
+    Awaited<ReturnType<typeof businessService.getMenu>>['data']
+  >([]);
   const { state } = useContext(CoffeeShopProviderContext);
   const { checkCartItemsExist, state: mainProviderState } =
     useContext(ProviderContext);
@@ -63,7 +66,7 @@ function MenuPage() {
         removeL('fetch-menu');
       })
       .then((data) => {
-        setMenuData(data);
+        setMenuData(data.data);
       })
       .catch(() => {
         message.error('خطا در دریافت اطلاعات منو');
@@ -148,17 +151,13 @@ function MenuPage() {
               titleClassName={classNames({
                 'text-[.9rem]': scrolled,
               })}
-              image={
-                category.background_path
-                  ? `${serverBaseUrl}/storage/${category.background_path}`
-                  : undefined
-              }
-              title={category.name}
+              image={category.image_url ? category.image_url : undefined}
+              title={category.title}
               onClick={() => {
-                setSelectedCategory(category.id);
+                setSelectedCategory(category.uuid);
                 setSearchInput('');
                 window.document
-                  .getElementById(`category-${category.id}`)
+                  .getElementById(`category-${category.uuid}`)
                   ?.scrollIntoView({
                     behavior: 'smooth',
                   });
@@ -171,10 +170,10 @@ function MenuPage() {
   }, [menuData, setSelectedCategory, scrolled]);
 
   const renderProducts = useCallback(
-    (category: APICateogory) => {
-      const categoryItems = category?.items || [];
+    (category: (typeof menuData)[number]) => {
+      const categoryItems = category?.products || [];
       const filtred = categoryItems.filter((product) =>
-        product.name.includes(searchInput!),
+        product.title.includes(searchInput!),
       );
       if (!filtred.length)
         return (
@@ -183,23 +182,19 @@ function MenuPage() {
           </div>
         );
       return categoryItems
-        .filter((product) => product.name.includes(searchInput!))
+        .filter((product) => product.title.includes(searchInput!))
         ?.map((product, key1) => (
           <Product
             key={key1}
-            id={product.id}
-            title={product.name}
-            descriptions={product.description}
-            image={
-              product.image_path
-                ? `${serverBaseUrl}/storage/${product.image_path}`
-                : noImage.src
-            }
-            prices={product.prices || []}
+            uuid={product.uuid}
+            title={product.title}
+            description={product.description}
+            image={product.image_url ? product.image_url : noImage.src}
+            prices={product.prices}
             fullWidth
             className="px-5 max-w-lg"
-            categoryId={product.category_id}
-            tags={product.tags}
+            category_uuid={category.uuid}
+            metadata={product.metadata}
           />
         ));
     },
@@ -210,17 +205,17 @@ function MenuPage() {
     return menuData
       .filter(
         (category) =>
-          category.items.filter((product) =>
-            product.name.includes(searchInput!),
+          category.products.filter((product) =>
+            product.title.includes(searchInput!),
           ).length,
       )
       .map((category, key) => (
         <Section
           key={key}
-          id={`category-${category.id}`}
+          id={`category-${category.uuid}`}
           className="mt-[1.125rem] pb-5 scroll-mt-[20rem]"
           contentClassNames="flex flex-col gap-[1rem] items-center"
-          title={category.name}
+          title={category.title}
         >
           {renderProducts(category)}
         </Section>

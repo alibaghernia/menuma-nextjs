@@ -69,13 +69,11 @@ declare type BusinessType = {
 };
 
 declare interface ISearchBusiness {
-  discounts?: boolean;
-  all_fields?: string;
-  has_event?: boolean;
   pin?: boolean;
-  distance?: number;
-  lat?: string;
-  long?: string;
+  distance?: string;
+  location_lat?: string;
+  location_long?: string;
+  search?: string;
 }
 declare interface IGetDiscounts {
   is_pinned?: boolean;

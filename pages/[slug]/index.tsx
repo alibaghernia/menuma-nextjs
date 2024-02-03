@@ -48,7 +48,6 @@ const Profile = () => {
   const slug = useSlug();
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
   const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
-
   const locationCoordinates: [number, number] = [
     parseFloat(profileData.location_lat || '0'),
     parseFloat(profileData.location_long || '0'),
@@ -78,17 +77,6 @@ const Profile = () => {
       ].filter((item) => item.value),
     [profileData, resolvedTailwindConfig],
   );
-
-  // const events = useMemo(() => {
-  //   return fetchedEvents.map((event, idx) => (
-  //     <SwiperSlide
-  //       className="!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] !w-[30rem]"
-  //       key={idx}
-  //     >
-  //       <EventCard {...event} className="mx-auto shadow-none border" />
-  //     </SwiperSlide>
-  //   ));
-  // }, [fetchedEvents]);
 
   const fetchEvents = () => {
     addL('fetch-events');
@@ -157,32 +145,6 @@ const Profile = () => {
             <div className="mt-[1rem]">
               <WorkingHours data={profileData.working_hours || []} />
             </div>
-
-            {/* {!!fetchedEvents?.length && (
-              <div className="mt-[2.12rem] pb-[1rem]  w-full" id="discounts">
-                <Section
-                  title="دورهمی ها"
-                  contentClassNames="pt-[1rem] relative"
-                >
-                  <Swiper
-                    id="events"
-                    slidesPerView={'auto'}
-                    spaceBetween={8}
-                    grabCursor={true}
-                    scrollbar
-                    slidesOffsetBefore={20}
-                    slidesOffsetAfter={20}
-                    breakpoints={{
-                      768: {
-                        centeredSlides: true
-                      }
-                    }}
-                  >
-                    {events}
-                  </Swiper>
-                </Section>
-              </div>
-            )} */}
             <Section
               title="موقعیت مکانی"
               className="mt-[1rem]"

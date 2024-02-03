@@ -18,6 +18,7 @@ import { toPersianNumber } from '@/helpers/functions';
 import AdvancedSearch from '@/components/common/advanced_search/advanced_search';
 import { GeneralContext } from '@/providers/general/provider';
 import { MainService } from '@/services/main/main.service';
+import { BusinessService } from '@/services/business/business.service';
 
 type SearchArgs = {
   is_pinned?: boolean;
@@ -42,14 +43,14 @@ function Search() {
       distance?: number;
     }[]
   >([]);
-  const mainService = MainService.init();
+  const businessService = BusinessService.init();
 
   const handleFetchBusinesses = (args: SearchArgs = {}) => {
     if (!!!Object.keys(args).length) return;
     addL('fetch-businesses');
-    mainService
-      .searchBusiness({
-        all_fields: args.search_field,
+    businessService
+      .getAll({
+        search: args.search_field,
         pin: args.is_pinned,
       })
       .finally(() => {
@@ -58,10 +59,8 @@ function Search() {
       .then((data) => {
         setAdvancedSearch(false);
         setFetchedItems(
-          (data as any[]).map((business) => ({
-            logo: business.logo_path
-              ? `${serverBaseUrl}/storage/${business.logo_path}`
-              : noImage.src,
+          data.data.businesses.map((business) => ({
+            logo: business.logo_url ? business.logo_url : noImage.src,
             title: business.name,
             slug: business.slug,
             address: business.address,
@@ -72,23 +71,23 @@ function Search() {
 
   const fetchNearBusinesses = (distance: string) => {
     addL('fetch-businesses');
-    axios
-      .get(
-        `/api/cafe-restaurants?lat=${params.lat}&long=${params.long}&distance=${distance}`,
-      )
+    businessService
+      .getAll({
+        distance: distance as string,
+        location_lat: params.lat as string,
+        location_long: params.long as string,
+      })
       .finally(() => {
         removeL('fetch-businesses');
       })
       .then(({ data }) => {
         setFetchedItems(
-          (data as any[]).map((business) => ({
+          data.businesses.map((business) => ({
             title: business.name,
             address: business.address,
             slug: business.slug,
             distance: business.distance,
-            logo: business.logo_path
-              ? `${serverBaseUrl}/storage/${business.logo_path}`
-              : noImage.src,
+            logo: business.logo_url ? business.logo_url : noImage.src,
           })),
         );
       });

@@ -19,7 +19,7 @@ export const withCafeeShopProfile = (
 ) => {
   return async (context: GetServerSidePropsContext) => {
     const businessService = BusinessService.init();
-    function profileFetcher(): Promise<IProfile> {
+    function profileFetcher() {
       return businessService.get(context.params?.slug as string);
     }
     const profile = await profileFetcher();
@@ -35,7 +35,7 @@ export const withCafeeShopProfile = (
     return _.merge(
       {
         props: {
-          profile,
+          profile: profile.data,
         },
       },
       getServerSidePropsRes,

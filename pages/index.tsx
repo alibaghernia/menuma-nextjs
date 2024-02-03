@@ -52,12 +52,10 @@ function Home() {
       .finally(() => removeL('pin-businesses'))
       .then((data) => {
         setPinBusinesses(
-          data?.map((business: any) => ({
+          data.data.businesses?.map((business) => ({
             title: business.name,
             slug: business.slug,
-            logo: business.logo_path
-              ? `${serverBaseUrl}/storage/${business.logo_path}`
-              : noImage.src,
+            logo: business.logo_url ? business.logo_url : noImage.src,
           })),
         );
       });

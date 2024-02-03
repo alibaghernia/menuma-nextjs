@@ -15,14 +15,12 @@ export const Map: IMap = ({ location }) => {
       scrollWheelZoom
       style={{ height: '100%' }}
     >
-      <TileLayer
-        url={`https://map.ir/shiveh/xyz/1.0.0/Shiveh:Shiveh@EPSG:3857@png/{z}/{x}/{y}.png?x-api-key=${apiKey}`}
-      />
+      <TileLayer url="https://mt1.google.com/vt/lyrs=m&x={x}&z={z}&y={y}" />
       <Marker
         position={location.coordinates}
         icon={L.icon({
-          iconSize: [64, 64],
-          iconAnchor: [64 / 2, 64],
+          iconSize: [40, 40],
+          iconAnchor: [40 / 2, 40],
           // className: "mymarker",
           iconUrl: mapMarker.src,
         })}

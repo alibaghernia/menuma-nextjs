@@ -4,6 +4,7 @@ import NError from 'next/error';
 import { CustomerClubService } from './customer_club/customer_club.service';
 import { EventsService } from './events/events.service';
 import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
+import { Business, CategoryEntity, ProductEntity } from './business';
 
 export class BusinessService {
   static init(slug?: string) {
@@ -21,9 +22,7 @@ export class BusinessService {
       throw new Error('Check Backend URL!');
     }
     this.axios = axiosPkg.create({
-      baseURL: `${this.backendURL}/api/cafe-restaurants${
-        slug ? `/${slug}` : ''
-      }`,
+      baseURL: `${this.backendURL}/business${slug ? `/${slug}` : ''}`,
     });
   }
 
@@ -50,17 +49,27 @@ export class BusinessService {
     if (slug) return `/${slug}`;
     return '';
   }
+  getAll(filters: ISearchBusiness = {}) {
+    return this.axios
+      .get<AxiosResponseType<{ businesses: Business[]; total: number }>>('/', {
+        params: filters,
+      })
+      .then(({ data }) => data);
+  }
   get(slug?: string) {
     return this.axios
-      .get<IProfile>(this.slugRoute(slug))
+      .get<AxiosResponseType<Business>>(this.slugRoute(slug))
       .then(({ data }) => data);
   }
   getMenu(slug?: string) {
     return this.axios
-      .get<any>(`${this.slugRoute(slug)}/menu`)
+      .get<
+        AxiosResponseType<(CategoryEntity & { products: ProductEntity[] })[]>
+      >(`${this.slugRoute(slug)}/menu`)
       .then(({ data }) => data);
   }
   getDailyOffers(slug?: string) {
+    return Promise.resolve([]);
     return this.axios
       .get<APIProduct[]>(`${this.slugRoute(slug)}/menu/day-offers`)
       .then(({ data }) => data);

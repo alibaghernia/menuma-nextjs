@@ -212,7 +212,7 @@ function Home() {
           <div className="text-typography/[.8] text-[.875rem] font-medium">
             کافه ای که میخوای را پیدا کن
           </div>
-          <div className="mt-[2.12rem] w-full px-[1.9rem]">
+          <div className="mt-[2.12rem] w-screen md:w-full px-[1.9rem]">
             <SearchBusinessBox
               value={searchField}
               onChange={setSearchField}
@@ -230,8 +230,11 @@ function Home() {
             </Button>
           </div>
           {Boolean(pinBusinesses?.length) && (
-            <div className="mt-[2.12rem] w-full max-w-[65rem]">
-              <Section title="کافه های پیشنهادی" contentClassNames="pt-[1rem]">
+            <div className="mt-[2.12rem] w-screen md:max-w-[65rem]">
+              <Section
+                title="کافه های پیشنهادی"
+                contentClassNames="pt-[1rem] overflow-hidden"
+              >
                 <Swiper
                   slidesPerView={'auto'}
                   spaceBetween={8}
@@ -246,7 +249,7 @@ function Home() {
             </div>
           )}
           {Boolean(conditinalDiscounts?.length) && (
-            <div className="mt-[2.12rem] w-full max-w-[65rem]">
+            <div className="mt-[2.12rem] w-screen md:max-w-[65rem]">
               <Section
                 title="تخفیف های ویژه"
                 contentClassNames="pt-[1rem] relative"
@@ -266,7 +269,7 @@ function Home() {
             </div>
           )}
           {Boolean(fetchedEvents?.length) && (
-            <div className="my-[2.12rem] w-full max-w-[65rem]">
+            <div className="my-[2.12rem] w-screen md:max-w-[65rem]">
               <Section title="دورهمی ها" contentClassNames="pt-[.5rem] px-5">
                 <FlexBox direction="column" alignItems="stretch" gap={2}>
                   {events}

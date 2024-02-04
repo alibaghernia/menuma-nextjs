@@ -38,7 +38,7 @@ export const EventCard: IEventCard = (props) => {
       <FlexBox
         className={twMerge(
           classNames(
-            'p-[1rem] bg-white gap-[.62rem] rounded-[1rem] shadow w-[30rem]',
+            'p-[1rem] bg-white gap-[.62rem] rounded-[1rem] shadow w-full sm:w-[30rem]',
             props.className,
           ),
         )}

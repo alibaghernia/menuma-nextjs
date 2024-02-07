@@ -52,6 +52,8 @@ export const EventCard: IEventCard = (props) => {
                   'w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0',
                   {
                     'bg-gray-100': !!!props.banner_path,
+                    'rounded-full overflow-hidden border-black/[.1] border':
+                      !!props.cafe_restaurant.logo_path,
                   },
                 ),
               )}
@@ -61,6 +63,13 @@ export const EventCard: IEventCard = (props) => {
                   fill
                   alt={props.name}
                   src={`${serverBaseUrl}/storage/${props.banner_path}`}
+                  className="object-cover"
+                />
+              ) : props.cafe_restaurant.logo_path ? (
+                <Image
+                  fill
+                  alt={props.cafe_restaurant.name}
+                  src={`${serverBaseUrl}/storage/${props.cafe_restaurant.logo_path}`}
                   className="object-cover"
                 />
               ) : (

@@ -3,12 +3,12 @@ import { FC, PropsWithChildren } from 'react';
 
 declare type ICartItem = {
   id: string;
+  uuid: string; //product uuid
   image: string;
   title: string;
   type: string;
   count: number;
   price: number;
-  product: IProductProps;
 };
 
 declare type IProviderState = {

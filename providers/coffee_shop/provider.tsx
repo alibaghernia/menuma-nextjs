@@ -21,6 +21,7 @@ import { ConfirmModal } from '@/components/common/confirm_modal/confirm_modal';
 import { useRouter } from 'next/router';
 import { BusinessService } from '@/services/business/business.service';
 import { useLoadings, useMessage } from '@/utils/hooks';
+import { TableEntity } from '@/services/business/business';
 
 export const TABLE_NUMBER_METADATA_STORAGE_KEY = '-table-number-key-';
 
@@ -63,7 +64,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
   const tableIDStorageKey = `${
     state.profile.id
   }${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`;
-  const [table, setTable] = useState<TableType>();
+  const [table, setTable] = useState<TableEntity>();
   useEffect(() => {
     const tab_id = searchParams.get('tab_id');
     if (tab_id) {
@@ -90,36 +91,53 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
 
   useEffect(() => {
     if (params.slug) profileFetcher();
+    if (window) {
+      const pagerRequest = localStorage.getItem('pager-request');
+      if (pagerRequest) {
+        const time = moment(pagerRequest);
+        const sec = moment().diff(time, 'seconds');
+        if (sec < 60) {
+          enableCancelGarsonCallInterval(false, sec * 1000);
+        }
+      }
+    }
   }, []);
 
-  const enableCancelGarsonCallInterval = () => {
+  const enableCancelGarsonCallInterval = (isNew = false, duration = 60000) => {
     setCancelGarsonCallButton(true);
+    if (window && isNew) {
+      localStorage.setItem('pager-request', moment().toISOString());
+    }
     cancelGarsonCallButtonInterval.current = setInterval(() => {
+      localStorage.removeItem('pager-request');
       setCancelGarsonCallButton(false);
-    }, 60000);
+    }, duration);
   };
 
   const disbleCancelGarsonCallInterval = () => {
     clearInterval(cancelGarsonCallButtonInterval.current);
+    localStorage.removeItem('pager-request');
     setCancelGarsonCallButton(false);
   };
 
   const handleCallGarson = async () => {
-    const handle = (tableID: string) => {
+    const pagerAPI = businessService.pager();
+    const handle = (uuid: string) => {
       addL('call-garson');
       if (!cancelGarsonCallButton) {
-        functions.services
-          .callGarson(tableID)
-          .then(() => {
-            enableCancelGarsonCallInterval();
+        pagerAPI
+          .requestPager(uuid)
+          .then((data) => {
+            localStorage.setItem('pager-request-uuid', data.data.request_uuid);
+            enableCancelGarsonCallInterval(true);
             setCallGarsonModal(undefined);
           })
           .finally(() => {
             removeL('call-garson');
           });
       } else {
-        functions.services
-          .cancelCallGarson(tableID)
+        pagerAPI
+          .cancelRequestPager(uuid)
           .then(() => {
             disbleCancelGarsonCallInterval();
             setCallGarsonModal(undefined);
@@ -132,7 +150,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     const storageTableID = localStorage.getItem(tableIDStorageKey);
     if (storageTableID) {
       setTableID(storageTableID);
-      const showModal = (table: TableType) => {
+      const showModal = (table: TableEntity) => {
         setCallGarsonModal({
           open: true,
           title: cancelGarsonCallButton
@@ -149,15 +167,19 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
             setCallGarsonModal(undefined);
           },
           onConfirm() {
-            handle(storageTableID);
+            if (cancelGarsonCallButton) {
+              const request_uuid = localStorage.getItem('pager-request-uuid');
+              if (request_uuid) handle(request_uuid);
+            } else handle(table.uuid);
           },
         });
       };
       if (table) showModal(table);
       else {
         addL('get-table');
-        functions.services
-          .geTable(storageTableID)
+        businessService
+          .pager()
+          .getTable(storageTableID)
           .then(({ data: table }) => {
             showModal(table);
             setTable(table);

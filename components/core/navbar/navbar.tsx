@@ -196,16 +196,15 @@ export const Navbar: INavBar = ({
         </FlexItem>
         <FlexItem>
           <FlexBox alignItems="center" gap=".5rem">
-            {callPager &&
-              Boolean(parseInt(coffeShopState.profile.has_pager)) && (
-                <FlexItem>
-                  <CallGarson
-                    onClick={handleCallGarson}
-                    isCancel={cancelGarsonCallButton}
-                    size="small"
-                  />
-                </FlexItem>
-              )}
+            {callPager && !!coffeShopState.profile.pager && (
+              <FlexItem>
+                <CallGarson
+                  onClick={handleCallGarson}
+                  isCancel={cancelGarsonCallButton}
+                  size="small"
+                />
+              </FlexItem>
+            )}
             {props.note && (
               <FlexItem>
                 <div

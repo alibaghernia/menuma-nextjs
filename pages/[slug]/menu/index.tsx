@@ -94,8 +94,8 @@ function MenuPage() {
         menuData
           ?.map(
             (cat: any) =>
-              cat.items?.filter((item: any) =>
-                item.tags.some((tag: string) => tag == 'sold_out'),
+              cat.products?.filter((item: any) =>
+                item.metadata.some((tag: string) => tag == 'sold_out'),
               ),
           )
           .flat() || [],

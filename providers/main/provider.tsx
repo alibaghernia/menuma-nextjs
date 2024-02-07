@@ -15,6 +15,8 @@ import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import dynamic from 'next/dynamic';
+import { ProductEntity } from '@/services/business/business';
+import { CartProductItem } from '@/components/common/cart/cart';
 const ConfirmModal = dynamic(
   () => import('@/components/common/confirm_modal/confirm_modal'),
 );
@@ -22,7 +24,7 @@ export const ProviderContext = createContext<{
   state: IProviderState;
   dispatch: (action: any) => void;
   functions: ReturnType<typeof Functions>;
-  checkCartItemsExist: (products: APIProduct[]) => void;
+  checkCartItemsExist: (products: ProductEntity[]) => void;
   // @ts-ignore
 }>({});
 
@@ -105,13 +107,13 @@ const Provider: IProvider = ({ children }) => {
     checkAppDomain();
   }, [getReducerState, checkAppDomain]);
 
-  function checkCartItemsExist(products: APIProduct[]) {
+  function checkCartItemsExist(products: CartProductItem[]) {
     const cartItems = state.cart;
     const deleteItems = cartItems.filter((item) =>
-      products.some((product) => product.id == item.product.id),
+      products.some((product) => product.uuid == item.uuid),
     );
     setDeletedCartItemsAlertModal({
-      names: Array.from(new Set(deleteItems.map((item) => item.product.title))),
+      names: Array.from(new Set(deleteItems.map((item) => item.title))),
       ids: deleteItems.map((item) => item.id),
     });
   }

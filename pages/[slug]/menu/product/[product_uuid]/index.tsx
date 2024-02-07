@@ -29,6 +29,7 @@ import { ProductService } from '@/services/product/product.service';
 
 import { BusinessService } from '@/services/business/business.service';
 import classNames from 'classnames';
+import { ProductEntity } from '@/services/business/business';
 
 function ProductPage() {
   usePageLoading();
@@ -46,13 +47,13 @@ function ProductPage() {
 
   const productService = ProductService.init(params.slug as string);
 
-  const [product, setProduct] = useState<APIProduct>();
+  const [product, setProduct] = useState<ProductEntity>();
   function fetchProduct() {
     addL('fetch-product');
     productService
-      .getOne(params.product_slug as string)
+      .getOne(params.product_uuid as string)
       .then((data) => {
-        setProduct(data);
+        setProduct(data.data);
       })
       .catch(() => {
         message.error('مشکلی در دریافت اطلاعات آیتم وجود دارد.');
@@ -70,66 +71,54 @@ function ProductPage() {
     if (
       mainProviderState.restored &&
       product &&
-      product.tags?.some((tag: string) => tag == 'sold_out')
+      product.metadata?.some((tag: string) => tag == 'sold_out')
     ) {
       checkCartItemsExist([product]);
     }
   }, [mainProviderState.restored, product]);
   const orderItem = useCallback(
-    (price: any) => {
-      const key = `${product?.id}-${price.id}`;
+    (price: ProductEntity['prices'][number]) => {
+      const key = `${product?.uuid}-${price.value}`;
       functions.cart.addItem({
         id: key,
-        image: product?.image_path
-          ? `${serverBaseUrl}/storage/${product?.image_path}`
-          : noImage.src,
-        title: product?.name!,
+        uuid: product?.uuid!,
+        image: product?.image_url ? product?.image_url : noImage.src,
+        title: product?.title!,
         count: 1,
-        price: price.price,
+        price: price.value,
         type: price.title,
-        product: {
-          id: product?.id!,
-          title: product?.name!,
-          descriptions: product?.description!,
-          //@ts-ignore
-          prices: product?.prices,
-          categoryId: product?.category_id,
-          image: product?.image_path
-            ? `${serverBaseUrl}/storage/${product.image_path}`
-            : noImage.src,
-        },
       });
     },
     [functions, product],
   );
 
   const increaseOrderItemCount = useCallback(
-    (price: any) => {
-      const key = `${product?.id}-${price.id}`;
+    (price: number) => {
+      const key = `${product?.uuid}-${price}`;
       functions.cart.increaseCount(key);
     },
-    [functions, product?.id],
+    [functions, product?.uuid],
   );
 
   const decreasOrderItemCount = useCallback(
-    (price: any) => {
-      const key = `${product?.id}-${price.id}`;
+    (price: number) => {
+      const key = `${product?.uuid}-${price}`;
       const item = functions.cart.getItem(key);
       if (item!.count == 1) {
         console.log('delete');
         functions.cart.removeItem(key);
       } else functions.cart.decreaseCount(key);
     },
-    [functions, product?.id],
+    [functions, product?.uuid],
   );
 
   const prices = useMemo(
     () =>
-      product?.prices?.map((price: any, key: number) => {
-        const foundTagSoldOut = !!product.tags?.find(
+      product?.prices?.map((price, key: number) => {
+        const foundTagSoldOut = !!product.metadata?.find(
           (tag: any) => tag === 'sold_out',
         );
-        const order = functions.cart.getItem(`${product.id}-${price.id}`);
+        const order = functions.cart.getItem(`${product.uuid}-${price.value}`);
         return (
           <FlexItem key={key}>
             <FlexBox
@@ -145,9 +134,7 @@ function ProductPage() {
                   {price.title && (
                     <FlexItem className="text-[1rem]">{price.title}:</FlexItem>
                   )}
-                  <FlexItem>
-                    {parseInt(price.price).toLocaleString('IR-fa')}
-                  </FlexItem>
+                  <FlexItem>{price.value.toLocaleString('IR-fa')}</FlexItem>
                 </FlexBox>
               </FlexItem>
               {!order ? (
@@ -166,7 +153,7 @@ function ProductPage() {
                     <FlexItem
                       className="relative w-7 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
                       onClick={_.throttle(
-                        () => increaseOrderItemCount(price),
+                        () => increaseOrderItemCount(price.value),
                         500,
                       )}
                     >
@@ -175,7 +162,7 @@ function ProductPage() {
                     {order.count}
                     <FlexItem
                       className="relative w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
-                      onClick={() => decreasOrderItemCount(price)}
+                      onClick={() => decreasOrderItemCount(price.value)}
                     >
                       <Container center>-</Container>
                     </FlexItem>
@@ -200,7 +187,7 @@ function ProductPage() {
     [state.profile],
   );
 
-  const foundTagSoldOut = !!product?.tags?.find(
+  const foundTagSoldOut = !!product?.metadata?.find(
     (tag: any) => tag === 'sold_out',
   );
   return (
@@ -209,7 +196,7 @@ function ProductPage() {
         <title>
           {`${
             state.profile.name +
-            ` - ${product?.name || ''}` +
+            ` - ${product?.title || ''}` +
             (slug ? ' - منوما' : '')
           }`}
         </title>
@@ -219,12 +206,8 @@ function ProductPage() {
         <FlexBox direction="column">
           <FlexItem className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow">
             <Image
-              src={
-                product?.image_path
-                  ? `${serverBaseUrl}/storage/${product?.image_path}`
-                  : noImage.src
-              }
-              alt={product?.name! || 'pic'}
+              src={product?.image_url ? product?.image_url : noImage.src}
+              alt={product?.title! || 'pic'}
               className={`inset-0 block object-cover ${
                 foundTagSoldOut && 'grayscale'
               }`}
@@ -240,7 +223,7 @@ function ProductPage() {
                 <FlexBox alignItems="center" gap={2}>
                   <hr className="border-black/10 w-full" />
                   <div className="w-fit text-[1.8rem] font-[500] whitespace-nowrap text-typography">
-                    {product?.name}
+                    {product?.title}
                   </div>
                   <hr className="border-black/10 w-full" />
                 </FlexBox>

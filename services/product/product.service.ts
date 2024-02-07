@@ -1,7 +1,11 @@
 import axiosPkg, { AxiosInstance } from 'axios';
+import { ProductEntity } from '../business/business';
 
 export class ProductService {
   static init(business_slug: string) {
+    if (!business_slug) {
+      console.error("You've didn't provide business slug to Product Service!");
+    }
     return new ProductService(business_slug);
   }
 
@@ -13,13 +17,13 @@ export class ProductService {
       throw new Error('Check Backend URL!');
     }
     this.axios = axiosPkg.create({
-      baseURL: `${backendURL}/api/cafe-restaurants/${business_slug}/menu`,
+      baseURL: `${backendURL}/product/${business_slug}`,
     });
   }
 
-  getOne(product_slug: string) {
+  getOne(uuid: string) {
     return this.axios
-      .get<APIProduct>(`/items/${product_slug}`)
+      .get<AxiosResponseType<ProductEntity>>(`/${uuid}`)
       .then(({ data }) => data);
   }
 }

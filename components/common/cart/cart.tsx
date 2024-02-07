@@ -21,10 +21,17 @@ import { CallGarson } from '../call_garson/call_garson';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { ProductEntity } from '@/services/business/business';
+import { ICartItem } from '@/providers/main/types';
 const ConfirmModal = dynamic(
   () => import('@/components/common/confirm_modal/confirm_modal'),
   { ssr: false },
 );
+
+export type CartProductItem = Omit<
+  ProductEntity,
+  'createdAt' | 'updatedAt' | 'images' | 'metadata' | 'prices' | 'business_uuid'
+>;
 
 export const Cart: ICart = (props) => {
   const { query: params } = useRouter();
@@ -43,16 +50,16 @@ export const Cart: ICart = (props) => {
   const orderItems = state.cart;
 
   const increaseOrderItemCount = useCallback(
-    (product: any, price: number) => {
-      const key = `${product?.id}-${price}`;
+    (product: ICartItem, price: number) => {
+      const key = `${product.uuid}-${price}`;
       functions.cart.increaseCount(key);
     },
     [functions],
   );
 
   const decreasOrderItemCount = useCallback(
-    (product: any, price: number) => {
-      const key = `${product?.id}-${price}`;
+    (product: ICartItem, price: number) => {
+      const key = `${product?.uuid}-${price}`;
       const item = functions.cart.getItem(key);
       if (item!.count == 1) {
         console.log('delete');
@@ -66,9 +73,7 @@ export const Cart: ICart = (props) => {
     () =>
       orderItems.map((orderItem, key) => {
         const productSlug =
-          params && orderItem.product
-            ? `/${slug}menu/${orderItem.product.categoryId}/${orderItem.product?.id}`
-            : '#';
+          params && orderItem ? `/${slug}menu/product/${orderItem.uuid}` : '#';
 
         return (
           <FlexItem key={key}>
@@ -155,10 +160,7 @@ export const Cart: ICart = (props) => {
                         className="relative w-14 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none text-typography"
                         onClick={_.throttle(
                           () =>
-                            increaseOrderItemCount(
-                              orderItem.product,
-                              parseInt(orderItem.id.split('-')[1]),
-                            ),
+                            increaseOrderItemCount(orderItem, orderItem.price),
                           500,
                         )}
                       >
@@ -173,10 +175,7 @@ export const Cart: ICart = (props) => {
                         )}
                         onClick={() => {
                           if (orderItem.count > 1)
-                            decreasOrderItemCount(
-                              orderItem.product,
-                              parseInt(orderItem.id.split('-')[1]),
-                            );
+                            decreasOrderItemCount(orderItem, orderItem.price);
                           else
                             setDismissModal({
                               open: true,
@@ -297,7 +296,7 @@ export const Cart: ICart = (props) => {
             </FlexBox>
           </FlexItem>
           <FlexItem grow={false} className="mt-[1.5rem]">
-            {Boolean(parseInt(coffeeShopState.profile.has_pager)) && (
+            {Boolean(coffeeShopState.profile.pager) && (
               <CallGarson
                 onClick={handleCallGarson}
                 isCancel={cancelGarsonCallButton}

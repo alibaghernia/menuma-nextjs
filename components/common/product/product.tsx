@@ -14,6 +14,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
 import { useCustomRouter } from '@/utils/hooks';
 import Link from 'next/link';
+import { ProductEntity } from '@/services/business/business';
 
 export const Product: IProduct = (props) => {
   const foundTagSoldOut = !!props.metadata?.find(
@@ -23,20 +24,20 @@ export const Product: IProduct = (props) => {
   const slug = useSlug();
   const { functions } = useContext(ProviderContext);
   const productSlug = useMemo(
-    () => (params ? `/${slug}menu/${props.category_uuid}/${props.uuid}` : '#'),
+    () => (params ? `/${slug}menu/product/${props.uuid}` : '#'),
     [params, props, slug],
   );
   const orderItem = useCallback(
-    (price: any) => {
+    (price: ProductEntity['prices'][number]) => {
       const key = `${props.uuid}-${price.value}`;
       functions.cart.addItem({
         id: key,
+        uuid: props.uuid,
         image: props.image || noImage.src,
         title: props.title,
         count: 1,
-        price: price.price,
+        price: price.value,
         type: price.title,
-        product: props,
       });
     },
     [functions, props],

@@ -4,7 +4,13 @@ import NError from 'next/error';
 import { CustomerClubService } from './customer_club/customer_club.service';
 import { EventsService } from './events/events.service';
 import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
-import { Business, CategoryEntity, ProductEntity } from './business';
+import {
+  Business,
+  CategoryEntity,
+  ProductEntity,
+  TableEntity,
+} from './business';
+import { ProductService } from '../product/product.service';
 
 export class BusinessService {
   static init(slug?: string) {
@@ -39,6 +45,9 @@ export class BusinessService {
   }
   get eventsService() {
     return EventsService.init(this);
+  }
+  get productService() {
+    return ProductService.init(this.slug!);
   }
   private slugRoute(slug?: string) {
     if (slug && this.slug)
@@ -99,12 +108,12 @@ export class BusinessService {
       `${this.slugRoute(cafe_slug)}/waiter_pager/${tableID}/cancel`,
     );
   }
-  pager(business_uuid: string) {
+  pager(slug?: string) {
     return {
       requestPager: (table_uuid: string) => {
         return this.axios
-          .post<IResponseType<{ request_uuid: string }>>(
-            `/${business_uuid}/pager-request`,
+          .post<AxiosResponseType<{ request_uuid: string }>>(
+            `${this.slugRoute(slug)}/pager-request`,
             {
               table_uuid,
             },
@@ -113,13 +122,13 @@ export class BusinessService {
       },
       cancelRequestPager: (request_uuid: string) => {
         return this.axios.delete(
-          `/${business_uuid}/pager-request/${request_uuid}`,
+          `${this.slugRoute(slug)}/pager-request/${request_uuid}`,
         );
       },
       getTable: (tableCode: string) => {
         return this.axios
-          .get<IResponseType<TableType>>(
-            `/${business_uuid}/get-table/${tableCode}`,
+          .get<AxiosResponseType<TableEntity>>(
+            `${this.slugRoute(slug)}/get-table/${tableCode}`,
           )
           .then(({ data }) => data);
       },

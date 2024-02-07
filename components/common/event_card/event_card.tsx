@@ -53,7 +53,7 @@ export const EventCard: IEventCard = (props) => {
                   {
                     'bg-gray-100': !!!props.banner_path,
                     'rounded-full overflow-hidden border-black/[.1] border':
-                      !!props.cafe_restaurant.logo_path,
+                      !!props.cafe_restaurant?.logo_path,
                   },
                 ),
               )}

@@ -65,7 +65,7 @@ export const EventCard: IEventCard = (props) => {
                   src={`${serverBaseUrl}/storage/${props.banner_path}`}
                   className="object-cover"
                 />
-              ) : props.cafe_restaurant.logo_path ? (
+              ) : props.cafe_restaurant?.logo_path ? (
                 <Image
                   fill
                   alt={props.cafe_restaurant.name}

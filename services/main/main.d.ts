@@ -1,18 +1,39 @@
-declare type EventType = {
-  id: number;
+import { Business } from '../business/business';
+
+export interface EventEntity {
+  uuid: string;
+  title: string;
+  start_at: string;
+  end_at: string;
+  limit: number;
+  banner_uuid: string;
+  short_description: string;
+  long_description: string;
+  organizer_type: string;
+  organizer_uuid: string;
+  cycle: string;
+  price: number;
+  pin: boolean;
   created_at: string;
   updated_at: string;
-  name: string;
-  capacity?: number;
-  banner_path?: string;
-  short_description?: string;
-  long_description?: string;
-  date: string;
-  from: string;
-  to?: string;
-  cafe_restaurant_id: number;
-  cafe_restaurant?: any;
-};
+  deleted_at?: null;
+  banner_url: string;
+  business?: BusinessType;
+  user?: unknown;
+}
+export interface DiscountEntity {
+  uuid: string;
+  title: string;
+  discount: number;
+  description: string;
+  pin: boolean;
+  type: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: null;
+  business_uuid: string;
+  business?: Business;
+}
 
 declare type Catalog = {
   id: number;
@@ -25,7 +46,7 @@ declare type Catalog = {
   label: string;
 };
 
-declare type ConditionalDiscount = {
+declare type DiscountEntity = {
   id: number;
   created_at: string;
   updated_at: string;
@@ -64,7 +85,7 @@ declare type BusinessType = {
   enabled_pager: number;
   is_pinned: number;
   is_hidden: number;
-  conditional_discounts?: ConditionalDiscount[];
+  conditional_discounts?: DiscountEntity[];
   events?: any[];
 };
 
@@ -80,7 +101,8 @@ declare interface IGetDiscounts {
   limit?: number;
 }
 declare interface IGetEvents {
-  is_pinned?: boolean;
+  pin?: boolean;
+  page?: number;
   limit?: number;
   from?: string;
   to?: string;

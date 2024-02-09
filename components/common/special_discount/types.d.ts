@@ -1,6 +1,7 @@
+import { DiscountEntity } from '@/services/main/main';
 import { FC, HTMLAttributes, PropsWithChildren } from 'react';
 
-declare interface ISpecialDiscountProps extends ConditionalDiscount {
+declare interface ISpecialDiscountProps extends DiscountEntity {
   business_title?: string;
   business_slug?: string;
   business_logo?: string;

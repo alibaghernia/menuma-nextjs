@@ -20,20 +20,23 @@ export const ProfileHeader: IProfileHeader = (props) => {
   } = useContext(CoffeeShopProviderContext);
 
   const socials = useMemo(() => {
-    const elements = [
-      profileData?.instagram
-        ? { icon: <InstagramIcon />, url: profileData.instagram }
-        : undefined,
-      profileData?.telegram
-        ? { icon: <TelegramIcon />, url: profileData.telegram }
-        : undefined,
-      profileData?.twitter
-        ? { icon: <XIcon width={20} height={20} />, url: profileData.twitter }
-        : undefined,
-      profileData?.whatsapp
-        ? { icon: <WhatsappIcon />, url: profileData.whatsapp }
-        : undefined,
-    ]
+    const elements = profileData.socials
+      ?.map((social) => {
+        switch (social.type) {
+          case 'instagram': {
+            return { icon: <InstagramIcon />, url: social.link };
+          }
+          case 'telegram': {
+            return { icon: <TelegramIcon />, url: social.link };
+          }
+          case 'twitter_x': {
+            return { icon: <XIcon width={20} height={20} />, url: social.link };
+          }
+          case 'whatsapp': {
+            return { icon: <WhatsappIcon />, url: social.link };
+          }
+        }
+      })
       .filter(Boolean)
       .map((social: any, key) => (
         <FlexItem key={key}>
@@ -54,8 +57,8 @@ export const ProfileHeader: IProfileHeader = (props) => {
             fill
             priority
             src={
-              profileData?.banner_path
-                ? `${serverBaseUrl}/storage/${profileData?.banner_path}`
+              profileData?.banner_url
+                ? profileData?.banner_url
                 : coffeeshopImage.src
             }
             alt={profileData.name}
@@ -80,9 +83,7 @@ export const ProfileHeader: IProfileHeader = (props) => {
           <Image
             fill
             src={
-              profileData?.logo_path
-                ? `${serverBaseUrl}/storage/${profileData?.logo_path}`
-                : coffeeshopLogo.src
+              profileData?.logo_url ? profileData?.logo_url : coffeeshopLogo.src
             }
             alt={profileData.name}
             className="object-cover"

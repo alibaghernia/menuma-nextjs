@@ -44,10 +44,9 @@ const Profile = () => {
   const [addL, removeL] = useLoadings();
   usePageLoading();
   const { state, businessService } = useContext(CoffeeShopProviderContext);
-  const profileData: IProfile = state.profile;
+  const profileData = state.profile;
   const slug = useSlug();
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
-  const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
   const locationCoordinates: [number, number] = [
     parseFloat(profileData.location_lat || '0'),
     parseFloat(profileData.location_long || '0'),
@@ -78,20 +77,6 @@ const Profile = () => {
     [profileData, resolvedTailwindConfig],
   );
 
-  const fetchEvents = () => {
-    addL('fetch-events');
-    businessService
-      .getEvents({
-        limit: 5,
-      })
-      .finally(() => {
-        removeL('fetch-events');
-      })
-      .then((data) => {
-        setFetchedEvents(data);
-      });
-  };
-
   useEffect(() => {
     // fetchEvents();
   }, []);
@@ -117,8 +102,8 @@ const Profile = () => {
           },
           {
             name: 'og:image',
-            value: profileData?.logo_path
-              ? `${serverBaseUrl}/storage/${profileData?.logo_path}`
+            value: profileData?.logo_url
+              ? profileData?.logo_url
               : cafeeshopBannelPlaceholder.src,
           },
         ]}

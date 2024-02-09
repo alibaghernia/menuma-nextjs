@@ -2,6 +2,13 @@ import { ISpecialDiscountProps } from '@/components/common/special_discount/type
 import axiosPkg, { AxiosInstance } from 'axios';
 import moment from 'moment';
 import { Business } from '../business/business';
+import {
+  Catalog,
+  EventEntity,
+  IGetDiscounts,
+  IGetEvents,
+  ISearchBusiness,
+} from './main';
 
 export class MainService {
   static init() {
@@ -20,13 +27,15 @@ export class MainService {
     });
   }
 
-  getEvents(args?: IGetEvents): Promise<EventType[]> {
-    // return this.axios
-    //   .get(`/api/events`, {
-    //     params: args,
-    //   })
-    //   .then(({ data }) => data);
-    return Promise.resolve([]);
+  getEvents(args?: IGetEvents) {
+    return this.axios
+      .get<AxiosResponseType<{ items: EventEntity[]; total: number }>>(
+        `/events`,
+        {
+          params: args,
+        },
+      )
+      .then(({ data }) => data);
   }
   searchBusiness(args?: ISearchBusiness) {
     return this.axios
@@ -38,7 +47,7 @@ export class MainService {
   }
   getDiscounts(args: IGetDiscounts = {}): Promise<ISpecialDiscountProps[]> {
     // return this.axios
-    //   .get<ConditionalDiscount[]>(`/api/discounts`, {
+    //   .get<DiscountEntity[]>(`/api/discounts`, {
     //     params: args,
     //   })
     //   .then(({ data }) => data);

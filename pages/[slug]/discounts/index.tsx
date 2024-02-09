@@ -17,24 +17,27 @@ import noImage from '@/assets/images/no-image.jpg';
 import Link from 'next/link';
 import { Footer } from '@/components/core/footer/footer';
 import { SpecialDiscount } from '@/components/common/special_discount';
+import { DiscountEntity } from '@/services/main/main';
 
 function DiscountsPage() {
   const [addL, removeL] = useLoadings();
   const { state, businessService } = useContext(CoffeeShopProviderContext);
   const mainProvider = useContext(ProviderContext);
-  const [fetchedDiscounts, setFetchedDiscounts] = useState<
-    ConditionalDiscount[]
-  >([]);
+  const [fetchedDiscounts, setFetchedDiscounts] = useState<DiscountEntity[]>(
+    [],
+  );
 
   const fetchDiscounts = () => {
     addL('fetch-discounts');
     businessService
-      .getDiscounts()
+      .getDiscounts({
+        type: 'CONDITIONAL',
+      })
       .finally(() => {
         removeL('fetch-discounts');
       })
       .then((data) => {
-        setFetchedDiscounts(data);
+        setFetchedDiscounts(data.data.items);
       });
   };
   useEffect(() => {
@@ -53,7 +56,7 @@ function DiscountsPage() {
       <FlexItem key={idx}>
         <SpecialDiscount
           {...discount}
-          business_logo={state.profile?.logo_path}
+          business_logo={state.profile?.logo_url}
           business_slug={state.profile?.slug}
           business_title={state.profile?.name}
           className="md:w-[25rem]"
@@ -84,8 +87,8 @@ function DiscountsPage() {
                     alt={state.profile.name}
                     fill
                     src={
-                      state.profile.logo_path
-                        ? `${serverBaseUrl}/storage/${state.profile.logo_path}`
+                      state.profile.logo_url
+                        ? state.profile.logo_url
                         : noImage.src
                     }
                   />

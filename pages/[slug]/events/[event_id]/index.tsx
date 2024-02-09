@@ -21,6 +21,7 @@ import { Button } from '@/components/common/button';
 import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
 import Link from 'next/link';
 import { serverBaseUrl } from '@/utils/axios';
+import { EventEntity } from '@/services/main/main';
 
 function EventPage() {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
@@ -30,31 +31,31 @@ function EventPage() {
   const { state, businessService } = useContext(CoffeeShopProviderContext);
   const slug = useSlug(false);
   const { query: params } = useCustomRouter();
-  const [event, setEvent] = useState<EventType>();
+  const [event, setEvent] = useState<EventEntity>();
   const date = useMemo(() => {
     if (!event) return;
-    const jMoment = moment(event?.date);
+    const jMoment = moment(event?.start_at);
     jMoment.locale('fa');
     return jMoment.format('dddd jD jMMMM');
-  }, [event?.date]);
+  }, [event?.start_at]);
 
   const clock = useMemo(() => {
     if (!event) return;
-    const from = moment(event?.from, 'HH:mm:ss').format('HH:mm');
-    const to = moment(event?.to, 'HH:mm:ss').format('HH:mm');
-    if (event?.to) return `${from} تا ${to}`;
+    const from = moment(event?.start_at, 'HH:mm:ss').format('HH:mm');
+    const to = moment(event?.end_at, 'HH:mm:ss').format('HH:mm');
+    if (event?.start_at) return `${from} تا ${to}`;
     return from;
-  }, [event?.from, event?.to]);
+  }, [event?.start_at, event?.end_at]);
 
   function fetchEvent() {
     addL('fetch-event');
     businessService.eventsService
-      .getEvent(params.event_id as string)
+      .get(params.event_id as string)
       .finally(() => {
         removeL('fetch-event');
       })
       .then((data) => {
-        setEvent(data);
+        setEvent(data.data);
       })
       .catch((err) => {
         if (err == 404) {
@@ -90,22 +91,18 @@ function EventPage() {
             <FlexBox alignItems="center" gap={2}>
               <hr className="border-black/10 w-full" />
               <div className="w-fit text-[1.2rem] font-[500] whitespace-nowrap text-typography">
-                {event?.name}
+                {event?.title}
               </div>
               <hr className="border-black/10 w-full" />
             </FlexBox>
           </FlexItem>
           <FlexItem className="mt-[1.64rem]">
             <div className="relative w-[20rem] h-[20rem] rounded-[.862rem] overflow-hidden mx-auto border">
-              {event?.banner_path ? (
+              {event?.banner_url ? (
                 <Image
                   fill
-                  alt={event?.name || ''}
-                  src={
-                    event?.banner_path
-                      ? `${serverBaseUrl}/storage/${event.banner_path}`
-                      : noImage.src
-                  }
+                  alt={event?.title || ''}
+                  src={event?.banner_url}
                   className="object-cover"
                 />
               ) : (
@@ -169,7 +166,7 @@ function EventPage() {
                   </FlexItem>
                 </FlexBox>
               </FlexItem>
-              {!!event?.capacity && (
+              {!!event?.limit && (
                 <FlexItem>
                   <FlexBox className="gap-[.5rem]" alignItems="center">
                     <FlexItem>
@@ -182,7 +179,7 @@ function EventPage() {
                       />
                     </FlexItem>
                     <FlexItem className="text-typography text-[.862rem]">
-                      {event?.capacity} نفر
+                      {event?.limit} نفر
                     </FlexItem>
                   </FlexBox>
                 </FlexItem>
@@ -221,7 +218,11 @@ function EventPage() {
                   توضیحات:
                 </FlexItem>
                 <FlexItem className="text-[.862rem] text-typography">
-                  {event?.long_description}
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: event?.long_description,
+                    }}
+                  />
                 </FlexItem>
               </FlexBox>
             </FlexItem>

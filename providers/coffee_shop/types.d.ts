@@ -1,3 +1,5 @@
+import { Business } from '@/services/business/business';
+import { BusinessType } from '@/services/main/main';
 import { FC, PropsWithChildren } from 'react';
 
 declare type ICartItem = {
@@ -9,7 +11,7 @@ declare type ICartItem = {
 };
 
 declare type IProviderState = {
-  profile: any;
+  profile: Business;
 };
 
 declare type IProvider = FC<

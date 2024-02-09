@@ -17,38 +17,39 @@ import noImage from '@/assets/images/no-image.jpg';
 import Link from 'next/link';
 import { Footer } from '@/components/core/footer/footer';
 import moment from 'moment';
+import { EventEntity } from '@/services/main/main';
 
 function EventsPage() {
   const [addL, removeL] = useLoadings();
   const { state, businessService } = useContext(CoffeeShopProviderContext);
   const mainProvider = useContext(ProviderContext);
-  const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
-  const [pastEvents, setPastEvents] = useState<EventType[]>([]);
+  const [fetchedEvents, setFetchedEvents] = useState<EventEntity[]>([]);
+  const [pastEvents, setPastEvents] = useState<EventEntity[]>([]);
 
   const fetchEvents = () => {
     addL('fetch-events');
-    businessService
-      .getEvents({
-        from: moment().format('YYYY-MM-DD'),
+    businessService.eventsService
+      .getItems({
+        from: moment().toISOString(),
       })
       .finally(() => {
         removeL('fetch-events');
       })
       .then((data) => {
-        setFetchedEvents(data);
+        setFetchedEvents(data.data.items);
       });
   };
   const fetchPastEvents = () => {
     addL('fetch-past-events');
-    businessService
-      .getEvents({
-        to: moment().format('YYYY-MM-DD'),
+    businessService.eventsService
+      .getItems({
+        to: moment().toISOString(),
       })
       .finally(() => {
         removeL('fetch-past-events');
       })
       .then((data) => {
-        setPastEvents(data);
+        setPastEvents(data.data.items);
       });
   };
   useEffect(() => {
@@ -99,8 +100,8 @@ function EventsPage() {
                     alt={state.profile.name}
                     fill
                     src={
-                      state.profile.logo_path
-                        ? `${serverBaseUrl}/storage/${state.profile.logo_path}`
+                      state.profile.logo_url
+                        ? state.profile.logo_url
                         : noImage.src
                     }
                   />

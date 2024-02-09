@@ -24,12 +24,13 @@ import { SpecialDiscount } from '@/components/common/special_discount';
 import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import ConfirmModal from '@/components/common/confirm_modal/confirm_modal';
 import moment from 'moment';
+import { DiscountEntity, EventEntity } from '@/services/main/main';
 
 function Home() {
   const [addL, removeL] = useLoadings();
   const router = useCustomRouter();
   const [searchField, setSearchField] = useState('');
-  const [fetchedEvents, setFetchedEvents] = useState<EventType[]>([]);
+  const [fetchedEvents, setFetchedEvents] = useState<EventEntity[]>([]);
   const [confirmModal, setConfirmModal] = useState<IConfirmModalProps>();
   const [pinBusinesses, setPinBusinesses] = useState<
     {
@@ -39,7 +40,7 @@ function Home() {
     }[]
   >([]);
   const [conditinalDiscounts, setConditinalDiscounts] = useState<
-    ConditionalDiscount[]
+    DiscountEntity[]
   >([]);
   const mainService = MainService.init();
 
@@ -64,14 +65,14 @@ function Home() {
     addL('fetch-events');
     mainService
       .getEvents({
-        is_pinned: true,
-        from: moment().format('YYYY-MM-DD'),
+        // pin: true,
+        // from: moment() .toISOString(),
       })
       .finally(() => {
         removeL('fetch-events');
       })
       .then((data) => {
-        setFetchedEvents(data);
+        setFetchedEvents(data.data.items);
       });
   };
   function fetchHasDiscountBusinesses() {
@@ -115,15 +116,10 @@ function Home() {
         >
           <SpecialDiscount
             key={idx}
-            cafe_restaurant_id={discount.cafe_restaurant_id}
-            title={discount.title}
-            description={discount.description}
-            id={discount.id}
-            created_at={discount.created_at}
-            updated_at={discount.updated_at}
-            business_logo={discount.cafe_restaurant?.logo_path}
-            business_slug={discount.cafe_restaurant?.slug}
-            business_title={discount.cafe_restaurant?.name}
+            business_logo={discount.business?.logo_url}
+            business_slug={discount.business?.slug}
+            business_title={discount.business?.name}
+            {...discount}
           />
         </SwiperSlide>
       )),

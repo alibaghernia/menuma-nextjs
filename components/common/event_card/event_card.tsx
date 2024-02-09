@@ -21,17 +21,17 @@ export const EventCard: IEventCard = (props) => {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
   const slug = useSlug(false);
   const date = useMemo(() => {
-    const jMoment = moment(props.date);
+    const jMoment = moment(props.start_at);
     jMoment.locale('fa');
     return jMoment.format('dddd jD jMMMM');
-  }, [props.date]);
+  }, [props.start_at]);
 
   const clock = useMemo(() => {
-    const from = moment(props.from, 'HH:mm:ss').format('HH:mm');
-    const to = moment(props.to, 'HH:mm:ss').format('HH:mm');
-    if (props.to) return `${from} تا ${to}`;
+    const from = moment(props.start_at, 'HH:mm:ss').format('HH:mm');
+    const to = moment(props.end_at, 'HH:mm:ss').format('HH:mm');
+    if (props.end_at) return `${from} تا ${to}`;
     return from;
-  }, [props.from, props.to]);
+  }, [props.start_at, props.end_at]);
 
   return (
     <>
@@ -51,16 +51,16 @@ export const EventCard: IEventCard = (props) => {
                 classNames(
                   'w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0',
                   {
-                    'bg-gray-100': !!!props.banner_path,
+                    'bg-gray-100': !!!props.banner_url,
                   },
                 ),
               )}
             >
-              {props.banner_path ? (
+              {props.banner_url ? (
                 <Image
                   fill
-                  alt={props.name}
-                  src={`${serverBaseUrl}/storage/${props.banner_path}`}
+                  alt={props.title}
+                  src={props.banner_url}
                   className="object-cover"
                 />
               ) : (
@@ -76,11 +76,11 @@ export const EventCard: IEventCard = (props) => {
                 alignItems="start"
               >
                 <FlexItem className="text-[1.2rem] text-typography font-semibold">
-                  {props.name}
+                  {props.title}
                 </FlexItem>
                 {!props.in_scope && (
                   <FlexItem className="bg-typography/[.9] text-white text-[.689rem] px-[.5rem] py-[.2rem] rounded-[.3125rem] w-fit">
-                    {props.cafe_restaurant?.name}
+                    {props.business?.name}
                   </FlexItem>
                 )}
                 <FlexItem className="text-typography text-[.862rem] line-clamp-[3]">
@@ -128,7 +128,7 @@ export const EventCard: IEventCard = (props) => {
                 </FlexItem>
               </FlexBox>
             </FlexItem>
-            {!!props.capacity && (
+            {!!props.limit && (
               <FlexItem>
                 <FlexBox className="gap-[.5rem]" alignItems="center">
                   <FlexItem>
@@ -141,7 +141,7 @@ export const EventCard: IEventCard = (props) => {
                     />
                   </FlexItem>
                   <FlexItem className="text-typography text-[.862rem]">
-                    {props.capacity} نفر
+                    {props.limit} نفر
                   </FlexItem>
                 </FlexBox>
               </FlexItem>
@@ -153,10 +153,7 @@ export const EventCard: IEventCard = (props) => {
             className="w-full text-center text-[.862rem] py-[.5rem]"
             type="primary"
           >
-            <Link
-              href={`/${props.cafe_restaurant?.slug}/events/${props.id}`}
-              className="block"
-            >
+            <Link href={`/${slug}/events/${props.uuid}`} className="block">
               مشاهده
             </Link>
           </Button>

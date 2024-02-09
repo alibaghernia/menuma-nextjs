@@ -17,6 +17,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
 import { MainService } from '@/services/main/main.service';
 import { serverBaseUrl } from '@/utils/axios';
+import { Catalog } from '@/services/main/main';
 
 type Service = Catalog;
 

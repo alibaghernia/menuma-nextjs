@@ -71,14 +71,14 @@ export const Navbar: INavBar = ({
       },
     ];
 
-    if (coffeShopState.profile.conditional_discounts_exists) {
+    if (coffeShopState.profile.has_discount) {
       menu.push({
         title: 'تخفیف های ویژه',
         icon: <DiscountIcon color={typographyColor} />,
         url: `/${slug}/discounts`,
       });
     }
-    if (coffeShopState.profile.events_exists) {
+    if (coffeShopState.profile.has_event) {
       menu.push({
         title: 'دورهمی ها',
         icon: <PeopleIcon color={typographyColor} />,
@@ -86,8 +86,8 @@ export const Navbar: INavBar = ({
       });
     }
     if (
-      coffeShopState.profile.has_customer_club &&
-      coffeShopState.profile.enabled_customer_club
+      coffeShopState.profile.customer_club &&
+      coffeShopState.profile.customer_club_enabled
     ) {
       menu.push({
         title: 'باشگاه مشتریان',

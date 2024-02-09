@@ -1,4 +1,3 @@
-import { IProfile } from '@/pages/[slug]/types';
 import axiosPkg, { AxiosInstance } from 'axios';
 import NError from 'next/error';
 import { CustomerClubService } from './customer_club/customer_club.service';
@@ -7,10 +6,17 @@ import { ISpecialDiscountProps } from '@/components/common/special_discount/type
 import {
   Business,
   CategoryEntity,
+  IGetDiscountsFilter,
   ProductEntity,
   TableEntity,
 } from './business';
 import { ProductService } from '../product/product.service';
+import {
+  DiscountEntity,
+  EventEntity,
+  IGetEvents,
+  ISearchBusiness,
+} from '../main/main';
 
 export class BusinessService {
   static init(slug?: string) {
@@ -83,14 +89,14 @@ export class BusinessService {
       .get<APIProduct[]>(`${this.slugRoute(slug)}/menu/day-offers`)
       .then(({ data }) => data);
   }
-  getDiscounts(slug?: string): Promise<ConditionalDiscount[]> {
+  getDiscounts(filters: IGetDiscountsFilter, slug?: string) {
     return this.axios
-      .get<ConditionalDiscount[]>(`${this.slugRoute(slug)}/discounts`)
-      .then(({ data }) => data);
-  }
-  getEvents(args?: IGetEvents, slug?: string): Promise<EventType[]> {
-    return this.axios
-      .get<EventType[]>(`${this.slugRoute(slug)}/events`, { params: args })
+      .get<AxiosResponseType<{ items: DiscountEntity[]; total: number }>>(
+        `${this.slugRoute(slug)}/discounts`,
+        {
+          params: filters,
+        },
+      )
       .then(({ data }) => data);
   }
   getTable(tableID: string, cafe_slug?: string) {

@@ -1,16 +1,16 @@
 import { Section } from '@/components/common/section/section';
-import moment from 'moment';
+import moment from 'jalali-moment';
 import React, { FC, useMemo } from 'react';
 import _ from 'lodash';
 
 export const WorkingHours: FC<any> = ({ data }) => {
   const renderWorkingHours = useMemo(() => {
-    const todayName = moment().format('dddd').toLocaleLowerCase();
-    const today = _.groupBy(data, (item) => item.weekday);
+    const dayNum = moment().format('d').toLocaleLowerCase();
+    const today = _.groupBy(data, (item) => item.day);
     return (
-      today[todayName]?.map((wh, key) => {
-        const time1 = moment(wh.from, 'HH:mm:ss').zone(-210);
-        const time2 = moment(wh.to, 'HH:mm:ss').zone(-210);
+      today[dayNum]?.map((wh, key) => {
+        const time1 = moment(wh.from);
+        const time2 = moment(wh.to);
         return (
           <tr key={key} className="py-2">
             <td className="text-center px-2 pb-2">

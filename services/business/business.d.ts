@@ -1,4 +1,4 @@
-// declare type ConditionalDiscount = {
+// declare type DiscountEntity = {
 //   id: number;
 //   created_at: string;
 //   updated_at: string;
@@ -43,7 +43,7 @@
 //   enabled_pager: number;
 //   is_pinned: number;
 //   is_hidden: number;
-//   conditional_discounts?: ConditionalDiscount[];
+//   conditional_discounts?: DiscountEntity[];
 //   events?: any[];
 // };
 
@@ -79,6 +79,9 @@ export interface Business {
   pager: boolean;
   customer_club: boolean;
   public: boolean;
+  has_discount: boolean;
+  has_event: boolean;
+  customer_club_enabled: boolean;
   createdAt: string;
   updatedAt: string;
   deletedAt?: null;
@@ -127,4 +130,9 @@ export interface TableEntity {
   hall_uuid?: null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface IGetDiscountsFilter extends Partial<IPagination> {
+  pin?: boolean;
+  type: 'CONDITIONAL' | 'NORMAL';
 }

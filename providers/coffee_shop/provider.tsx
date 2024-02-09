@@ -21,7 +21,7 @@ import { ConfirmModal } from '@/components/common/confirm_modal/confirm_modal';
 import { useRouter } from 'next/router';
 import { BusinessService } from '@/services/business/business.service';
 import { useLoadings, useMessage } from '@/utils/hooks';
-import { TableEntity } from '@/services/business/business';
+import { Business, TableEntity } from '@/services/business/business';
 
 export const TABLE_NUMBER_METADATA_STORAGE_KEY = '-table-number-key-';
 
@@ -42,7 +42,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
     if (profile) {
       return _.merge(INITIAL_STATE, { profile });
     }
-    return INITIAL_STATE;
+    return INITIAL_STATE as { profile: Business };
   };
   const [addL, removeL] = useLoadings();
   const message = useMessage();
@@ -62,7 +62,7 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
   const [tableID, setTableID] = useState<string>('');
   const [callGarsonModal, setCallGarsonModal] = useState<IConfirmModalProps>();
   const tableIDStorageKey = `${
-    state.profile.id
+    state.profile.uuid
   }${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`;
   const [table, setTable] = useState<TableEntity>();
   useEffect(() => {

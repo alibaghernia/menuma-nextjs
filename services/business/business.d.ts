@@ -81,6 +81,7 @@ export interface Business {
   public: boolean;
   has_discount: boolean;
   has_event: boolean;
+  has_menu: boolean;
   customer_club_enabled: boolean;
   createdAt: string;
   updatedAt: string;

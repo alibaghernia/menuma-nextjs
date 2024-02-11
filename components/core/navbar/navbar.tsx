@@ -58,7 +58,10 @@ export const Navbar: INavBar = ({
         ),
         url: `/${slug}`,
       },
-      {
+    ];
+
+    if (coffeShopState.profile.has_menu) {
+      menu.push({
         title: 'منو',
         icon: (
           <MenuCircleIcon
@@ -68,9 +71,8 @@ export const Navbar: INavBar = ({
           />
         ),
         url: `/${slug}menu`,
-      },
-    ];
-
+      });
+    }
     if (coffeShopState.profile.has_discount) {
       menu.push({
         title: 'تخفیف های ویژه',

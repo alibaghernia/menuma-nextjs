@@ -21,7 +21,6 @@ import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { MetaTags } from '@/components/common/metatags';
 import _ from 'lodash';
 import { useLoadings, usePageLoading } from '@/utils/hooks';
-import Navbar from '@/components/core/navbar/navbar';
 import Link from 'next/link';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,6 +37,9 @@ const WorkingHours = dynamic(
   { ssr: false },
 );
 const MapComponent = dynamic(() => import('@/components/common/map/map'), {
+  ssr: false,
+});
+const Navbar = dynamic(() => import('@/components/core/navbar/navbar'), {
   ssr: false,
 });
 const Profile = () => {
@@ -118,15 +120,17 @@ const Profile = () => {
         <div className="z-0">
           <ProfileHeader />
           <div className="mt-[4.3rem]">
-            <Button
-              className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
-              rounded
-              color="#fff"
-            >
-              <Link href={`/${slug}menu`} className="mx-auto">
-                مشاهده مـنـو
+            {profileData.has_menu && (
+              <Link href={`/${slug}menu`} className="mx-auto w-fit block">
+                <Button
+                  className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
+                  rounded
+                  color="#fff"
+                >
+                  مشاهده مـنـو
+                </Button>
               </Link>
-            </Button>
+            )}
             <div className="mt-[1rem]">
               <WorkingHours data={profileData.working_hours || []} />
             </div>

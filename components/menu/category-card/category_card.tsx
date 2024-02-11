@@ -36,7 +36,7 @@ export const CategoryCard: ICategoryCard = (props) => {
         />
         <div
           className={twMerge(
-            'text-white text-[1.2rem] font-bold text-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20',
+            'text-white text-[1.1rem] font-bold text-center absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] z-20',
             props.titleClassName,
           )}
         >

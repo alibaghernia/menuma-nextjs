@@ -38,7 +38,8 @@ import {
 import { BusinessService } from '@/services/business/business.service';
 import { DailyOffers } from '@/components/menu/dayli_offers';
 import { ProviderContext } from '@/providers/main/provider';
-import { CategoryEntity } from '@/services/business/business';
+import { CategoryEntity, ProductEntity } from '@/services/business/business';
+import { ProductService } from '@/services/product/product.service';
 
 function MenuPage() {
   const [addL, removeL] = useLoadings();
@@ -53,9 +54,10 @@ function MenuPage() {
     useContext(ProviderContext);
   const [searchInput, setSearchInput] = useState<string>('');
   const { query: params } = useCustomRouter();
-  const [dailyOffers, setDailyOffers] = useState<APIProduct[]>();
+  const [dailyOffers, setDailyOffers] = useState<ProductEntity[]>([]);
   const slug = useSlug(false);
   const businessService = BusinessService.init(params.slug as string);
+  const productService = ProductService.init(params.slug as string);
   const [selectedCategory, setSelectedCategory] = useState<string | number>();
 
   function menuFetcher() {
@@ -75,10 +77,10 @@ function MenuPage() {
 
   function fetchDaiulyOffers() {
     addL('fetch-offers');
-    businessService
-      .getDailyOffers()
+    productService
+      .offers()
       .then((data) => {
-        setDailyOffers(data);
+        setDailyOffers(data.data.items);
       })
       .catch(() => {
         message.error('مشکلی در دریافت پیشنهادات وجود دارد.');
@@ -186,15 +188,10 @@ function MenuPage() {
         ?.map((product, key1) => (
           <Product
             key={key1}
-            uuid={product.uuid}
-            title={product.title}
-            description={product.description}
-            image={product.image_url ? product.image_url : noImage.src}
-            prices={product.prices}
+            {...product}
             fullWidth
             className="px-5 max-w-lg"
             category_uuid={category.uuid}
-            metadata={product.metadata}
           />
         ));
     },

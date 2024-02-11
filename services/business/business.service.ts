@@ -83,12 +83,6 @@ export class BusinessService {
       >(`${this.slugRoute(slug)}/menu`)
       .then(({ data }) => data);
   }
-  getDailyOffers(slug?: string) {
-    return Promise.resolve([]);
-    return this.axios
-      .get<APIProduct[]>(`${this.slugRoute(slug)}/menu/day-offers`)
-      .then(({ data }) => data);
-  }
   getDiscounts(filters: IGetDiscountsFilter, slug?: string) {
     return this.axios
       .get<AxiosResponseType<{ items: DiscountEntity[]; total: number }>>(

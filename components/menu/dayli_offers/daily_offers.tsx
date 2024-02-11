@@ -59,19 +59,9 @@ export const DailyOffers: IDailyOffers = (props) => {
                   key={product.id}
                 >
                   <Product
-                    id={product.id}
-                    title={product.name}
-                    descriptions={product.description}
-                    image={
-                      product.image_path
-                        ? `${serverBaseUrl}/storage/${product.image_path}`
-                        : noImage.src
-                    }
-                    prices={product.prices || []}
+                    {...product}
                     fullWidth
                     className={twMerge('w-full md:w-[30rem]')}
-                    categoryId={product.category_id}
-                    tags={product.tags}
                     single_mode
                   />
                 </SwiperSlide>

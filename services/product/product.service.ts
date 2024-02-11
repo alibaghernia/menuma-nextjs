@@ -17,13 +17,21 @@ export class ProductService {
       throw new Error('Check Backend URL!');
     }
     this.axios = axiosPkg.create({
-      baseURL: `${backendURL}/product/${business_slug}`,
+      baseURL: `${backendURL}/business/${business_slug}/products`,
     });
   }
 
   getOne(uuid: string) {
     return this.axios
       .get<AxiosResponseType<ProductEntity>>(`/${uuid}`)
+      .then(({ data }) => data);
+  }
+
+  offers() {
+    return this.axios
+      .get<AxiosResponseType<{ items: ProductEntity[]; total: number }>>(
+        `/offers`,
+      )
       .then(({ data }) => data);
   }
 }

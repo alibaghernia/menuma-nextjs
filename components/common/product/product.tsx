@@ -176,7 +176,7 @@ export const Product: IProduct = (props) => {
         >
           <Image
             fill
-            src={props.image!}
+            src={props.image_url!}
             alt={props.title}
             className={classNames(`z-0 object-cover relative`, {
               grayscale: foundTagSoldOut,

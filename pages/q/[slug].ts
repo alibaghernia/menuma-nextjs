@@ -41,7 +41,7 @@ export async function getServerSideProps(context: any) {
   return {
     props: {},
     redirect: {
-      destination: destination,
+      destination: `https://q.menuma.online/${slug}`,
       permanent: false, // Set to true if the redirection is permanent (HTTP status code 301)
     },
   };

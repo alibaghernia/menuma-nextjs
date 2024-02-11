@@ -3,7 +3,6 @@ import { IEventCard } from './types';
 import { FlexBox } from '../flex_box/flex_box';
 import { FlexItem } from '../flex_item/flex_item';
 import Image from 'next/image';
-import noImage from '@/assets/images/no-image.jpg';
 import { PeopleIcon } from '@/icons/people';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import tailwindConfig from '@/tailwind.config';
@@ -14,7 +13,6 @@ import { Button } from '../button';
 import classNames from 'classnames';
 import Link from 'next/link';
 import { useSlug } from '@/providers/main/hooks';
-import { serverBaseUrl } from '@/utils/axios';
 import { twMerge } from 'tailwind-merge';
 
 export const EventCard: IEventCard = (props) => {
@@ -52,6 +50,8 @@ export const EventCard: IEventCard = (props) => {
                   'w-[7rem] h-[7rem] relative rounded-[.625rem] overflow-hidden shrink-0',
                   {
                     'bg-gray-100': !!!props.banner_url,
+                    'rounded-full overflow-hidden border-black/[.1] border':
+                      !!props.business?.logo_url,
                   },
                 ),
               )}
@@ -61,6 +61,13 @@ export const EventCard: IEventCard = (props) => {
                   fill
                   alt={props.title}
                   src={props.banner_url}
+                  className="object-cover"
+                />
+              ) : props.business?.logo_url ? (
+                <Image
+                  fill
+                  alt={props.business.name}
+                  src={props.business?.logo_url}
                   className="object-cover"
                 />
               ) : (

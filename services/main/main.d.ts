@@ -18,7 +18,7 @@ export interface EventEntity {
   updated_at: string;
   deleted_at?: null;
   banner_url: string;
-  business?: BusinessType;
+  business?: Business;
   user?: unknown;
 }
 export interface DiscountEntity {

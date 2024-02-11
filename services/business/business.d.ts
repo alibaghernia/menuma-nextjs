@@ -134,5 +134,5 @@ export interface TableEntity {
 
 export interface IGetDiscountsFilter extends Partial<IPagination> {
   pin?: boolean;
-  type: 'CONDITIONAL' | 'NORMAL';
+  type: 'CONDITIONAL' | 'NORMAL' | 'ALL';
 }

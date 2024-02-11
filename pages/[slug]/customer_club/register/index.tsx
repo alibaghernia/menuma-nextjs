@@ -139,7 +139,7 @@ function CustomerClubRegisterPage() {
                 <Form form={form} onFinish={onFinish} layout="vertical">
                   <Form.Item
                     label="نام"
-                    name="name"
+                    name="first_name"
                     rules={[
                       {
                         required: true,
@@ -155,7 +155,7 @@ function CustomerClubRegisterPage() {
                   </Form.Item>
                   <Form.Item
                     label="نام خانوادگی"
-                    name="family"
+                    name="last_name"
                     rules={[
                       {
                         required: true,
@@ -191,7 +191,7 @@ function CustomerClubRegisterPage() {
                     <DatePicker
                       inputClass={classNames('ant-input', designToken.hashId)}
                       containerClassName="w-full"
-                      className="rmdp-mobile w-full"
+                      className="rmdp-mobile"
                       calendar={persian}
                       locale={persian_fa}
                       calendarPosition="bottom-right"

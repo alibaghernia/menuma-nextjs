@@ -65,8 +65,8 @@ function Home() {
     addL('fetch-events');
     mainService
       .getEvents({
-        // pin: true,
-        // from: moment() .toISOString(),
+        pin: true,
+        from: moment().toISOString(),
       })
       .finally(() => {
         removeL('fetch-events');
@@ -79,13 +79,14 @@ function Home() {
     addL('fetch-has-discount-businesses');
     mainService
       .getDiscounts({
-        is_pinned: true,
+        type: 'CONDITIONAL',
+        pin: true,
       })
       .finally(() => {
         removeL('fetch-has-discount-businesses');
       })
       .then((data) => {
-        setConditinalDiscounts(data);
+        setConditinalDiscounts(data.data.items);
       });
   }
 

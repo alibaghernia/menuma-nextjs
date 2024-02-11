@@ -1,9 +1,8 @@
-import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
 import axiosPkg, { AxiosInstance } from 'axios';
-import moment from 'moment';
-import { Business } from '../business/business';
+import { Business, IGetDiscountsFilter } from '../business/business';
 import {
   Catalog,
+  DiscountEntity,
   EventEntity,
   IGetDiscounts,
   IGetEvents,
@@ -45,14 +44,15 @@ export class MainService {
       )
       .then(({ data }) => data);
   }
-  getDiscounts(args: IGetDiscounts = {}): Promise<ISpecialDiscountProps[]> {
-    // return this.axios
-    //   .get<DiscountEntity[]>(`/api/discounts`, {
-    //     params: args,
-    //   })
-    //   .then(({ data }) => data);
-
-    return Promise.resolve([]);
+  getDiscounts(args: IGetDiscountsFilter) {
+    return this.axios
+      .get<AxiosResponseType<{ items: DiscountEntity[]; total: number }>>(
+        `/discounts`,
+        {
+          params: args,
+        },
+      )
+      .then(({ data }) => data);
   }
   getCatalogs(): Promise<Catalog[]> {
     return this.axios.get(`/api/catalogs`).then(({ data }) => data);

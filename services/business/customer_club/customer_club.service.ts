@@ -1,6 +1,3 @@
-import { IProfile } from '@/pages/[slug]/types';
-import axiosPkg, { AxiosInstance } from 'axios';
-import NError from 'next/error';
 import { BusinessService } from '../business.service';
 
 export class CustomerClubService {
@@ -11,6 +8,6 @@ export class CustomerClubService {
   constructor(private businessService: BusinessService) {}
 
   signUp(args: ISignUp) {
-    return this.businessService.axios.post('/customer-club/register', args);
+    return this.businessService.axios.post('/customer_club/customers', args);
   }
 }

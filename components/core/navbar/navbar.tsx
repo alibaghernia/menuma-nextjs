@@ -86,8 +86,8 @@ export const Navbar: INavBar = ({
       });
     }
     if (
-      coffeShopState.profile.customer_club &&
-      coffeShopState.profile.customer_club_enabled
+      coffeShopState.profile.customer_club
+      //  && coffeShopState.profile.customer_club_enabled
     ) {
       menu.push({
         title: 'باشگاه مشتریان',

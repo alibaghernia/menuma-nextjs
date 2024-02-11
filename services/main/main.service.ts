@@ -54,10 +54,14 @@ export class MainService {
       )
       .then(({ data }) => data);
   }
-  getCatalogs(): Promise<Catalog[]> {
-    return this.axios.get(`/api/catalogs`).then(({ data }) => data);
+  getCatalogs() {
+    return this.axios
+      .get<AxiosResponseType<{ items: Catalog[]; total: number }>>(`/catalogs`)
+      .then(({ data }) => data);
   }
-  getCatalog(id: string): Promise<Catalog> {
-    return this.axios.get(`/api/catalogs/${id}`).then(({ data }) => data);
+  getCatalog(id: string) {
+    return this.axios
+      .get<AxiosResponseType<Catalog>>(`/catalogs/${id}`)
+      .then(({ data }) => data);
   }
 }

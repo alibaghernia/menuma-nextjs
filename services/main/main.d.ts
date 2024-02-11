@@ -36,14 +36,15 @@ export interface DiscountEntity {
 }
 
 declare type Catalog = {
-  id: number;
-  created_at: string;
-  updated_at: string;
+  uuid: string;
+  createdAt: string;
+  updatedAt: string;
   title: string;
   short_description: string;
   long_description: string;
   image: string;
-  label: string;
+  image_url: string;
+  labels: { label: string }[];
 };
 
 declare type DiscountEntity = {

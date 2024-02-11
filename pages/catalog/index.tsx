@@ -36,7 +36,7 @@ function CatalogPage() {
         removeL('fetch-services');
       })
       .then((data) => {
-        setServices(data);
+        setServices(data.data.items);
       })
       .catch(() => {
         message.error('مشکلی در دریافت اطلاعات وجود دارد.');
@@ -150,17 +150,14 @@ export default CatalogPage;
 
 const ServiceCard: FC<Service> = (service) => {
   const labels = useMemo(() => {
-    return service.label
-      ?.split(',')
-      .filter(Boolean)
-      .map((label, idx) => (
-        <FlexItem
-          key={idx}
-          className="py-[.34rem] px-[1.64rem] font-bold rounded-[.689rem] bg-green-600/[.1] text-green-700 text-[.689rem]"
-        >
-          {label.trim()}
-        </FlexItem>
-      ));
+    return service.labels.filter(Boolean).map((label, idx) => (
+      <FlexItem
+        key={idx}
+        className="py-[.34rem] px-[1.64rem] font-bold rounded-[.689rem] bg-green-600/[.1] text-green-700 text-[.689rem]"
+      >
+        {label.label.trim()}
+      </FlexItem>
+    ));
   }, []);
 
   return (
@@ -181,11 +178,7 @@ const ServiceCard: FC<Service> = (service) => {
         >
           <FlexItem className="relative w-[7rem] h-[7rem] rounded-[.625rem] overflow-hidden">
             {service.image && (
-              <Image
-                fill
-                alt={service.title}
-                src={`${serverBaseUrl}/storage/${service.image}`}
-              />
+              <Image fill alt={service.title} src={service.image_url} />
             )}
           </FlexItem>
           <FlexItem className="text-[1rem] text-typography text-center font-semibold">
@@ -206,7 +199,7 @@ const ServiceCard: FC<Service> = (service) => {
       </FlexItem>
       <FlexItem>
         <Button type="ghost" color="primary" className="outline-none">
-          <Link href={`/catalog/${service.id}`} className="w-full">
+          <Link href={`/catalog/${service.uuid}`} className="w-full">
             اطلاعات بیشتر
           </Link>
         </Button>

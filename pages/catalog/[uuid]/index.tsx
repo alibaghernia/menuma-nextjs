@@ -25,6 +25,7 @@ import resolveConfig from 'tailwindcss/resolveConfig';
 import { useRouter } from 'next/router';
 import { Section } from '@/components/common/section/section';
 import Link from 'next/link';
+import { Catalog } from '@/services/main/main';
 
 type Service = Catalog;
 
@@ -41,12 +42,12 @@ const ServicePage: FC = () => {
   function fetchService() {
     addL('fetch-service');
     mainService
-      .getCatalog(params.id as string)
+      .getCatalog(params.uuid as string)
       .finally(() => {
         removeL('fetch-service');
       })
       .then((data) => {
-        setService(data);
+        setService(data.data);
       })
       .catch(() => {
         message.error('مشکلی در دریافت اطلاعات وجود دارد.');
@@ -54,21 +55,18 @@ const ServicePage: FC = () => {
   }
 
   useEffect(() => {
-    if (params.id) fetchService();
+    if (params.uuid) fetchService();
   }, [params]);
   const labels = useMemo(() => {
-    return service?.label
-      ?.split(',')
-      .filter(Boolean)
-      .map((label, idx) => (
-        <FlexItem
-          key={idx}
-          className="py-[.34rem] px-[1.64rem] font-bold rounded-[.689rem] bg-green-600/[.1] text-green-700 text-[.800rem]"
-        >
-          {label?.trim()}
-        </FlexItem>
-      ));
-  }, [service?.label]);
+    return service?.labels.filter(Boolean).map((label, idx) => (
+      <FlexItem
+        key={idx}
+        className="py-[.34rem] px-[1.64rem] font-bold rounded-[.689rem] bg-green-600/[.1] text-green-700 text-[.800rem]"
+      >
+        {label.label?.trim()}
+      </FlexItem>
+    ));
+  }, [service?.labels]);
 
   return (
     <>
@@ -104,13 +102,11 @@ const ServicePage: FC = () => {
                       <FlexBox justify="end">
                         <FlexItem>
                           <FlexBox
+                            onClick={() => router.back()}
                             alignItems="center"
                             className="rounded-lg bg-typography/[.05] px-[.5rem] pr-[1rem] py-1 cursor-pointer"
                           >
-                            <FlexItem
-                              className="text-typography"
-                              onClick={() => router.back()}
-                            >
+                            <FlexItem className="text-typography">
                               بازگشت
                             </FlexItem>
                             <FlexItem>
@@ -129,7 +125,7 @@ const ServicePage: FC = () => {
                         <Image
                           fill
                           alt={service.title}
-                          src={`${serverBaseUrl}/storage/${service.image}`}
+                          src={service.image_url}
                         />
                       )}
                     </FlexItem>

@@ -15,7 +15,7 @@ export const Badge: IBadge = (props) => {
           <span className="mx-auto">جدید</span>
         </div>
       ),
-      hot: (
+      offer: (
         <div
           className="
         text-xs font-medium px-2.5 py-0.5 rounded-full bg-red-200/[.75] text-red-900"
@@ -34,6 +34,7 @@ export const Badge: IBadge = (props) => {
     }),
     [],
   );
+  //@ts-ignore
   const badge = useMemo(() => typeBadge[props.type!], [props.type, typeBadge]);
   return badge;
 };

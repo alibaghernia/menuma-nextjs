@@ -29,7 +29,7 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
               <Image
                 fill
                 alt={discount.title}
-                src={discountPlaceholer.src}
+                src={discount.business?.logo_url! || discountPlaceholer.src}
                 className="object-cover bg-gray-100"
               />
             </FlexItem>

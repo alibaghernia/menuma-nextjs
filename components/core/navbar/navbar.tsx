@@ -1,3 +1,4 @@
+'use client';
 import React, { useContext, useMemo, useState } from 'react';
 import { INavBar } from './types';
 import { MenuIcon } from '@/icons/menu';
@@ -18,19 +19,18 @@ import { Container } from '@/components/common/container/container';
 import dynamic from 'next/dynamic';
 import { CallGarson } from '@/components/common/call_garson/call_garson';
 import { useCustomRouter, useLoadings, useTailwindColor } from '@/utils/hooks';
-import Link from 'next/link';
+import Link from '@/components/common/link/link';
 import { PeopleIcon } from '@/icons/people';
 import { DiscountIcon } from '@/icons/discount';
 import { AwardOutlineIcon } from '@/icons/award-outline';
-
-const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false });
+import Cart from '@/components/common/cart/cart';
 export const Navbar: INavBar = ({
   background = true,
   callPager = true,
   ...props
 }) => {
   const router = useCustomRouter();
-  const slug = useSlug();
+  const slug = useSlug(false);
   const [addL, removeL] = useLoadings();
   const {
     state: coffeShopState,
@@ -70,7 +70,7 @@ export const Navbar: INavBar = ({
             ].toString()}
           />
         ),
-        url: `/${slug}menu`,
+        url: `/${slug}/menu`,
       });
     }
     if (coffeShopState.profile.has_discount) {
@@ -87,10 +87,7 @@ export const Navbar: INavBar = ({
         url: `/${slug}/events`,
       });
     }
-    if (
-      coffeShopState.profile.customer_club
-      //  && coffeShopState.profile.customer_club_enabled
-    ) {
+    if (coffeShopState.profile.customer_club) {
       menu.push({
         title: 'باشگاه مشتریان',
         icon: <AwardOutlineIcon color={typographyColor} />,
@@ -112,7 +109,6 @@ export const Navbar: INavBar = ({
           if (menuItem.url) {
             setOverlay(false);
             setMenuOpen(false);
-            // addL(LOADING_KEYS.pageLoading);
             router.push(menuItem.url);
           }
         }}
@@ -130,19 +126,6 @@ export const Navbar: INavBar = ({
       router.back();
     }
   }
-
-  const cart = useMemo(
-    () => (
-      <Cart
-        open={cartOpen}
-        onClose={() => {
-          setCartOpen(false);
-          setOverlay(false);
-        }}
-      />
-    ),
-    [cartOpen],
-  );
 
   return (
     <Container
@@ -314,7 +297,13 @@ export const Navbar: INavBar = ({
           </FlexItem>
         </FlexBox>
       </Container>
-      {cart}
+      <Cart
+        open={cartOpen}
+        onClose={() => {
+          setCartOpen(false);
+          setOverlay(false);
+        }}
+      />
     </Container>
   );
 };

@@ -1,8 +1,6 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import { useEffect, useState, Fragment } from 'react';
-import { axios, serverBaseUrl } from '@/utils/axios';
-import { Container } from '@/components/common/container/container';
+import Link from '@/components/common/link/link';
+import { useState, Fragment } from 'react';
+import { axios } from '@/utils/axios';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Label } from '@/components/common/label';
@@ -29,7 +27,7 @@ export const RegisterFormComponent = () => {
           <div>
             <FlexBox className="flex flex-col items-center justify-center px-6 mx-auto lg:py-0">
               <FlexItem className="mx-auto mb-7 text-[2rem] text-gray-800">
-                <Link href={{ pathname: '/' }}></Link>
+                <Link href={'/'}></Link>
               </FlexItem>
             </FlexBox>
             <FlexBox className="">
@@ -44,7 +42,7 @@ export const RegisterFormComponent = () => {
             </FlexBox>
             <FlexBox direction="column">
               <FlexItem className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <Link href={{ pathname: '/' }}>
+                <Link href={'/'}>
                   <Button
                     className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded justify-center text-center"
                     onClick={() => {}}

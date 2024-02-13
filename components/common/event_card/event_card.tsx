@@ -11,7 +11,7 @@ import moment from 'jalali-moment';
 import { ClockIcon } from '@/icons/clock';
 import { Button } from '../button';
 import classNames from 'classnames';
-import Link from 'next/link';
+import Link from '@/components/common/link/link';
 import { useSlug } from '@/providers/main/hooks';
 import { twMerge } from 'tailwind-merge';
 

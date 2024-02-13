@@ -12,7 +12,7 @@ import { InstagramIcon } from '@/icons/instagram';
 import { TelegramIcon } from '@/icons/telegram';
 import { XIcon } from '@/icons/x';
 import { WhatsappIcon } from '@/icons/whatsapp';
-import Link from 'next/link';
+import Link from '@/components/common/link/link';
 
 export const ProfileHeader: IProfileHeader = (props) => {
   const {

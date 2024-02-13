@@ -17,7 +17,7 @@ const config: Config = {
         primary: '#3177FF',
         typography: '#434343',
         secondary: '#EEB33F',
-        background: '#FBFBFB',
+        background: '#FcFcFc',
         more: '#EEB33F',
       },
     },

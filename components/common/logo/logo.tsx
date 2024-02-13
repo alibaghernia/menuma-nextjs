@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ILogo } from './types';
-import Link from 'next/link';
+import Link from '@/components/common/link/link';
 
 export const Logo: ILogo = (props) => {
   return (

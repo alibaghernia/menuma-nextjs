@@ -1,3 +1,4 @@
+'use client';
 import React, {
   createContext,
   useCallback,
@@ -17,6 +18,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import dynamic from 'next/dynamic';
 import { ProductEntity } from '@/services/business/business';
 import { CartProductItem } from '@/components/common/cart/cart';
+import { useParams } from 'next/navigation';
 const ConfirmModal = dynamic(
   () => import('@/components/common/confirm_modal/confirm_modal'),
 );
@@ -31,13 +33,13 @@ export const ProviderContext = createContext<{
 const localStoragekey = 'provider-storage-new-v3.0';
 
 const Provider: IProvider = ({ children }) => {
-  const { query: params } = useRouter();
+  const params = useParams();
   const [deletedCartItemsAlertModal, setDeletedCartItemsAlertModal] = useState<{
     names?: string[];
     ids: string[];
   }>({ ids: [], names: [] });
   const getLocalStorageKey = useCallback(() => {
-    const slug = params.slug || 'menuma';
+    const slug = params?.slug || 'menuma';
     return `${slug}-${localStoragekey}`;
   }, [params?.slug]);
 

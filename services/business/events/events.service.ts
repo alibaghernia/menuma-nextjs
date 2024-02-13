@@ -1,4 +1,4 @@
-import { IProfile } from '@/pages/[slug]/types';
+import { IProfile } from '@/app/(cafe_restaurant)/[slug]/(cafe)/types';
 import axiosPkg, { AxiosInstance } from 'axios';
 import NError from 'next/error';
 import { BusinessService } from '../business.service';

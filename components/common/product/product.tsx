@@ -13,14 +13,15 @@ import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
 import { useCustomRouter } from '@/utils/hooks';
-import Link from 'next/link';
+import Link from '@/components/common/link/link';
 import { ProductEntity } from '@/services/business/business';
+import { useParams } from 'next/navigation';
 
 export const Product: IProduct = (props) => {
   const foundTagSoldOut = !!props.metadata?.find(
     (tag: string) => tag === 'sold_out',
   );
-  const { query: params } = useCustomRouter();
+  const params = useParams();
   const slug = useSlug();
   const { functions } = useContext(ProviderContext);
   const productSlug = useMemo(
@@ -33,7 +34,7 @@ export const Product: IProduct = (props) => {
       functions.cart.addItem({
         id: key,
         uuid: props.uuid,
-        image: props.image || noImage.src,
+        image: props.image_url || noImage.src,
         title: props.title,
         count: 1,
         price: price.value,
@@ -189,7 +190,7 @@ export const Product: IProduct = (props) => {
                 className="z-10 absolute inset-0"
                 style={{
                   background:
-                    'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 40%, rgba(224, 224, 224, 0.75) 100%)',
+                    'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 40%, rgba(224, 224, 224, 1) 100%)',
                 }}
               ></span>
               <div className="text-[1.2rem] text-typography absolute bottom-[.3rem] left-[50%] translate-x-[-50%] font-bold z-20">

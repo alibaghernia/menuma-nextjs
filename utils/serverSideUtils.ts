@@ -1,4 +1,4 @@
-import { IProfile } from '@/pages/[slug]/types';
+import { IProfile } from '@/app/(cafe_restaurant)/[slug]/(cafe)/types';
 import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { QueryClient } from 'react-query';
 import { axios } from './axios';

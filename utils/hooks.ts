@@ -1,15 +1,13 @@
 import { LOADING_KEYS } from '@/providers/general/contants';
 import { GeneralContext } from '@/providers/general/provider';
-import { TransitionalOptions } from 'axios';
-import { Url } from 'next/dist/shared/lib/router/router';
-import Error from 'next/error';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { nextTick } from 'process';
 import { useContext, useEffect, useMemo } from 'react';
-import { TransitionOptions } from './page_hooks_types';
 import { Grid } from 'antd/lib';
 import tailwindConfig from '@/tailwind.config';
 import resolveConfig from 'tailwindcss/resolveConfig';
+import { useRouteChangeContext } from '@/providers/routeChange/provider';
+import { NavigateOptions } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export const useLoadings = () => {
   const { addLoading, removeLoading } = useContext(GeneralContext);
@@ -24,43 +22,38 @@ export const useNotification = () => {
   return notificationApi;
 };
 
-export const usePageLoading = () => {
-  const router = useRouter();
-  const { removeLoading, addLoading } = useContext(GeneralContext);
-  useEffect(() => {
-    nextTick?.(() => {
-      removeLoading(LOADING_KEYS.pageLoading);
-    });
-  }, [router]);
-};
-
 export const useCustomRouter = () => {
+  const { onRouteChangeStart } = useRouteChangeContext();
   const router = useRouter();
-  const { removeLoading, addLoading } = useContext(GeneralContext);
-  useEffect(() => {
-    nextTick?.(() => {
-      removeLoading(LOADING_KEYS.pageLoading);
+
+  const push = (...params: [string, NavigateOptions?]) => {
+    const { pathname, search, hash } = window.location;
+    const hrefCurrent = `${pathname}${search}${hash}`;
+    const hrefTarget = params[0] as string;
+    console.log({
+      hrefTarget,
+      hrefCurrent,
     });
-  }, []);
+    if (hrefTarget !== hrefCurrent) {
+      onRouteChangeStart();
+    }
+    router.push(...params);
+  };
+  const replace = (...params: [string, NavigateOptions?]) => {
+    const { pathname, search, hash } = window.location;
+    const hrefCurrent = `${pathname}${search}${hash}`;
+    const hrefTarget = params[0] as string;
+    if (hrefTarget !== hrefCurrent) {
+      onRouteChangeStart();
+    }
+    router.replace(...params);
+  };
+
   return {
     ...router,
-    push(...props: [Url, Url?, TransitionOptions?]) {
-      addLoading(LOADING_KEYS.pageLoading);
-
-      return router.push(...props);
-    },
-    replace(...props: [Url, Url?, TransitionOptions?]) {
-      addLoading(LOADING_KEYS.pageLoading);
-
-      return router.replace(...props);
-    },
+    push,
+    replace,
   };
-};
-
-export const useCustomParams = () => {
-  const { query: params } = useRouter();
-
-  return params;
 };
 
 export const useCurrentBreakpoints = () => {

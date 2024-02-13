@@ -1,14 +1,11 @@
 import axiosPkg, { AxiosInstance } from 'axios';
-import NError from 'next/error';
 import { CustomerClubService } from './customer_club/customer_club.service';
 import { EventsService } from './events/events.service';
-import { ISpecialDiscountProps } from '@/components/common/special_discount/types';
 import {
   Business,
   CategoryEntity,
   IGetDiscountsFilter,
   ProductEntity,
-  TableEntity,
 } from './business';
 import { ProductService } from '../product/product.service';
 import {
@@ -17,6 +14,8 @@ import {
   IGetEvents,
   ISearchBusiness,
 } from '../main/main';
+import { TablesService } from './tables/tables.service';
+import { TableEntity } from './tables/tables';
 
 export class BusinessService {
   static init(slug?: string) {
@@ -39,11 +38,7 @@ export class BusinessService {
   }
 
   get businessSlug() {
-    if (!this.slug)
-      throw new NError({
-        title: 'BusinessSlug is not specified!',
-        statusCode: 500,
-      });
+    if (!this.slug) throw new Error('BusinessSlug is not specified!');
     return this.slug;
   }
   get customerClubService() {
@@ -55,12 +50,14 @@ export class BusinessService {
   get productService() {
     return ProductService.init(this.slug!);
   }
+  get tableService() {
+    return TablesService.init(this);
+  }
   private slugRoute(slug?: string) {
     if (slug && this.slug)
-      throw new NError({
-        statusCode: 500,
-        title: 'Only pass the slug to method or BusinessService constructor!',
-      });
+      throw new Error(
+        'Only pass the slug to method or BusinessService constructor!',
+      );
     if (slug) return `/${slug}`;
     return '';
   }
@@ -124,13 +121,6 @@ export class BusinessService {
         return this.axios.delete(
           `${this.slugRoute(slug)}/pager-request/${request_uuid}`,
         );
-      },
-      getTable: (tableCode: string) => {
-        return this.axios
-          .get<AxiosResponseType<TableEntity>>(
-            `${this.slugRoute(slug)}/get-table/${tableCode}`,
-          )
-          .then(({ data }) => data);
       },
     };
   }

@@ -1,7 +1,8 @@
+'use client';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { ProviderContext } from '@/providers/main/provider';
-import Link from 'next/link';
+import Link from '@/components/common/link/link';
 import React, { useContext } from 'react';
 
 export const Footer = () => {

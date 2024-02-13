@@ -1,8 +1,9 @@
+'use client';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { ICart } from './types';
 import classNames from 'classnames';
 import { LinedCloseIcon } from '@/icons/lined_close';
-import sperso from '@/assets/images/sperso.png';
+import noImage from '@/assets/images/no-image.jpg';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import colors from 'tailwindcss/colors';
 import tailwindConfig from '@/tailwind.config';
@@ -18,9 +19,8 @@ import { Container } from '../container/container';
 import { IConfirmModalProps } from '../confirm_modal/types';
 import _ from 'lodash';
 import { CallGarson } from '../call_garson/call_garson';
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
+import Link from '@/components/common/link/link';
 import { ProductEntity } from '@/services/business/business';
 import { ICartItem } from '@/providers/main/types';
 const ConfirmModal = dynamic(
@@ -34,7 +34,7 @@ export type CartProductItem = Omit<
 >;
 
 export const Cart: ICart = (props) => {
-  const { query: params } = useRouter();
+  const params = useParams();
   const slug = useSlug();
   const [dismissModal, setDismissModal] = useState<
     IConfirmModalProps | undefined
@@ -88,7 +88,11 @@ export const Cart: ICart = (props) => {
                     <Link href={productSlug}>
                       <Image
                         fill
-                        src={orderItem.image || sperso.src}
+                        src={
+                          orderItem.image.startsWith('http')
+                            ? orderItem.image
+                            : noImage.src
+                        }
                         alt=""
                         className="object-cover"
                       />

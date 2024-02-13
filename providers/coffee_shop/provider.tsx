@@ -1,3 +1,4 @@
+'use client';
 import React, {
   createContext,
   useEffect,
@@ -10,18 +11,17 @@ import reducer from './reducer';
 import { INITIAL_STATE } from './constants';
 import _ from 'lodash';
 import Functions from './functions';
-import { useSearchParams } from 'next/navigation';
+import { useParams, usePathname, useSearchParams } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { useSlug } from '../main/hooks';
 import moment from 'moment';
 import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { ConfirmModal } from '@/components/common/confirm_modal/confirm_modal';
-import { useRouter } from 'next/router';
 import { BusinessService } from '@/services/business/business.service';
-import { useLoadings, useMessage } from '@/utils/hooks';
-import { Business, TableEntity } from '@/services/business/business';
+import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
+import { Business } from '@/services/business/business';
+import { TableEntity } from '@/services/business/tables/tables';
 
 export const TABLE_NUMBER_METADATA_STORAGE_KEY = '-table-number-key-';
 
@@ -46,14 +46,15 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
   };
   const [addL, removeL] = useLoadings();
   const message = useMessage();
-  const { query: params } = useRouter();
+  const params = useParams();
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const router = useCustomRouter();
+  const path = usePathname();
   const [state, dispatch] = useReducer(
     (state: IProviderState, action: any) => reducer(_.cloneDeep(state), action),
     getInitialState(),
   );
-  const businessService = BusinessService.init(params.slug as string);
+  const businessService = BusinessService.init(params?.slug as string);
   const functions = Functions(state, dispatch);
 
   // garson call
@@ -66,31 +67,15 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
   }${TABLE_NUMBER_METADATA_STORAGE_KEY}${moment().format('YYYY/MM/DD HH')}`;
   const [table, setTable] = useState<TableEntity>();
   useEffect(() => {
-    const tab_id = searchParams.get('tab_id');
+    const tab_id = searchParams?.get('tab_id');
     if (tab_id) {
       setTableID(tab_id);
       localStorage.setItem(tableIDStorageKey, tab_id);
-      const path = router.asPath.substring(0, router.asPath.indexOf('?'));
-      router.replace(path, undefined);
+      router.replace(path!, undefined);
     }
   }, [searchParams, setTableID]);
 
-  function profileFetcher() {
-    addL('fetch-business');
-    businessService
-      .get()
-      .then()
-      .finally(() => removeL('fetch-business'))
-      .then((data) => {
-        functions.setProfile(data.data);
-      })
-      .catch(() => {
-        message.error('خطا در دریافت اطلاعات کافه');
-      });
-  }
-
   useEffect(() => {
-    if (params.slug) profileFetcher();
     if (window) {
       const pagerRequest = localStorage.getItem('pager-request');
       if (pagerRequest) {
@@ -177,9 +162,8 @@ const CoffeShopProvider: IProvider = ({ children, profile }) => {
       if (table) showModal(table);
       else {
         addL('get-table');
-        businessService
-          .pager()
-          .getTable(storageTableID)
+        businessService.tableService
+          .get(storageTableID)
           .then(({ data: table }) => {
             showModal(table);
             setTable(table);

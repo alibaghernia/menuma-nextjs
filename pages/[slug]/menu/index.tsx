@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/core/navbar/navbar';
 import { CategoryCard } from '@/components/menu/category-card';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import styles from '@/assets/styles/pages/menu/menu.module.scss';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';

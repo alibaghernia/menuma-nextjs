@@ -66,6 +66,7 @@ const Provider: IProvider = ({ children }) => {
         !state.isNotMenuma &&
         !domain.startsWith('localhost') &&
         !domain.startsWith('192.168.') &&
+        !domain.startsWith('172.') &&
         !domain.startsWith('test.')
       ) {
         dispatch({
@@ -108,7 +109,7 @@ const Provider: IProvider = ({ children }) => {
   function checkCartItemsExist(products: APIProduct[]) {
     const cartItems = state.cart;
     const deleteItems = cartItems.filter((item) =>
-      products.some((product) => product.id == item.product.id),
+      products.some((product) => product.id == item.product?.id),
     );
     setDeletedCartItemsAlertModal({
       names: Array.from(new Set(deleteItems.map((item) => item.product.title))),

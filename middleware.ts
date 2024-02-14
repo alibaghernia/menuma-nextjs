@@ -23,6 +23,8 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`http://test.`) &&
     !reqUrl.startsWith(`https://test.`) &&
     !reqUrl.startsWith(`http://192.168.`) &&
+    !reqUrl.startsWith(`http://172.`) &&
+    !reqUrl.startsWith(`https://172.`) &&
     !reqUrl.startsWith(`https://192.168.`)
   ) {
     const domain_name = host?.split('.') || [];

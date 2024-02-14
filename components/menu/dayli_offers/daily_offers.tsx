@@ -5,7 +5,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import classNames from 'classnames';
 import { twMerge } from 'tailwind-merge';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import { Product } from '@/components/common/product/product';
 import { serverBaseUrl } from '@/utils/axios';
 import { Swiper, SwiperRef, SwiperSlide } from 'swiper/react';

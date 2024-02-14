@@ -79,21 +79,22 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
   const image = useMemo(() => {
     if (current.is_panorama) {
       return (
-        <Pannellum
-          width="100%"
-          height="100%"
-          image={current.src}
-          autoLoad
-          onError={(err: any) => {
-            console.log({
-              err,
-            });
-            setLoadingImage(false);
-          }}
-          onLoad={() => {
-            setLoadingImage(false);
-          }}
-        ></Pannellum>
+        <>
+          <Pannellum
+            width="100%"
+            image={current.src}
+            autoLoad
+            onError={(err: any) => {
+              console.log({
+                err,
+              });
+              setLoadingImage(false);
+            }}
+            onLoad={() => {
+              setLoadingImage(false);
+            }}
+          />
+        </>
       );
     } else
       return (
@@ -101,7 +102,7 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
           src={current.src}
           onLoad={() => setLoadingImage(false)}
           alt={current.alt}
-          className="w-full object-cover rounded-[.865rem] "
+          className="w-full object-cover rounded-[.865rem] h-[400px]"
         />
       );
   }, [current]);
@@ -181,10 +182,12 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
           <hr />
         </FlexItem>
         <FlexItem grow className="relative overflow-y-auto">
-          <FlexBox direction="column" justify="center" className="h-full">
-            <FlexItem className="overflow-hidden h-full  overflow-y-auto">
-              {image}
-            </FlexItem>
+          <FlexBox
+            // direction="column"
+            alignItems="center"
+            className="h-full"
+          >
+            {image}
           </FlexBox>
           {loadingImage && (
             <div className="absolute inset-0 bg-white flex justify-center items-center">

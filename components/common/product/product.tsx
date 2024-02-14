@@ -4,7 +4,7 @@ import { TagType } from '@/components/common/badge/types';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { LinedAddIcon } from '@/icons/lined_add';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import { ProviderContext } from '@/providers/main/provider';
 import _ from 'lodash';
 import { useSlug } from '@/providers/main/hooks';
@@ -14,6 +14,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
 import { useCustomRouter } from '@/utils/hooks';
 import Link from 'next/link';
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 
 export const Product: IProduct = (props) => {
   const foundTagSoldOut = !!props.tags?.find(
@@ -22,6 +23,7 @@ export const Product: IProduct = (props) => {
   const { query: params } = useCustomRouter();
   const slug = useSlug();
   const { functions } = useContext(ProviderContext);
+  const { state } = useContext(CoffeeShopProviderContext);
   const productSlug = useMemo(
     () => (params ? `/${slug}menu/${props.categoryId}/${props.id}` : '#'),
     [params, props, slug],
@@ -106,14 +108,18 @@ export const Product: IProduct = (props) => {
                         'active:scale-[.8]': !order && !foundTagSoldOut,
                       },
                     )}
-                    onClick={() => !foundTagSoldOut && orderItem(price)}
+                    onClick={() =>
+                      !foundTagSoldOut &&
+                      !!+state.profile.has_pager &&
+                      orderItem(price)
+                    }
                   >
                     <FlexItem>
                       <div className="text-[1rem] font-[500] text-typography">
                         {`${parseInt(price.price).toLocaleString('IR-fa')} ت`}
                       </div>
                     </FlexItem>
-                    {!foundTagSoldOut && (
+                    {!foundTagSoldOut && !!+state.profile.has_pager && (
                       <FlexItem>
                         {order ? (
                           <FlexBox alignItems="center" gap={2}>

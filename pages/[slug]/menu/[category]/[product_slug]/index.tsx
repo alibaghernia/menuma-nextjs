@@ -12,7 +12,7 @@ import { serverBaseUrl } from '@/utils/axios';
 import Head from 'next/head';
 import _ from 'lodash';
 import { Navbar } from '@/components/core/navbar/noSSR';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -133,7 +133,7 @@ function ProductPage() {
         return (
           <FlexItem key={key}>
             <FlexBox
-              justify="between"
+              justify={!!+state.profile.has_pager ? 'between' : 'center'}
               alignItems="center"
               className={classNames(
                 'p-[.5rem] px-[1.5rem] pl-[.875rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto',
@@ -150,37 +150,41 @@ function ProductPage() {
                   </FlexItem>
                 </FlexBox>
               </FlexItem>
-              {!order ? (
-                <FlexItem
-                  className={classNames(
-                    'rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]',
-                    { 'grayscale pointer-events-none': foundTagSoldOut },
-                  )}
-                  onClick={() => orderItem(price)}
-                >
-                  {foundTagSoldOut ? 'اتمام موجودی' : 'سفارش'}
-                </FlexItem>
-              ) : (
-                <FlexItem>
-                  <FlexBox gap={2} alignItems="center">
+              {!!+state.profile.has_pager && (
+                <>
+                  {!order ? (
                     <FlexItem
-                      className="relative w-7 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
-                      onClick={_.throttle(
-                        () => increaseOrderItemCount(price),
-                        500,
+                      className={classNames(
+                        'rounded-[1rem] py-[.2rem] px-[1.5rem] bg-more text-typography cursor-pointer active:scale-[.8] transition duration-[.2s]',
+                        { 'grayscale pointer-events-none': foundTagSoldOut },
                       )}
+                      onClick={() => orderItem(price)}
                     >
-                      <Container center>+</Container>
+                      {foundTagSoldOut ? 'اتمام موجودی' : 'سفارش'}
                     </FlexItem>
-                    {order.count}
-                    <FlexItem
-                      className="relative w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
-                      onClick={() => decreasOrderItemCount(price)}
-                    >
-                      <Container center>-</Container>
+                  ) : (
+                    <FlexItem>
+                      <FlexBox gap={2} alignItems="center">
+                        <FlexItem
+                          className="relative w-7 h-7 bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
+                          onClick={_.throttle(
+                            () => increaseOrderItemCount(price),
+                            500,
+                          )}
+                        >
+                          <Container center>+</Container>
+                        </FlexItem>
+                        {order.count}
+                        <FlexItem
+                          className="relative w-7 h-7 flex items-center justify-center bg-more rounded-lg cursor-pointer active:scale-[.8] transition duration-[.2s] select-none"
+                          onClick={() => decreasOrderItemCount(price)}
+                        >
+                          <Container center>-</Container>
+                        </FlexItem>
+                      </FlexBox>
                     </FlexItem>
-                  </FlexBox>
-                </FlexItem>
+                  )}
+                </>
               )}
             </FlexBox>
           </FlexItem>
@@ -250,7 +254,10 @@ function ProductPage() {
               </FlexItem>
               <FlexItem className="mt-[3rem]">
                 <FlexBox direction="column" gap={2}>
-                  {prices}
+                  <div className="text-[.9rem] text-typography">قیمت ها</div>
+                  <FlexBox direction="column" gap={2}>
+                    {prices}
+                  </FlexBox>
                 </FlexBox>
               </FlexItem>
             </FlexBox>

@@ -206,7 +206,7 @@ export const Navbar: INavBar = ({
                   />
                 </FlexItem>
               )}
-            {props.note && (
+            {props.note && !!+coffeShopState.profile.has_pager && (
               <FlexItem>
                 <div
                   className="cursor-pointer relative"

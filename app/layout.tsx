@@ -6,7 +6,6 @@ import { GeneralProvider } from '@/providers/general/provider';
 import { RouteChangeProvider } from '@/providers/routeChange/provider';
 import faIR from 'antd/locale/fa_IR';
 import _ from 'lodash';
-import LocaleProvider from 'antd/lib/locale';
 import Provider from '@/providers/main/provider';
 
 export const metadata: Metadata = {
@@ -23,31 +22,29 @@ export default function RootLayout({
     <html lang="fa" dir="rtl">
       <body>
         <main className="bg-background">
-          <LocaleProvider locale={faIR}>
-            <ConfigProvider
-              direction="rtl"
-              theme={{
-                token: {
-                  colorPrimary: '#3177FF',
-                  fontSize: 16,
+          <ConfigProvider
+            direction="rtl"
+            theme={{
+              token: {
+                colorPrimary: '#3177FF',
+                fontSize: 16,
+              },
+              components: {
+                Input: {
+                  paddingBlock: 6,
                 },
-                components: {
-                  Input: {
-                    paddingBlock: 6,
-                  },
-                },
-              }}
-              locale={faIR}
-            >
-              <RouteChangeProvider>
-                <GeneralProvider>
-                  <Provider>
-                    <AntdRegistry>{children}</AntdRegistry>
-                  </Provider>
-                </GeneralProvider>
-              </RouteChangeProvider>
-            </ConfigProvider>
-          </LocaleProvider>
+              },
+            }}
+            locale={faIR}
+          >
+            <RouteChangeProvider>
+              <GeneralProvider>
+                <Provider>
+                  <AntdRegistry>{children}</AntdRegistry>
+                </Provider>
+              </GeneralProvider>
+            </RouteChangeProvider>
+          </ConfigProvider>
         </main>
       </body>
     </html>

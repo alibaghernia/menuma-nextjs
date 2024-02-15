@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 import { ISearchBusinessBox } from './types';
 import { SearchIcon } from '@/icons/search';
 import { SettingConfig } from '@/icons/setting-config';

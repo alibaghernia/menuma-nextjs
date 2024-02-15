@@ -8,14 +8,14 @@ import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { SearchBusinessBox } from '@/components/common/search_business_box/search_business_box';
 import Image from 'next/image';
 import noImage from '@/assets/images/no-image.jpg';
-import { useCustomRouter, useLoadings } from '@/utils/hooks';
+import { useLoadings } from '@/utils/hooks';
 import Link from '@/components/common/link/link';
 import { Select } from 'antd/lib';
 import { toPersianNumber } from '@/helpers/functions';
 import AdvancedSearch from '@/components/common/advanced_search/advanced_search';
 import { GeneralContext } from '@/providers/general/provider';
 import { BusinessService } from '@/services/business/business.service';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 
 type SearchArgs = {
   is_pinned?: boolean;
@@ -27,8 +27,8 @@ function Search() {
   const { loadings } = useContext(GeneralContext);
   const [advancedSearch, setAdvancedSearch] = useState(false);
   const [advancedSearchArgs, setAdvancedSearchArgs] = useState({});
-  const params = useParams();
-  const isNear = !!params?.near;
+  const searchParams = useSearchParams();
+  const isNear = !!searchParams.get('near');
   const [searchField, setSearchField] = useState('');
   const [radius, setRadius] = useState('2 کیلومتری');
   const [fetchedItems, setFetchedItems] = useState<
@@ -71,8 +71,8 @@ function Search() {
     businessService
       .getAll({
         distance: distance as string,
-        location_lat: params?.lat as string,
-        location_long: params?.long as string,
+        location_lat: searchParams.get('lat')!,
+        location_long: searchParams.get('long')!,
       })
       .finally(() => {
         removeL('fetch-businesses');
@@ -91,14 +91,21 @@ function Search() {
   };
 
   useEffect(() => {
-    if (params?.search) {
-      handleFetchBusinesses({ search_field: params.search as string });
-      setSearchField(params.search as string);
+    if (searchParams.get('search')) {
+      handleFetchBusinesses({
+        search_field: searchParams.get('search') as string,
+      });
+      setSearchField(searchParams.get('search') as string);
     }
-    if (params?.near && params.lat && params.long && isNear) {
+    if (
+      searchParams.get('near') &&
+      searchParams.get('lat') &&
+      searchParams.get('long') &&
+      isNear
+    ) {
       fetchNearBusinesses('2000');
     }
-  }, [params]);
+  }, [searchParams]);
 
   function roundUpToNearestMultipleOf100(number: number) {
     return Math.ceil(number / 100) * 100;
@@ -181,7 +188,7 @@ function Search() {
   ) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
   return (
     <>
-      <div className="mx-auto md:w-fit mt-[2.38rem] flex flex-col px-[2rem]">
+      <div className="mx-auto md:w-fit mt-[2.38rem] flex flex-col px-[2rem] min-h-screen">
         <div className="mx-auto">
           <Logo />
         </div>
@@ -235,7 +242,9 @@ function Search() {
               {renderBusinesses()}
             </div>
           ) : (
-            params?.search && <div className="center">موردی وجود ندارد</div>
+            searchParams.get('search') && (
+              <div className="center">موردی وجود ندارد</div>
+            )
           )}
         </div>
       </div>

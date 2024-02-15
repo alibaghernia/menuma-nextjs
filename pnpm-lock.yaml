@@ -148,9 +148,6 @@ devDependencies:
   babel-eslint:
     specifier: ^10.1.0
     version: 10.1.0(eslint@8.54.0)
-  core:
-    specifier: link:@types/@photo-sphere-viewer/core
-    version: link:@types/@photo-sphere-viewer/core
   eslint:
     specifier: ^8
     version: 8.54.0

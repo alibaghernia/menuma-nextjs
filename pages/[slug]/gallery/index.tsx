@@ -8,11 +8,12 @@ import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import { useCurrentBreakpoints } from '@/utils/hooks';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import { GetServerSideProps } from 'next';
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import Masonry from 'react-responsive-masonry';
 import dynamic from 'next/dynamic';
-import { GalleryImage } from '@/components/pages/gallery/image/types';
-import image360 from '@/assets/images/360-image-2.jpg';
+import { axios, serverBaseUrl } from '@/utils/axios';
+import { useRouter } from 'next/router';
+import { stat } from 'fs';
 
 const GalleryImage = dynamic(
   () => import('@/components/pages/gallery/image/image'),
@@ -21,7 +22,9 @@ const GalleryImage = dynamic(
 
 function GalleryPage() {
   const { state } = useContext(CoffeeShopProviderContext);
+  const { query: params } = useRouter();
   const breakpoints = useCurrentBreakpoints();
+  const [gallery, setGallery] = useState<any[]>([]);
 
   const repeatColumns = useMemo(() => {
     switch (breakpoints.last) {
@@ -34,53 +37,32 @@ function GalleryPage() {
     }
   }, [breakpoints.breakpoints]);
 
+  function fetchGallery() {
+    axios
+      .get(`/api/cafe-restaurants/${params.slug}/galleries`)
+      .then(({ data }) => {
+        setGallery(
+          data.map((img: any) => ({
+            title: state.profile.name,
+            alt: state.profile.name,
+            src: `${serverBaseUrl}/storage/${img.path}`,
+            information: img.description,
+            width: img.w,
+            height: img.h,
+          })),
+        );
+      });
+  }
+  useEffect(() => {
+    fetchGallery();
+  }, []);
   const images = useMemo(() => {
-    const images: GalleryImage[] = [
-      {
-        src: 'https://i.pinimg.com/564x/6b/61/9b/6b619b18f89bcdceec7e223c28e99f8e.jpg',
-        title: 'Image 1',
-        childs: [
-          {
-            title: 'image 2',
-            src: 'https://i.pinimg.com/564x/8e/66/92/8e6692a623146d86c16b811cdfa05853.jpg',
-            information: 'this is a test information',
-          },
-          {
-            title: 'image 3',
-            src: 'https://i.pinimg.com/564x/80/e9/27/80e9279d123d9b280146456603b1ebcd.jpg',
-          },
-          {
-            title: 'image 4',
-            src: image360.src,
-            is_panorama: true,
-          },
-          {
-            title: 'image 5',
-            src: 'https://i.pinimg.com/736x/90/c4/89/90c4895984a1eb57eaecafc18173f5cc.jpg',
-          },
-          {
-            title: 'image 5',
-            src: 'https://i.pinimg.com/736x/90/c4/89/90c4895984a1eb57eaecafc18173f5cc.jpg',
-          },
-          {
-            title: 'image 5',
-            src: 'https://i.pinimg.com/736x/90/c4/89/90c4895984a1eb57eaecafc18173f5cc.jpg',
-          },
-        ],
-      },
-
-      {
-        title: 'image 4',
-        src: image360.src,
-        is_panorama: true,
-      },
-    ];
-    return images.map((image, idx) => (
+    return gallery.map((image, idx) => (
       <div key={idx} className="relative rounded-[.862rem] overflow-hidden">
         <GalleryImage {...image} zoomable />
       </div>
     ));
-  }, []);
+  }, [gallery]);
 
   return (
     <>

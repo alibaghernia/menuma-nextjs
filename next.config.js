@@ -21,6 +21,7 @@ const nextConfig = {
     'leva',
     'zaman',
     'react-jss',
+    'react-pannellum',
   ],
   images: {
     remotePatterns: [

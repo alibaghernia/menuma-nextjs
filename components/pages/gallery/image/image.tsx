@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { GalleryImage, GalleryImageProps, IGalleryImage } from './types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -10,8 +10,7 @@ import { useCurrentBreakpoints, useTailwindColor } from '@/utils/hooks';
 import { LinedCloseIcon } from '@/icons/lined_close';
 import { createPortal } from 'react-dom';
 import { Button, Spin } from 'antd/lib';
-import { Pannellum } from 'pannellum-react';
-import image360 from '@/assets/images/360-image.jpg';
+import { ReactPhotoSphereViewer } from 'react-photo-sphere-viewer';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import 'swiper/css';
@@ -75,22 +74,37 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
   const typographyColor = useTailwindColor('typography');
   const [current, setCurrent] = useState<GalleryImage>(props);
   const [loadingImage, setLoadingImage] = useState(true);
+  const [imageContainerWidth, setImageContainerWidth] = useState(0);
+
+  useEffect(() => {
+    process.nextTick(() => {
+      const width = document.getElementById('image-container')?.clientWidth;
+      setImageContainerWidth(width!);
+    });
+  }, []);
 
   const image = useMemo(() => {
+    const aspect = props.width / props.height;
+    const height = (1 * imageContainerWidth) / aspect;
+    console.log({
+      aspect,
+      imageContainerWidth,
+      props,
+    });
     if (current.is_panorama) {
       return (
         <>
-          <Pannellum
+          <ReactPhotoSphereViewer
+            height="400px"
             width="100%"
-            image={current.src}
-            autoLoad
-            onError={(err: any) => {
-              console.log({
-                err,
-              });
-              setLoadingImage(false);
+            src={current.src}
+            panoData={{
+              isEquirectangular: true,
+              croppedHeight: 1980,
+              croppedWidth: 4096,
+              croppedY: 1000,
             }}
-            onLoad={() => {
+            onReady={() => {
               setLoadingImage(false);
             }}
           />
@@ -102,10 +116,14 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
           src={current.src}
           onLoad={() => setLoadingImage(false)}
           alt={current.alt}
-          className="w-full object-cover rounded-[.865rem] h-[400px]"
+          className="w-full object-cover rounded-[.865rem]"
+          style={{
+            width: '100%',
+            height: `${height}px`,
+          }}
         />
       );
-  }, [current]);
+  }, [current, imageContainerWidth]);
 
   const childSlides = useMemo(() => {
     return props.childs?.map((image, idx) => (
@@ -183,6 +201,7 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
         </FlexItem>
         <FlexItem grow className="relative overflow-y-auto">
           <FlexBox
+            id="image-container"
             // direction="column"
             alignItems="center"
             className="h-full"

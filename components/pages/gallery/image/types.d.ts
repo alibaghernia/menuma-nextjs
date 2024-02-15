@@ -3,8 +3,8 @@ import { FC } from 'react';
 declare type GalleryImage = {
   src: string;
   thumb_src?: string;
-  width?: number | string;
-  height?: number | string;
+  width: number;
+  height: number;
   alt?: string;
   title: string;
   information?: string;

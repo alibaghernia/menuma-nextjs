@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { cookies } from 'next/headers';
+import { setIsNotMenuma } from './actions/cookie';
 
 export function middleware(request: NextRequest) {
   const appDomain = process.env.NEXT_PUBLIC_MENUMA_DOMAIN;
@@ -34,13 +36,17 @@ export function middleware(request: NextRequest) {
         : domain_name.toString()
     ).replace(/:(\d+)/, '');
     const pathname = request.url.replace(nextUrl, '');
-    request.headers.set('isNotMenuma', '1');
-    return NextResponse.rewrite(`${nextUrl}/${username}${pathname}`, {
+    const response = NextResponse.rewrite(`${nextUrl}/${username}${pathname}`, {
       headers: request.headers,
     });
+    response.cookies.set('is-not-menuma', '1');
+    response.cookies.set('is-rewrite', '1');
+    return response;
   }
-  request.headers.set('isNotMenuma', '0');
-  return NextResponse.next({
+  const response = NextResponse.next({
     headers: request.headers,
   });
+  if (cookies().get('is-rewrite')?.value != '1')
+    response.cookies.set('is-not-menuma', '0');
+  return response;
 }

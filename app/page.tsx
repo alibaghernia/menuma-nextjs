@@ -22,15 +22,16 @@ import SpecialDiscounts from './components/special-discounts';
 import Events from './components/events';
 import SearchBox from './components/search-box';
 import { Flex } from 'antd/lib';
+import { cache } from 'react';
 
-const fetchPinBusinesses = () => {
+const fetchPinBusinesses = cache(() => {
   const mainService = MainService.init();
   return mainService
     .searchBusiness({
       pin: true,
     })
     .then((data) => data.data.businesses);
-};
+});
 const fetchEvents = () => {
   const mainService = MainService.init();
   return mainService

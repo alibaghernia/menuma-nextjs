@@ -1,3 +1,4 @@
+'use client';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { IProduct } from './types';
 import { TagType } from '@/components/common/badge/types';

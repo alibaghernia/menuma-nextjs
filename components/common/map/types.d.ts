@@ -1,3 +1,4 @@
+import { Business } from '@/services/business/business';
 import { FC } from 'react';
 
 declare type ILocation = {
@@ -5,7 +6,7 @@ declare type ILocation = {
 };
 
 declare interface IMapProps {
-  location: ILocation;
+  business: Business;
 }
 
 declare type IMap = FC<IMapProps>;

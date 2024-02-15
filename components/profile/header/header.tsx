@@ -1,3 +1,4 @@
+'use client';
 import React, { useContext, useMemo, useState } from 'react';
 import coffeeshopImage from '@/assets/images/coffeeshop.jpg';
 import coffeeshopLogo from '@/assets/images/coffeeshopLogo.png';

@@ -4,6 +4,7 @@ import { QueryClient } from 'react-query';
 import { axios } from './axios';
 import _ from 'lodash';
 import { BusinessService } from '@/services/business/business.service';
+import { getIsNotMenuma } from '@/actions/cookie';
 
 export const getSlugFromReq = (
   { req, params }: GetServerSidePropsContext,
@@ -42,3 +43,9 @@ export const withCafeeShopProfile = (
     );
   };
 };
+
+export function getSlug(slug: string, traillingSlash: boolean = true) {
+  const isNotMenuma = getIsNotMenuma();
+  const final_slug = isNotMenuma ? `` : slug;
+  return traillingSlash && final_slug ? `${final_slug}/` : final_slug;
+}

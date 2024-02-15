@@ -1,106 +1,34 @@
-'use client';
+'use server';
 import { ProfileHeader } from '@/components/profile/header/header';
-import cafeeshopBannelPlaceholder from '@/assets/images/coffeeshop-banner-placeholder.jpg';
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { cache } from 'react';
 import { Section } from '@/components/common/section/section';
-import dynamic from 'next/dynamic';
-import { GetServerSideProps, Metadata } from 'next';
-import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import { Button } from '@/components/common/button';
-import { useSlug } from '@/providers/main/hooks';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
-import { PhoneIcon } from '@/icons/phone';
-import resolveConfig from 'tailwindcss/resolveConfig';
-import tailwindConfig from '@/tailwind.config';
-import { MailIcon } from '@/icons/mail';
-import { serverBaseUrl } from '@/utils/axios';
-import { withCafeeShopProfile } from '@/utils/serverSideUtils';
-import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
-import { MetaTags } from '@/components/common/metatags';
+import { getSlug } from '@/utils/serverSideUtils';
 import _ from 'lodash';
 import Link from '@/components/common/link/link';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Footer } from '@/components/core/footer/footer';
+import { Navbar } from '@/components/core/navbar/navbar';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
-import Head from 'next/head';
+import Contacts from './components/contacts';
+import { getBusiness } from '@/actions/business';
+import WorkingHours from '@/components/profile/working_hours/working_hours';
+import dynamic from 'next/dynamic';
 
-const WorkingHours = dynamic(
-  () => import('@/components/profile/working_hours/working_hours'),
-  { ssr: false },
-);
-const MapComponent = dynamic(() => import('@/components/common/map/map'), {
+const Map = dynamic(() => import('@/components/common/map/map'), {
   ssr: false,
 });
-const Navbar = dynamic(() => import('@/components/core/navbar/navbar'), {
-  ssr: false,
-});
-
-const Profile = () => {
-  const { state } = useContext(CoffeeShopProviderContext);
-  const profileData = state.profile;
-  const slug = useSlug();
-  const resolvedTailwindConfig = resolveConfig(tailwindConfig);
-  const locationCoordinates: [number, number] = [
-    parseFloat(profileData.location_lat || '0'),
-    parseFloat(profileData.location_long || '0'),
-  ];
-
-  const contactInfo = useMemo(
-    () =>
-      [
-        {
-          icon: (
-            <PhoneIcon
-              color={resolvedTailwindConfig.theme?.colors!['white'].toString()}
-            />
-          ),
-          value: profileData.phone_number,
-          link: `tel:${profileData.phone_number}`,
-        },
-        {
-          icon: (
-            <MailIcon
-              color={resolvedTailwindConfig.theme?.colors!['white'].toString()}
-            />
-          ),
-          value: profileData.email,
-          link: `mailto:${profileData.email}`,
-        },
-      ].filter((item) => item.value),
-    [profileData, resolvedTailwindConfig],
-  );
+async function Profile({ params }: any) {
+  const profileData = await getBusiness(params.slug);
+  const slug = getSlug(params.slug, false);
 
   return (
     <>
-      <Head>
-        <title>{`${profileData.name + (slug ? ' - منوما' : '')}`}</title>
-        <link
-          rel="manifest"
-          href={`${serverBaseUrl}/api/cafe-restaurants/${state.profile.slug}/manifest.json`}
-        />
-      </Head>
-      <MetaTags
-        metatags={[
-          {
-            name: 'og:title',
-            value: `${profileData.name + (slug ? ' - منوما' : '')}`,
-          },
-          {
-            name: 'og:description',
-            value: profileData.description,
-          },
-          {
-            name: 'og:image',
-            value: profileData?.logo_url
-              ? profileData?.logo_url
-              : cafeeshopBannelPlaceholder.src,
-          },
-        ]}
-      />
       <Navbar dark background={false} callPager={false} menuButtonOverlay />
       <FlexBox
         className="min-h-screen"
@@ -112,7 +40,7 @@ const Profile = () => {
           <ProfileHeader />
           <div className="mt-[4.3rem]">
             {profileData.has_menu && (
-              <Link href={`/${slug}menu`} className="mx-auto w-fit block">
+              <Link href={`/${slug}/menu`} className="mx-auto w-fit block">
                 <Button
                   className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
                   rounded
@@ -130,7 +58,7 @@ const Profile = () => {
               className="mt-[1rem]"
               append={
                 <Button
-                  link={`https://www.google.com/maps/search/?api=1&query=${locationCoordinates[0]},${locationCoordinates[1]}`}
+                  link={`https://www.google.com/maps/search/?api=1&query=${profileData.location_lat},${profileData.location_long}`}
                   className="text-[.8rem] px-[.8rem] py-[.3rem] text-white bg-[#EEB33F]"
                   linkTarget="_blank"
                   rounded="1rem"
@@ -146,51 +74,18 @@ const Profile = () => {
                 </FlexItem>
                 <FlexItem className="mt-2">
                   <div className="rounded-[1rem] overflow-hidden h-[12.7rem] relative z-0">
-                    <MapComponent
-                      location={{
-                        coordinates: locationCoordinates,
-                      }}
-                    />
+                    <Map business={profileData} />
                   </div>
                 </FlexItem>
               </FlexBox>
             </Section>
-            {!!contactInfo.length && (
-              <Section
-                title="تماس با ما"
-                className="py-[1.6rem]"
-                contentClassNames="px-[1.7rem]"
-              >
-                <FlexBox direction="column" className="px-[1rem]" gap={2}>
-                  {contactInfo.map((contact, key) => (
-                    <FlexItem
-                      className="text-typography text-[.9rem] text-justify rounded-[2rem] border"
-                      key={key}
-                    >
-                      <FlexBox alignItems="center" gap={0}>
-                        <FlexItem className="bg-typography rounded-tr-[1rem] rounded-br-[1rem]  py-2 px-2">
-                          {contact.icon}
-                        </FlexItem>
-                        <FlexItem
-                          className="text-typography font-bold bg-white/[.4] py-2 px-4 rounded-tl-[1rem] rounded-bl-[1rem] text-[1rem] text-center"
-                          grow
-                        >
-                          <Link target="_blank" href={contact.link || '#'}>
-                            {contact.value}
-                          </Link>
-                        </FlexItem>
-                      </FlexBox>
-                    </FlexItem>
-                  ))}
-                </FlexBox>
-              </Section>
-            )}
+            <Contacts business={profileData} />
           </div>
         </div>
         <Footer />
       </FlexBox>
     </>
   );
-};
+}
 
 export default Profile;

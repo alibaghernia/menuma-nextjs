@@ -1,24 +1,26 @@
+'use client';
 import React from 'react';
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer } from './client';
 import { IMap } from './types';
 import mapMarker from '@/assets/images/map-marker.png';
-import L from 'leaflet';
+import { icon } from './client';
 
-export const Map: IMap = ({ location }) => {
-  const apiKey =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImNiN2RkZmFjOTAzNDY0NGFkYjNlOTY0MzMwNzRhZmQ3YzRmYWJhOTYyYjhjZGFkOTBhOTE1YWIzZTgyZGI5MGY3MDU4MDQ2YmVkNjZjMGRlIn0.eyJhdWQiOiIyNTA2NyIsImp0aSI6ImNiN2RkZmFjOTAzNDY0NGFkYjNlOTY0MzMwNzRhZmQ3YzRmYWJhOTYyYjhjZGFkOTBhOTE1YWIzZTgyZGI5MGY3MDU4MDQ2YmVkNjZjMGRlIiwiaWF0IjoxNzAwODE2NjQyLCJuYmYiOjE3MDA4MTY2NDIsImV4cCI6MTcwMzMyMjI0Miwic3ViIjoiIiwic2NvcGVzIjpbImJhc2ljIl19.ZWi3pe3C2U61B9X-xlnbRRtorFTVRAFKKt6En_3Zvtqg2YHOF8l7ADnvVE-XV5bj8v4rlK9O5ORq6Nxse13QM0VDkEEiIu1i0nhSDXKovhuu320b6IxrRWBmqkwKbVblNcCFtLX_3ENUXHdfPIsZmCVxVhZLLwJrBB9eRiYjSuXCvK2pEP8RdevlQh42xXl8rT9KdieLLaa32HJEEQUAwLUYlKz87n9GhcD_zS7hBbS08HVeLF6VSa6M53svOnpTatR1sDEDpTMmXNhY_vpXWkJYROIErQFO7jofLc1kEkC51kv_8YL6aWcLTTlfVHLFyN86xL9FztbZ-rEFZSDPog';
-
+const Map: IMap = ({ business }) => {
+  const locationCoordinates: [number, number] = [
+    parseFloat(business.location_lat || '0'),
+    parseFloat(business.location_long || '0'),
+  ];
   return (
     <MapContainer
-      center={location.coordinates}
+      center={locationCoordinates}
       zoom={15}
       scrollWheelZoom
       style={{ height: '100%' }}
     >
       <TileLayer url="https://mt1.google.com/vt/lyrs=m&x={x}&z={z}&y={y}" />
       <Marker
-        position={location.coordinates}
-        icon={L.icon({
+        position={locationCoordinates}
+        icon={icon({
           iconSize: [40, 40],
           iconAnchor: [40 / 2, 40],
           // className: "mymarker",

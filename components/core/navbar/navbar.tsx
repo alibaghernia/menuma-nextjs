@@ -22,6 +22,7 @@ import Link from 'next/link';
 import { PeopleIcon } from '@/icons/people';
 import { DiscountIcon } from '@/icons/discount';
 import { AwardOutlineIcon } from '@/icons/award-outline';
+import { View360 } from '@/icons/view-360';
 
 const Cart = dynamic(import('@/components/common/cart/cart'), { ssr: false });
 export const Navbar: INavBar = ({
@@ -83,6 +84,16 @@ export const Navbar: INavBar = ({
         title: 'دورهمی ها',
         icon: <PeopleIcon color={typographyColor} />,
         url: `/${slug}/events`,
+      });
+    }
+    if (
+      typeof coffeShopState.profile.has_gallery == 'undefined' ||
+      !!+coffeShopState.profile.has_gallery
+    ) {
+      menu.push({
+        title: 'گالری',
+        icon: <View360 color={typographyColor} />,
+        url: `/${slug}/gallery`,
       });
     }
     if (

@@ -98,6 +98,7 @@ const ZoomModal: FC<GalleryImageProps & { onClose: () => void }> = (props) => {
             height="400px"
             width="100%"
             src={current.src}
+            //@ts-ignore
             panoData={{
               isEquirectangular: true,
               croppedHeight: 1980,

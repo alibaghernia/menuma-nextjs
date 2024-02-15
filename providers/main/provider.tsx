@@ -63,6 +63,7 @@ const Provider: IProvider = ({ children }) => {
       }
       if (
         domain != menumaDomain &&
+        domain != `wwww.${menumaDomain}` &&
         !state.isNotMenuma &&
         !domain.startsWith('localhost') &&
         !domain.startsWith('192.168.') &&

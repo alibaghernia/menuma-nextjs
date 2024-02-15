@@ -17,6 +17,10 @@ export function middleware(request: NextRequest) {
     !reqUrl.startsWith(`https://${appDomain}/`) &&
     !reqUrl.startsWith(`http://${appDomain}/_next`) &&
     !reqUrl.startsWith(`https://${appDomain}/_next`) &&
+    !reqUrl.startsWith(`http://www.${appDomain}/`) &&
+    !reqUrl.startsWith(`https://www.${appDomain}/`) &&
+    !reqUrl.startsWith(`http://www.${appDomain}/_next`) &&
+    !reqUrl.startsWith(`https://www.${appDomain}/_next`) &&
     !reqUrl.startsWith(`${protocol}//${host}/_next`) &&
     !reqUrl.startsWith(`http://localhost`) &&
     !reqUrl.startsWith(`https://localhost`) &&

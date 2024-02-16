@@ -36,6 +36,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_BACKEND_BASE_API=${{ vars.NEXT_PUBLIC_BACKEND_BASE_API }}
             NEXT_PUBLIC_MENUMA_DOMAIN=${{ vars.NEXT_PUBLIC_MENUMA_DOMAIN }}
+            NEXT_PUBLIC_PANEL_URL=${{ vars.NEXT_PUBLIC_PANEL_URL }}
 
       - name: Call API to update server
         uses: indiesdev/curl@v1.1

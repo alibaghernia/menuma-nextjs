@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { ICart } from './types';
 import classNames from 'classnames';
 import { LinedCloseIcon } from '@/icons/lined_close';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import colors from 'tailwindcss/colors';
 import tailwindConfig from '@/tailwind.config';

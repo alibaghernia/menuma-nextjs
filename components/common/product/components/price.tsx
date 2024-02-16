@@ -7,7 +7,7 @@ import React, { useCallback, useContext } from 'react';
 import { Container } from '../../container/container';
 import { FlexBox } from '../../flex_box/flex_box';
 import { FlexItem } from '../../flex_item/flex_item';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import { IProductProps } from '../types';
 
 const Price = ({

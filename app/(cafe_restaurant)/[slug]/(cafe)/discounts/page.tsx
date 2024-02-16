@@ -9,7 +9,7 @@ import { useLoadings } from '@/utils/hooks';
 import Head from 'next/head';
 import Image from 'next/image';
 import React, { cache, useContext, useEffect, useMemo, useState } from 'react';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import Link from '@/components/common/link/link';
 import { Footer } from '@/components/core/footer/footer';
 import { SpecialDiscount } from '@/components/common/special_discount';

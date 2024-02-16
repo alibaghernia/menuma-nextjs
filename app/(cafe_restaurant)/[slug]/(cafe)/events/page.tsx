@@ -6,7 +6,7 @@ import { Section } from '@/components/common/section/section';
 import Navbar from '@/components/core/navbar/navbar';
 import Image from 'next/image';
 import React, { cache } from 'react';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import Link from '@/components/common/link/link';
 import { Footer } from '@/components/core/footer/footer';
 import moment from 'moment';

@@ -178,7 +178,7 @@ const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
         </FlexItem>
         <FlexItem>
           <FlexBox alignItems="center" gap=".5rem">
-            {callPager && !!coffeShopState.profile.pager && (
+            {callPager && coffeShopState.profile.pager && (
               <FlexItem>
                 <CallGarson
                   onClick={handleCallGarson}
@@ -187,7 +187,7 @@ const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
                 />
               </FlexItem>
             )}
-            {props.note && (
+            {props.note && coffeShopState.profile.pager && (
               <FlexItem>
                 <div
                   className="cursor-pointer relative"

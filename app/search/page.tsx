@@ -7,7 +7,7 @@ import 'swiper/css/pagination';
 import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { SearchBusinessBox } from '@/components/common/search_business_box/search_business_box';
 import Image from 'next/image';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import { useLoadings } from '@/utils/hooks';
 import Link from '@/components/common/link/link';
 import { Select } from 'antd/lib';

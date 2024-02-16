@@ -10,6 +10,7 @@ declare interface IProductProps
   slug: string;
   single_mode?: boolean;
   link: string;
+  orderable: boolean;
 }
 
 declare type IProduct = FC<IProductProps>;

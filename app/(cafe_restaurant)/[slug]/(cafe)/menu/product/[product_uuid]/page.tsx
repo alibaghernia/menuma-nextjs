@@ -1,7 +1,7 @@
 'use server';
 import React, { cache } from 'react';
 import Image from 'next/image';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { ProductService } from '@/services/product/product.service';
@@ -11,6 +11,7 @@ import dynamic from 'next/dynamic';
 import { getBusiness } from '@/actions/business';
 import Price from './components/price';
 import { Metadata } from 'next';
+import { Flex } from 'antd/lib';
 const Navbar = dynamic(() => import('@/components/core/navbar/navbar'), {
   ssr: false,
 });
@@ -37,7 +38,6 @@ export const generateMetadata = async (
 };
 async function ProductPage({ params }: any) {
   const business = await getBusiness(params.slug);
-
   const product = await fetchProduct(params);
 
   const foundTagSoldOut = !!product?.metadata?.find(
@@ -46,9 +46,9 @@ async function ProductPage({ params }: any) {
   const prices = product?.prices?.map((price, key: number) => {
     return (
       <FlexItem key={key}>
-        <FlexBox
-          justify="between"
-          alignItems="center"
+        <Flex
+          justify={business.pager ? 'space-between' : 'center'}
+          align="center"
           className={classNames(
             'p-[.5rem] px-[1.5rem] pl-[.875rem] rounded-[2rem] bg-more/[.1] md:max-w-md md:w-full md:mx-auto',
             { grayscale: foundTagSoldOut },
@@ -62,8 +62,8 @@ async function ProductPage({ params }: any) {
               <FlexItem>{price.value.toLocaleString('IR-fa')}</FlexItem>
             </FlexBox>
           </FlexItem>
-          <Price price={price} product={product} />
-        </FlexBox>
+          {business.pager && <Price price={price} product={product} />}
+        </Flex>
       </FlexItem>
     );
   });

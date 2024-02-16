@@ -3,11 +3,9 @@ import { ISpecialDiscount } from './types';
 import { FlexBox } from '../flex_box/flex_box';
 import { FlexItem } from '../flex_item/flex_item';
 import Image from 'next/image';
-import noImage from '@/assets/images/no-image.jpg';
 import { Button } from '../button';
 import classNames from 'classnames';
 import Link from '@/components/common/link/link';
-import { serverBaseUrl } from '@/utils/axios';
 import { twMerge } from 'tailwind-merge';
 import discountPlaceholer from '@/assets/images/discount-placeholder.png';
 

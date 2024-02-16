@@ -76,6 +76,7 @@ async function MenuPage({ params, searchParams }: any) {
           className="px-5 max-w-lg"
           category_uuid={category.uuid}
           slug={params.slug}
+          orderable={business.pager}
           link={`/${[slug, 'menu', 'product', product.uuid]
             .filter(Boolean)
             .join('/')}`}

@@ -44,11 +44,16 @@ export const useCustomRouter = () => {
     }
     router.replace(...params);
   };
+  const back = () => {
+    onRouteChangeStart();
+    router.back();
+  };
 
   return {
     ...router,
     push,
     replace,
+    back,
   };
 };
 

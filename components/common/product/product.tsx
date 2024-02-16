@@ -54,7 +54,7 @@ const Product: IProduct = async (props) => {
                       !foundTagSoldOut && 'cursor-pointer'
                     }  transition-all duration-[.3s]`,
                     {
-                      'active:scale-[.8]': !foundTagSoldOut,
+                      'active:scale-[.9]': !foundTagSoldOut && props.orderable,
                     },
                   )}
                 >
@@ -63,7 +63,7 @@ const Product: IProduct = async (props) => {
                       {`${price.value.toLocaleString('IR-fa')} ت`}
                     </div>
                   </FlexItem>
-                  {!foundTagSoldOut && (
+                  {!foundTagSoldOut && props.orderable && (
                     <Price
                       price={price}
                       product={props}

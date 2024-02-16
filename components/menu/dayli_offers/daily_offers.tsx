@@ -1,5 +1,5 @@
 'use client';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { IDailyOffers } from './types';
 import { Section } from '@/components/common/section/section';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -10,10 +10,12 @@ import styles from '@/assets/styles/pages/menu/menu.module.scss';
 import { Pagination } from 'swiper/modules';
 import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 const Product = dynamic(() => import('@/components/common/product/product'), {
   ssr: false,
 });
 const DailyOffers: IDailyOffers = (props) => {
+  const { state } = useContext(CoffeeShopProviderContext);
   const slides = useMemo(
     () =>
       props.productArray?.map((product: any, key: any) => {
@@ -31,6 +33,7 @@ const DailyOffers: IDailyOffers = (props) => {
               fullWidth
               className={twMerge('w-full md:w-[30rem]')}
               single_mode
+              orderable={state.profile.pager}
               slug={props.slug}
               link={`/${[props.slug, 'menu/product', product.uuid]
                 .filter(Boolean)

@@ -2,7 +2,7 @@
 import { ProviderContext } from '@/providers/main/provider';
 import { ProductEntity } from '@/services/business/business';
 import React, { useCallback, useContext } from 'react';
-import noImage from '@/assets/images/no-image.jpg';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 import { Container } from '@/components/common/container/container';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';

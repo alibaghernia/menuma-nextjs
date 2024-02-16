@@ -92,7 +92,7 @@ const Categories = ({ menuData }: any) => {
         setNavbarHeight(navbar?.clientHeight);
       });
     }
-  }, [window]);
+  }, []);
 
   return (
     <Container

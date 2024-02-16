@@ -10,7 +10,7 @@ import Provider from '@/providers/main/provider';
 import { cookies } from 'next/headers';
 import { getIsNotMenuma } from '@/actions/cookie';
 
-export const generateMetadata = (): Promise<Metadata> => {
+export const generateMetadata = (): Awaited<Metadata> => {
   const isNotMenuma = getIsNotMenuma();
   return {
     title: isNotMenuma ? '' : 'منوما',

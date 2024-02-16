@@ -9,6 +9,7 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
 import Link from '@/components/common/link/link';
 import Price from './components/price';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 
 const Product: IProduct = async (props) => {
   const foundTagSoldOut = !!props.metadata?.find(
@@ -92,7 +93,7 @@ const Product: IProduct = async (props) => {
       >
         <Image
           fill
-          src={props.image_url!}
+          src={props.image ? props.image_url! : noImage.src}
           alt={props.title}
           className={classNames(`z-0 object-cover relative`, {
             grayscale: foundTagSoldOut,

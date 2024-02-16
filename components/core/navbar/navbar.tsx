@@ -66,28 +66,28 @@ const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
             ].toString()}
           />
         ),
-        url: `/${slug}/menu`,
+        url: `/${[slug, 'menu'].filter(Boolean).join('/')}`,
       });
     }
     if (coffeShopState.profile.has_discount) {
       menu.push({
         title: 'تخفیف های ویژه',
         icon: <DiscountIcon color={typographyColor} />,
-        url: `/${slug}/discounts`,
+        url: `/${[slug, 'discounts'].filter(Boolean).join('/')}`,
       });
     }
     if (coffeShopState.profile.has_event) {
       menu.push({
         title: 'دورهمی ها',
         icon: <PeopleIcon color={typographyColor} />,
-        url: `/${slug}/events`,
+        url: `/${[slug, 'events'].filter(Boolean).join('/')}`,
       });
     }
     if (coffeShopState.profile.customer_club) {
       menu.push({
         title: 'باشگاه مشتریان',
         icon: <AwardOutlineIcon color={typographyColor} />,
-        url: `/${slug}/customer_club/register`,
+        url: `/${[slug, 'customer_club/register'].filter(Boolean).join('/')}`,
       });
     }
 

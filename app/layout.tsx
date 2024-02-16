@@ -8,10 +8,14 @@ import faIR from 'antd/locale/fa_IR';
 import _ from 'lodash';
 import Provider from '@/providers/main/provider';
 import { cookies } from 'next/headers';
+import { getIsNotMenuma } from '@/actions/cookie';
 
-export const metadata: Metadata = {
-  title: 'منوما',
-  description: 'پلتفرم مدیریت، مقایسه و تعامل با کافه ها و رستوران ها',
+export const generateMetadata = (): Promise<Metadata> => {
+  const isNotMenuma = getIsNotMenuma();
+  return {
+    title: isNotMenuma ? '' : 'منوما',
+    description: 'پلتفرم مدیریت، مقایسه و تعامل با کافه ها و رستوران ها',
+  };
 };
 
 export default function RootLayout({

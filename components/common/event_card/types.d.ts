@@ -5,6 +5,7 @@ declare interface IEventCardProps
   extends EventEntity,
     HTMLAttributes<HTMLDivElement> {
   in_scope?: boolean;
+  slug?: string;
 }
 
 declare type IEventCard = FC<PropsWithChildren<IEventCardProps>>;

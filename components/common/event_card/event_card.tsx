@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+'use server';
+import React from 'react';
 import { IEventCard } from './types';
 import { FlexBox } from '../flex_box/flex_box';
 import { FlexItem } from '../flex_item/flex_item';
@@ -9,28 +10,23 @@ import tailwindConfig from '@/tailwind.config';
 import { CalendarIcon } from '@/icons/calendar';
 import moment from 'jalali-moment';
 import { ClockIcon } from '@/icons/clock';
-import { Button } from '../button';
 import classNames from 'classnames';
 import Link from '@/components/common/link/link';
-import { useSlug } from '@/providers/main/hooks';
 import { twMerge } from 'tailwind-merge';
+import { Button } from 'antd/lib';
 
 export const EventCard: IEventCard = (props) => {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
-  const slug = useSlug(false);
-  const date = useMemo(() => {
-    const jMoment = moment(props.start_at);
-    jMoment.locale('fa');
-    return jMoment.format('dddd jD jMMMM');
-  }, [props.start_at]);
+  const jMoment = moment(props.start_at);
+  jMoment.locale('fa');
+  const date = jMoment.format('dddd jD jMMMM');
 
-  const clock = useMemo(() => {
+  const clock = (() => {
     const from = moment(props.start_at, 'HH:mm:ss').format('HH:mm');
     const to = moment(props.end_at, 'HH:mm:ss').format('HH:mm');
     if (props.end_at) return `${from} تا ${to}`;
     return from;
-  }, [props.start_at, props.end_at]);
-
+  })();
   return (
     <>
       <FlexBox
@@ -66,7 +62,7 @@ export const EventCard: IEventCard = (props) => {
               ) : props.business?.logo_url ? (
                 <Image
                   fill
-                  alt={props.business.name}
+                  alt={props.title}
                   src={props.business?.logo_url}
                   className="object-cover"
                 />
@@ -156,14 +152,16 @@ export const EventCard: IEventCard = (props) => {
           </FlexBox>
         </FlexItem>
         <FlexItem className="mt-[.5rem]">
-          <Button
-            className="w-full text-center text-[.862rem] py-[.5rem]"
-            type="primary"
+          <Link
+            href={`/${[props.slug || props.business?.slug, 'events', props.uuid]
+              .filter(Boolean)
+              .join('/')}`}
+            className="block"
           >
-            <Link href={`/${slug}/events/${props.uuid}`} className="block">
+            <Button block type="primary">
               مشاهده
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </FlexItem>
       </FlexBox>
     </>

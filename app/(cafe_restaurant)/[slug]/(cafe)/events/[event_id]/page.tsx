@@ -1,14 +1,8 @@
-'use client';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
-import { useSlug } from '@/providers/main/hooks';
-import { withCafeeShopProfile } from '@/utils/serverSideUtils';
-import Head from 'next/head';
-import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
+'use server';
+import React, { cache } from 'react';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import Image from 'next/image';
-import noImage from '@/assets/images/no-image.jpg';
 import { PlacePinIcon } from '@/icons/place_pin';
 import tailwindConfig from '@/tailwind.config';
 import resolveConfig from 'tailwindcss/resolveConfig';
@@ -18,79 +12,62 @@ import { ClockIcon } from '@/icons/clock';
 import { PeopleIcon } from '@/icons/people';
 import { Location } from '@/icons/location';
 import { Button } from '@/components/common/button';
-import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
 import Link from '@/components/common/link/link';
-import { serverBaseUrl } from '@/utils/axios';
-import { EventEntity } from '@/services/main/main';
-import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import { BusinessService } from '@/services/business/business.service';
+import { getBusiness } from '@/actions/business';
+import { getSlug } from '@/utils/serverSideUtils';
+import { Metadata } from 'next';
 const Navbar = dynamic(() => import('@/components/core/navbar/navbar'), {
   ssr: false,
 });
+const fetchEvent = cache((params: any) => {
+  const businessService = BusinessService.init(params.slug);
+  return businessService.eventsService
+    .get(params?.event_id as string)
+    .then((data) => data.data);
+});
 
-function EventPage() {
+export const generateMetadata = async (
+  { params }: any,
+  parent: any,
+): Promise<Metadata> => {
+  const event = await fetchEvent(params);
+  const parentLay = await parent;
+
+  return {
+    title: [parentLay.title?.absolute, event.title].reverse().join(' - '),
+    description: event.short_description,
+    openGraph: {
+      images: event.banner_url,
+    },
+  };
+};
+
+async function EventPage({ params }: any) {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);
-  const router = useCustomRouter();
-  const [addL, removeL] = useLoadings();
-  const message = useMessage();
-  const { state, businessService } = useContext(CoffeeShopProviderContext);
-  const slug = useSlug(false);
-  const params = useParams();
-  const [event, setEvent] = useState<EventEntity>();
-  const date = useMemo(() => {
+  const event = await fetchEvent(params);
+  const business = await getBusiness(params.slug);
+  const slug = getSlug(params.slug, false);
+  const date = (() => {
     if (!event) return;
     const jMoment = moment(event?.start_at);
     jMoment.locale('fa');
     return jMoment.format('dddd jD jMMMM');
-  }, [event?.start_at]);
+  })();
 
-  const clock = useMemo(() => {
+  const clock = (() => {
     if (!event) return;
     const from = moment(event?.start_at, 'HH:mm:ss').format('HH:mm');
     const to = moment(event?.end_at, 'HH:mm:ss').format('HH:mm');
     if (event?.end_at) return `${from} تا ${to}`;
     return from;
-  }, [event?.start_at, event?.end_at]);
-
-  function fetchEvent() {
-    addL('fetch-event');
-    businessService.eventsService
-      .get(params?.event_id as string)
-      .finally(() => {
-        removeL('fetch-event');
-      })
-      .then((data) => {
-        setEvent(data.data);
-      })
-      .catch((err) => {
-        if (err == 404) {
-          message.error('رویداد مورد نظر یافت نشد');
-          // setTimeout(() => {
-          //   router.back();
-          // }, 1000);
-        } else message.error('مشکلی در دریافت اطلاعات رویداد وجود دارد!');
-      });
-  }
-
-  useEffect(() => {
-    if (params?.event_id) fetchEvent();
-  }, [params]);
-  console.log('render');
+  })();
 
   return (
     <>
-      <Head>
-        <title>
-          {`${state.profile.name + ' - رویداد' + (slug ? ' - منوما' : '')}`}
-        </title>
-      </Head>
       <div className="min-h-screen w-full">
-        <Navbar
-          fixed={false}
-          callPager={false}
-          back
-          title={state.profile.name}
-        />
+        <Navbar fixed={false} callPager={false} back title={business.name} />
         <FlexBox direction="column" className="px-[2.07rem] max-w-lg mx-auto">
           <FlexItem>
             <FlexBox alignItems="center" gap={2}>
@@ -129,7 +106,7 @@ function EventPage() {
                 />
               </FlexItem>
               <FlexItem className="text-[1rem] text-typography">
-                {state.profile?.name}
+                {business.name}
               </FlexItem>
             </FlexBox>
           </FlexItem>
@@ -191,7 +168,7 @@ function EventPage() {
               )}
             </FlexBox>
           </FlexItem>
-          {!!state.profile?.address && (
+          {!!business.address && (
             <FlexItem className="mt-[1.21rem]">
               <FlexBox alignItems="center">
                 <FlexItem>
@@ -211,7 +188,7 @@ function EventPage() {
                   </FlexBox>
                 </FlexItem>
                 <FlexItem className="text-[.862rem] text-typography">
-                  {state.profile?.address}
+                  {business.address}
                 </FlexItem>
               </FlexBox>
             </FlexItem>

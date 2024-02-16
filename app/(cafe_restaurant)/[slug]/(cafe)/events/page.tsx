@@ -1,88 +1,69 @@
-'use client';
+'use server';
 import { EventCard } from '@/components/common/event_card';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Section } from '@/components/common/section/section';
 import Navbar from '@/components/core/navbar/navbar';
-import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
-import { ProviderContext } from '@/providers/main/provider';
-import { useLoadings } from '@/utils/hooks';
-import Head from 'next/head';
 import Image from 'next/image';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { cache } from 'react';
 import noImage from '@/assets/images/no-image.jpg';
 import Link from '@/components/common/link/link';
 import { Footer } from '@/components/core/footer/footer';
 import moment from 'moment';
-import { EventEntity } from '@/services/main/main';
+import { BusinessService } from '@/services/business/business.service';
+import { getBusiness } from '@/actions/business';
+import { getSlug } from '@/utils/serverSideUtils';
 
-function EventsPage() {
-  const [addL, removeL] = useLoadings();
-  const { state, businessService } = useContext(CoffeeShopProviderContext);
-  const mainProvider = useContext(ProviderContext);
-  const [fetchedEvents, setFetchedEvents] = useState<EventEntity[]>([]);
-  const [pastEvents, setPastEvents] = useState<EventEntity[]>([]);
+const fetchEvents = cache((params: any) => {
+  const businessService = BusinessService.init(params.slug);
+  return businessService.eventsService
+    .getItems({
+      from: moment().toISOString(),
+    })
+    .then((data) => data.data.items);
+});
+const fetchPastEvents = cache((params: any) => {
+  const businessService = BusinessService.init(params.slug);
+  return businessService.eventsService
+    .getItems({
+      to: moment().toISOString(),
+    })
+    .then((data) => data.data.items);
+});
 
-  const fetchEvents = () => {
-    addL('fetch-events');
-    businessService.eventsService
-      .getItems({
-        from: moment().toISOString(),
-      })
-      .finally(() => {
-        removeL('fetch-events');
-      })
-      .then((data) => {
-        setFetchedEvents(data.data.items);
-      });
-  };
-  const fetchPastEvents = () => {
-    addL('fetch-past-events');
-    businessService.eventsService
-      .getItems({
-        to: moment().toISOString(),
-      })
-      .finally(() => {
-        removeL('fetch-past-events');
-      })
-      .then((data) => {
-        setPastEvents(data.data.items);
-      });
-  };
-  useEffect(() => {
-    fetchEvents();
-    fetchPastEvents();
-  }, []);
-  const title = useMemo(() => {
-    const titleAr = ['منوما', state.profile.name, 'دورهمی ها'];
-    if (mainProvider.state.isNotMenuma) {
-      titleAr.shift();
-    }
-    return titleAr.join(' - ');
-  }, []);
+async function EventsPage({ params }: any) {
+  const slug = getSlug(params.slug, false);
+  const business = await getBusiness(params.slug);
+  const [fetchedEvents, pastEvents] = await Promise.all([
+    fetchEvents(params),
+    fetchPastEvents(params),
+  ]);
 
-  const events = useMemo(() => {
-    return fetchedEvents.map((event, idx) => (
-      <FlexItem key={idx}>
-        <EventCard {...event} className="w-full md:w-[30rem]" in_scope />
-      </FlexItem>
-    ));
-  }, [fetchedEvents]);
-  const renderPastEvents = useMemo(() => {
-    return pastEvents.map((event, idx) => (
-      <FlexItem key={idx}>
-        <EventCard {...event} className="w-full md:w-[30rem]" in_scope />
-      </FlexItem>
-    ));
-  }, [fetchedEvents]);
+  const events = fetchedEvents.map((event, idx) => (
+    <FlexItem key={idx}>
+      <EventCard
+        {...event}
+        className="w-full md:w-[30rem]"
+        slug={slug}
+        in_scope
+      />
+    </FlexItem>
+  ));
+  const renderPastEvents = pastEvents.map((event, idx) => (
+    <FlexItem key={idx}>
+      <EventCard
+        {...event}
+        className="w-full md:w-[30rem]"
+        slug={slug}
+        in_scope
+      />
+    </FlexItem>
+  ));
   return (
     <>
-      <Head>
-        <title>{title}</title>
-      </Head>
       <Navbar
         fixed={false}
-        title={state.profile.name}
+        title={business.name}
         back
         callPager={false}
         background={false}
@@ -92,15 +73,11 @@ function EventsPage() {
           <FlexBox direction="column">
             <FlexItem>
               <div className="relative w-[7rem] h-[7rem] rounded-full overflow-hidden mx-auto border">
-                <Link href={`/${state.profile.slug}`}>
+                <Link href={`/${business.slug}`}>
                   <Image
-                    alt={state.profile.name}
+                    alt={business.name}
                     fill
-                    src={
-                      state.profile.logo_url
-                        ? state.profile.logo_url
-                        : noImage.src
-                    }
+                    src={business.logo_url ? business.logo_url : noImage.src}
                   />
                 </Link>
               </div>

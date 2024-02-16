@@ -4,8 +4,8 @@ import { useParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 
 export function useSlug(traillingSlash: boolean = true) {
-  const { state } = useContext(ProviderContext);
+  const { isNotMenuma } = useContext(ProviderContext);
   const params = useParams();
-  const slug = state.isNotMenuma ? `` : params?.slug;
+  const slug = isNotMenuma ? `` : params?.slug;
   return traillingSlash && slug ? `${slug}/` : slug;
 }

@@ -18,4 +18,4 @@ declare type IProviderState = {
   profile: any;
 };
 
-declare type IProvider = FC<PropsWithChildren<{}>>;
+declare type IProvider = FC<PropsWithChildren<{ isNotMenuma: boolean }>>;

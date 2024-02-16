@@ -7,7 +7,9 @@ declare interface IProductProps
     HTMLAttributes<HTMLDivElement> {
   fullWidth?: boolean;
   category_uuid?: string;
+  slug: string;
   single_mode?: boolean;
+  link: string;
 }
 
 declare type IProduct = FC<IProductProps>;

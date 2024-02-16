@@ -11,8 +11,6 @@ import reducer from './reducer';
 import { INITIAL_STATE, REDUCER_KEYS } from './constants';
 import _ from 'lodash';
 import Functions from './functions';
-import { useRouter } from 'next/router';
-import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import dynamic from 'next/dynamic';
@@ -21,18 +19,22 @@ import { CartProductItem } from '@/components/common/cart/cart';
 import { useParams } from 'next/navigation';
 const ConfirmModal = dynamic(
   () => import('@/components/common/confirm_modal/confirm_modal'),
+  {
+    ssr: false,
+  },
 );
 export const ProviderContext = createContext<{
   state: IProviderState;
   dispatch: (action: any) => void;
   functions: ReturnType<typeof Functions>;
   checkCartItemsExist: (products: ProductEntity[]) => void;
+  isNotMenuma: boolean;
   // @ts-ignore
 }>({});
 
 const localStoragekey = 'provider-storage-new-v3.0';
 
-const Provider: IProvider = ({ children }) => {
+const Provider: IProvider = ({ children, isNotMenuma }) => {
   const params = useParams();
   const [deletedCartItemsAlertModal, setDeletedCartItemsAlertModal] = useState<{
     names?: string[];
@@ -56,32 +58,6 @@ const Provider: IProvider = ({ children }) => {
   );
   const functions = Functions(state, dispatch);
 
-  const checkAppDomain = useCallback(() => {
-    if (typeof window != 'undefined') {
-      const location = window.location;
-      const domain = location.host;
-      const menumaDomain = process.env.NEXT_PUBLIC_MENUMA_DOMAIN;
-      if (!menumaDomain) {
-        console.log('Please check the menuma domain env');
-        process.exit(1);
-      }
-      if (
-        domain != menumaDomain &&
-        !state.isNotMenuma &&
-        !domain.startsWith('localhost') &&
-        !domain.startsWith('192.168.') &&
-        !domain.startsWith('test.')
-      ) {
-        dispatch({
-          type: REDUCER_KEYS.UPDATE,
-          data: {
-            key: 'isNotMenuma',
-            value: true,
-          },
-        });
-      }
-    }
-  }, [state.isNotMenuma]);
   const getReducerState = useCallback(() => {
     const data = localStorage.getItem(getLocalStorageKey());
     if (!data) {
@@ -106,8 +82,7 @@ const Provider: IProvider = ({ children }) => {
 
   useEffect(() => {
     getReducerState();
-    checkAppDomain();
-  }, [getReducerState, checkAppDomain]);
+  }, [getReducerState]);
 
   function checkCartItemsExist(products: CartProductItem[]) {
     const cartItems = state.cart;
@@ -135,6 +110,7 @@ const Provider: IProvider = ({ children }) => {
           dispatch,
           functions,
           checkCartItemsExist,
+          isNotMenuma,
         }}
       >
         {children}

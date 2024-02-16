@@ -4,6 +4,7 @@ import { FC } from 'react';
 
 declare interface IDailyOffersProps {
   title: string;
+  slug: string;
   scrolled?: boolean;
   productArray: ProductEntity[];
   classNameSection?: string;

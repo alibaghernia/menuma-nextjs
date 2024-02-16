@@ -1,22 +1,48 @@
 'use client';
-import React from 'react';
-import 'swiper/css';
-import 'swiper/css/effect-coverflow';
-import 'swiper/css/pagination';
+import React, { useMemo } from 'react';
 import { IDailyOffers } from './types';
 import { Section } from '@/components/common/section/section';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import classNames from 'classnames';
 import { twMerge } from 'tailwind-merge';
-import { Product } from '@/components/common/product/product';
-import { Swiper, SwiperSlide } from './client-components';
 import styles from '@/assets/styles/pages/menu/menu.module.scss';
 import { Pagination } from 'swiper/modules';
-export const DailyOffers: IDailyOffers = (props) => {
-  console.log({
-    props,
-  });
+import dynamic from 'next/dynamic';
+import { Swiper, SwiperSlide } from 'swiper/react';
+const Product = dynamic(() => import('@/components/common/product/product'), {
+  ssr: false,
+});
+const DailyOffers: IDailyOffers = (props) => {
+  const slides = useMemo(
+    () =>
+      props.productArray?.map((product: any, key: any) => {
+        return (
+          <SwiperSlide
+            className={twMerge(
+              classNames(
+                '!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] w-full md:!w-fit',
+                props.classNameScroll,
+              ),
+            )}
+            key={key}
+          >
+            <Product
+              fullWidth
+              className={twMerge('w-full md:w-[30rem]')}
+              single_mode
+              slug={props.slug}
+              link={`/${[props.slug, 'menu/product', product.uuid]
+                .filter(Boolean)
+                .join('/')}`}
+              {...product}
+            />
+          </SwiperSlide>
+        );
+      }),
+    [],
+  );
+
   return (
     <Section
       className={twMerge(classNames(), props.classNameSection)}
@@ -46,24 +72,7 @@ export const DailyOffers: IDailyOffers = (props) => {
             }}
             modules={[Pagination]}
           >
-            {props.productArray?.map((product: any, key: any) => (
-              <SwiperSlide
-                className={twMerge(
-                  classNames(
-                    '!flex !flex-row !flex-nowrap !items-center !gap-[.5rem] w-full md:!w-fit',
-                    props.classNameScroll,
-                  ),
-                )}
-                key={product.id}
-              >
-                <Product
-                  {...product}
-                  fullWidth
-                  className={twMerge('w-full md:w-[30rem]')}
-                  single_mode
-                />
-              </SwiperSlide>
-            ))}
+            {slides}
           </Swiper>
         </FlexItem>
         <FlexItem
@@ -78,3 +87,4 @@ export const DailyOffers: IDailyOffers = (props) => {
     </Section>
   );
 };
+export default DailyOffers;

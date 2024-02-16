@@ -1,2 +1,2 @@
 'use client';
-export * from 'swiper/react';
+export { Swiper, SwiperSlide } from 'swiper/react';

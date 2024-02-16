@@ -17,11 +17,15 @@ import moment from 'moment';
 import { IConfirmModalProps } from '@/components/common/confirm_modal/types';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
-import { ConfirmModal } from '@/components/common/confirm_modal/confirm_modal';
+const ConfirmModal = dynamic(
+  () => import('@/components/common/confirm_modal/confirm_modal'),
+  { ssr: false },
+);
 import { BusinessService } from '@/services/business/business.service';
 import { useCustomRouter, useLoadings, useMessage } from '@/utils/hooks';
 import { Business } from '@/services/business/business';
 import { TableEntity } from '@/services/business/tables/tables';
+import dynamic from 'next/dynamic';
 
 export const TABLE_NUMBER_METADATA_STORAGE_KEY = '-table-number-key-';
 

@@ -11,7 +11,6 @@ import Link from '@/components/common/link/link';
 import 'leaflet/dist/leaflet.css';
 import 'react-toastify/dist/ReactToastify.css';
 import { Footer } from '@/components/core/footer/footer';
-import { Navbar } from '@/components/core/navbar/navbar';
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
@@ -19,6 +18,9 @@ import Contacts from './components/contacts';
 import { getBusiness } from '@/actions/business';
 import WorkingHours from '@/components/profile/working_hours/working_hours';
 import dynamic from 'next/dynamic';
+const Navbar = dynamic(() => import('@/components/core/navbar/navbar'), {
+  ssr: false,
+});
 
 const Map = dynamic(() => import('@/components/common/map/map'), {
   ssr: false,
@@ -26,7 +28,6 @@ const Map = dynamic(() => import('@/components/common/map/map'), {
 async function Profile({ params }: any) {
   const profileData = await getBusiness(params.slug);
   const slug = getSlug(params.slug, false);
-
   return (
     <>
       <Navbar dark background={false} callPager={false} menuButtonOverlay />
@@ -40,7 +41,10 @@ async function Profile({ params }: any) {
           <ProfileHeader />
           <div className="mt-[4.3rem]">
             {profileData.has_menu && (
-              <Link href={`/${slug}/menu`} className="mx-auto w-fit block">
+              <Link
+                href={`/${[slug, 'menu'].filter(Boolean).join('/')}`}
+                className="mx-auto w-fit block"
+              >
                 <Button
                   className="py-[.8rem] px-[2.9rem] mx-auto w-fit shadow-[0_0_20px_5px_rgba(0,0,0,0.01)] font-bold border"
                   rounded

@@ -24,11 +24,7 @@ import { PeopleIcon } from '@/icons/people';
 import { DiscountIcon } from '@/icons/discount';
 import { AwardOutlineIcon } from '@/icons/award-outline';
 import Cart from '@/components/common/cart/cart';
-export const Navbar: INavBar = ({
-  background = true,
-  callPager = true,
-  ...props
-}) => {
+const Navbar: INavBar = ({ background = true, callPager = true, ...props }) => {
   const router = useCustomRouter();
   const slug = useSlug(false);
   const [addL, removeL] = useLoadings();
@@ -129,6 +125,7 @@ export const Navbar: INavBar = ({
 
   return (
     <Container
+      id="navbar"
       position={
         typeof props.fixed == 'undefined'
           ? 'fixed'

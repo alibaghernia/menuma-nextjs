@@ -1,3 +1,4 @@
+'use client';
 import React, { Fragment } from 'react';
 import { IConfirmModal } from './types';
 import { FlexBox } from '../flex_box/flex_box';
@@ -24,7 +25,8 @@ export const ConfirmModal: IConfirmModal = ({
   children,
 }) => {
   if (typeof window == 'undefined') return <div></div>;
-  return createPortal(
+  return (
+    // createPortal(
     <>
       {open && (
         <Container
@@ -89,8 +91,10 @@ export const ConfirmModal: IConfirmModal = ({
           if (outClose) onClose?.();
         }}
       />
-    </>,
-    document.body.querySelector('main')!,
+    </>
+    //   ,
+    //   document.body.querySelector('main')!,
+    // );
   );
 };
 export default ConfirmModal;

@@ -21,7 +21,7 @@ export const SearchField: ISearchField = (props) => {
       >
         <SearchIcon width={18} height={18} />
       </FlexItem>
-      <FlexItem>
+      <FlexItem grow>
         <input
           type="text"
           value={props.value}
@@ -29,9 +29,12 @@ export const SearchField: ISearchField = (props) => {
             props.onChange(value);
           }}
           className={classNames(
-            'outline-none bg-transparent placeholder:text-[.8rem] w-full text-typography',
+            'outline-none bg-transparent placeholder:text-[.8rem] w-full text-typography px-2',
             props.inputClassNames,
           )}
+          onKeyDown={({ key }) => {
+            if (key == 'Enter') props.onSearch?.(props.value);
+          }}
           placeholder="جستجو..."
         />
       </FlexItem>

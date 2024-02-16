@@ -18,6 +18,7 @@ export const generateMetadata = async (
     return {
       title: [parentLayout.title.absolute, business.name]
         .filter(Boolean)
+        .reverse()
         .join(' - '),
       description: business.description,
       openGraph: {
@@ -32,9 +33,6 @@ export const generateMetadata = async (
 };
 
 const Layout = async ({ params, children, ...other }: any) => {
-  console.log({
-    params,
-  });
   const businessService = new BusinessService(params?.slug);
 
   try {

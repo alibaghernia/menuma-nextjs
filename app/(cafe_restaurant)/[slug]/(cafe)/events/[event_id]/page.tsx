@@ -4,7 +4,6 @@ import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { useSlug } from '@/providers/main/hooks';
 import { withCafeeShopProfile } from '@/utils/serverSideUtils';
 import Head from 'next/head';
-import { Navbar } from '@/components/core/navbar/navbar';
 import { CoffeeShopProviderContext } from '@/providers/coffee_shop/provider';
 import { FlexBox } from '@/components/common/flex_box/flex_box';
 import { FlexItem } from '@/components/common/flex_item/flex_item';
@@ -24,6 +23,10 @@ import Link from '@/components/common/link/link';
 import { serverBaseUrl } from '@/utils/axios';
 import { EventEntity } from '@/services/main/main';
 import { useParams } from 'next/navigation';
+import dynamic from 'next/dynamic';
+const Navbar = dynamic(() => import('@/components/core/navbar/navbar'), {
+  ssr: false,
+});
 
 function EventPage() {
   const resolvedTailwindConfig = resolveConfig(tailwindConfig);

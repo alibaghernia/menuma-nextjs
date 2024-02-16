@@ -7,15 +7,24 @@ import { CategoryCard } from '@/components/menu/category-card';
 
 import classNames from 'classnames';
 import styles from '@/assets/styles/pages/menu/menu.module.scss';
-import { chunk, throttle } from 'lodash';
+import { chunk, throttle, words } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Swiper, SwiperSlide } from './client';
 import { twMerge } from 'tailwind-merge';
 import { Pagination } from 'swiper/modules';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useSlug } from '@/providers/main/hooks';
+import { useCustomRouter } from '@/utils/hooks';
 
 const Categories = ({ menuData }: any) => {
-  const [searchInput, setSearchInput] = useState<string>('');
+  const searchParams = useSearchParams();
+  const [searchInput, setSearchInput] = useState<string>(
+    searchParams.get('search') || '',
+  );
   const [scrolled, setScrolled] = useState(false);
+  const router = useCustomRouter();
+  const slug = useSlug(false);
+  const [navbarHeight, setNavbarHeight] = useState(0);
   useEffect(() => {
     const handler = () => {
       const actegoryBar = window.document.getElementById('category-bar');
@@ -65,65 +74,90 @@ const Categories = ({ menuData }: any) => {
           ))}
         </SwiperSlide>
       )),
-    [],
+    [scrolled],
   );
+
+  function getSearchURL(value: string) {
+    const search = new URLSearchParams();
+    if (value) search.set('search', value);
+    return `/${[[slug, 'menu'].filter(Boolean).join('/'), search.toString()]
+      .filter(Boolean)
+      .join('?')}`;
+  }
+
+  useEffect(() => {
+    if (window) {
+      process.nextTick(() => {
+        const navbar = document.getElementById('navbar')!;
+        setNavbarHeight(navbar?.clientHeight);
+      });
+    }
+  }, [window]);
 
   return (
     <Container
       position="sticky"
       id="category-bar"
       className={twMerge(
-        classNames('top-0 bg-background z-20', {
+        classNames('bg-background z-20', {
           'pb-[1.125rem]': !scrolled,
           'pb-[1rem]': scrolled,
         }),
       )}
+      style={{
+        top: `${navbarHeight}px`,
+      }}
     >
       <FlexBox direction="column">
-        <FlexItem>
-          <FlexBox direction="column" gap={2} className="pt-[4.5rem]">
-            <FlexItem className="px-2">
-              <Swiper
-                slidesPerView={'auto'}
-                spaceBetween={8}
-                grabCursor={true}
-                scrollbar
-                pagination={{
-                  clickable: true,
-                  el: '#swiper-pagination',
-                  bulletElement: 'div',
-                  bulletClass: styles['swiper-pagination-bullet'],
-                  bulletActiveClass: styles['swiper-pagination-bullet-active'],
-                }}
-                breakpoints={{
-                  768: {
-                    centerInsufficientSlides: true,
-                  },
-                }}
-                modules={[Pagination]}
-              >
-                {categoriesSwiperSlides}
-              </Swiper>
-            </FlexItem>
-            <FlexItem
-              id="swiper-pagination"
-              className={twMerge(
-                classNames(
-                  'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s]',
-                  {
-                    '!hidden': scrolled,
-                  },
-                ),
-              )}
-            />
-          </FlexBox>
-        </FlexItem>
+        {!!menuData?.length && (
+          <FlexItem>
+            <FlexBox direction="column" gap={2} className="">
+              <FlexItem className="px-2">
+                <Swiper
+                  slidesPerView={'auto'}
+                  spaceBetween={8}
+                  grabCursor={true}
+                  scrollbar
+                  pagination={{
+                    clickable: true,
+                    el: '#swiper-pagination',
+                    bulletElement: 'div',
+                    bulletClass: styles['swiper-pagination-bullet'],
+                    bulletActiveClass:
+                      styles['swiper-pagination-bullet-active'],
+                  }}
+                  breakpoints={{
+                    768: {
+                      centerInsufficientSlides: true,
+                    },
+                  }}
+                  modules={[Pagination]}
+                >
+                  {categoriesSwiperSlides}
+                </Swiper>
+              </FlexItem>
+              <FlexItem
+                id="swiper-pagination"
+                className={twMerge(
+                  classNames(
+                    'mx-auto mt-2 !flex !w-fit transition-all duration-[.3s]',
+                    {
+                      '!hidden': scrolled,
+                    },
+                  ),
+                )}
+              />
+            </FlexBox>
+          </FlexItem>
+        )}
         <FlexItem>
           <div className="mt-4 md:max-w-md md:mx-auto mx-6">
             <SearchField
               value={searchInput ?? ''}
               onChange={setSearchInput}
-              onSearch={(value) => {}}
+              onSearch={(value) => {
+                router.replace(getSearchURL(value));
+              }}
             />
           </div>
         </FlexItem>

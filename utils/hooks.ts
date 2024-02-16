@@ -30,10 +30,6 @@ export const useCustomRouter = () => {
     const { pathname, search, hash } = window.location;
     const hrefCurrent = `${pathname}${search}${hash}`;
     const hrefTarget = params[0] as string;
-    console.log({
-      hrefTarget,
-      hrefCurrent,
-    });
     if (hrefTarget !== hrefCurrent) {
       onRouteChangeStart();
     }

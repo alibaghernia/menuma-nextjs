@@ -73,11 +73,11 @@ export class BusinessService {
       .get<AxiosResponseType<Business>>(this.slugRoute(slug))
       .then(({ data }) => data);
   }
-  getMenu(slug?: string) {
+  getMenu(filters: any, slug?: string) {
     return this.axios
       .get<
         AxiosResponseType<(CategoryEntity & { products: ProductEntity[] })[]>
-      >(`${this.slugRoute(slug)}/menu`)
+      >(`${this.slugRoute(slug)}/menu`, { params: filters })
       .then(({ data }) => data);
   }
   getDiscounts(filters: IGetDiscountsFilter, slug?: string) {

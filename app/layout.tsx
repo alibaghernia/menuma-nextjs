@@ -7,6 +7,7 @@ import { RouteChangeProvider } from '@/providers/routeChange/provider';
 import faIR from 'antd/locale/fa_IR';
 import _ from 'lodash';
 import Provider from '@/providers/main/provider';
+import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'منوما',
@@ -18,6 +19,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isNotMenuma = !!+cookies().get('is-not-menuma')?.value!;
+
   return (
     <html lang="fa" dir="rtl">
       <body>
@@ -39,7 +42,7 @@ export default function RootLayout({
           >
             <RouteChangeProvider>
               <GeneralProvider>
-                <Provider>
+                <Provider isNotMenuma={isNotMenuma}>
                   <AntdRegistry>{children}</AntdRegistry>
                 </Provider>
               </GeneralProvider>

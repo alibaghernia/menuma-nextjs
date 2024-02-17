@@ -5,6 +5,7 @@ import { Business } from '@/services/business/business';
 import Image from 'next/image';
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import noImage from '@/assets/images/coffe-pattern.jpg';
 
 const PinBusinesses = ({ pinBusinesses }: { pinBusinesses: Business[] }) => {
   const businessesSlides = pinBusinesses.map((slide, idx) => {
@@ -14,9 +15,13 @@ const PinBusinesses = ({ pinBusinesses }: { pinBusinesses: Business[] }) => {
         key={idx}
       >
         <Link href={`/${slide.slug}`} className=" w-[6.25rem] h-[6.25rem]">
-          {slide.logo_url && (
-            <Image src={slide.logo_url} fill alt={slide.name} className="z-0" />
-          )}
+          <Image
+            src={slide.logo ? slide.logo_url! : noImage.src}
+            fill
+            alt={slide.name}
+            className="z-0"
+          />
+
           <div className="absolute inset-0 bg-black/[.6] flex items-center justify-center z-10 text-white text-[.75rem] font-bold">
             {slide.name}
           </div>

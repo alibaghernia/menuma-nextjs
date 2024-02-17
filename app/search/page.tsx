@@ -8,7 +8,7 @@ import { CoffeeShopPageProvider } from '@/providers/coffee_shop/page_provider';
 import { SearchBusinessBox } from '@/components/common/search_business_box/search_business_box';
 import Image from 'next/image';
 import noImage from '@/assets/images/coffe-pattern.jpg';
-import { useLoadings } from '@/utils/hooks';
+import { useCustomRouter, useLoadings } from '@/utils/hooks';
 import Link from '@/components/common/link/link';
 import { Select } from 'antd/lib';
 import { toPersianNumber } from '@/helpers/functions';
@@ -24,6 +24,7 @@ type SearchArgs = {
 
 function Search() {
   const [addL, removeL] = useLoadings();
+  const router = useCustomRouter();
   const { loadings } = useContext(GeneralContext);
   const [advancedSearch, setAdvancedSearch] = useState(false);
   const [advancedSearchArgs, setAdvancedSearchArgs] = useState({});
@@ -165,11 +166,13 @@ function Search() {
     ));
   };
 
+  function getSearchURL(value: string) {
+    const search = new URLSearchParams();
+    if (value) search.set('search', value);
+    return `/${['search', search.toString()].filter(Boolean).join('?')}`;
+  }
   const handleSearchBusiness = (searchPhrase: string) => {
-    handleFetchBusinesses({
-      ...advancedSearchArgs,
-      search_field: searchPhrase,
-    });
+    router.push(getSearchURL(searchPhrase));
   };
 
   const onChangeSelect = (value: string) => {

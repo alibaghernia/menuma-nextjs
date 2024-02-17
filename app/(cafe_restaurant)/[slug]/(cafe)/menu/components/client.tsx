@@ -12,8 +12,9 @@ const Client = ({ menuData }: any) => {
         menuData
           ?.map(
             (cat: any) =>
-              cat.products?.filter((item: any) =>
-                item.metadata.some((tag: string) => tag == 'sold_out'),
+              cat.products?.filter(
+                (item: any) =>
+                  item.metadata?.some((tag: string) => tag == 'sold_out'),
               ),
           )
           .flat() || [],

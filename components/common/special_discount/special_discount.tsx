@@ -3,11 +3,11 @@ import { ISpecialDiscount } from './types';
 import { FlexBox } from '../flex_box/flex_box';
 import { FlexItem } from '../flex_item/flex_item';
 import Image from 'next/image';
-import { Button } from '../button';
 import classNames from 'classnames';
 import Link from '@/components/common/link/link';
 import { twMerge } from 'tailwind-merge';
 import discountPlaceholer from '@/assets/images/discount-placeholder.png';
+import { Button } from 'antd/lib';
 
 export const SpecialDiscount: ISpecialDiscount = (discount) => {
   return (
@@ -37,7 +37,7 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
                 className="gap-[.3rem]"
                 alignItems="start"
               >
-                <FlexItem className="text-[1.2rem] text-typography font-semibold">
+                <FlexItem className="text-[1rem] text-typography font-semibold">
                   {discount.title}
                 </FlexItem>
                 {!discount.in_scope && (
@@ -45,7 +45,7 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
                     {discount.business_title}
                   </FlexItem>
                 )}
-                <FlexItem className="text-typography text-[.862rem] line-clamp-[3]">
+                <FlexItem className="text-typography text-[.862rem] line-clamp-[2]">
                   {discount.description}
                 </FlexItem>
               </FlexBox>
@@ -54,10 +54,7 @@ export const SpecialDiscount: ISpecialDiscount = (discount) => {
         </FlexItem>
         {!discount.in_scope && (
           <FlexItem className="mt-[.5rem]">
-            <Button
-              className="w-full text-center text-[.862rem] py-[.5rem]"
-              type="primary"
-            >
+            <Button block size="large" type="primary">
               <Link href={`/${discount.business_slug}`} className="block">
                 مشاهده کافه
               </Link>

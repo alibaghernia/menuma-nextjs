@@ -1,5 +1,8 @@
 FROM node:18
-
+RUN apt-get -y update && \
+  apt-get install -yq openssl git ca-certificates tzdata && \
+  ln -fs /usr/share/zoneinfo/Asia/Tehran /etc/localtime && \
+  dpkg-reconfigure -f noninteractive tzdata
 WORKDIR /app
 
 COPY package.json .

@@ -12,6 +12,7 @@ import { getBusiness } from '@/actions/business';
 import Price from './components/price';
 import { Metadata } from 'next';
 import { Flex } from 'antd/lib';
+import ProductImage from './components/image';
 const Navbar = dynamic(() => import('@/components/core/navbar/navbar'), {
   ssr: false,
 });
@@ -74,14 +75,7 @@ async function ProductPage({ params }: any) {
       <div className="pt-[4.5rem] pb-[2.5rem] z-10 px-4 min-h-screen">
         <FlexBox direction="column">
           <FlexItem className="rounded-[2.4rem] overflow-hidden relative max-w-[22.4rem] w-full h-[22.4rem] mx-auto bg-white shadow">
-            <Image
-              src={product?.image_url ? product?.image_url : noImage.src}
-              alt={product?.title! || 'pic'}
-              className={`inset-0 block object-cover ${
-                foundTagSoldOut && 'grayscale'
-              }`}
-              fill
-            />
+            <ProductImage {...product} />
           </FlexItem>
           <FlexItem
             className="mt-[1.1rem] max-w-[22.4rem] w-full mx-auto bg-white/[.5] p-4 pb-10 rounded-[1.5rem] border"

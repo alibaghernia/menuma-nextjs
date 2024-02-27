@@ -1,6 +1,5 @@
 import React from 'react';
 import { IProduct } from './types';
-import Image from 'next/image';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { Container } from '../container/container';
@@ -9,7 +8,8 @@ import { FlexItem } from '@/components/common/flex_item/flex_item';
 import { Badge } from '@/components/common/badge/badge';
 import Link from '@/components/common/link/link';
 import Price from './components/price';
-import noImage from '@/assets/images/coffe-pattern.jpg';
+import dynamic from 'next/dynamic';
+const ProductImage = dynamic(() => import('./components/image'));
 
 const Product: IProduct = async (props) => {
   const foundTagSoldOut = !!props.metadata?.find(
@@ -84,36 +84,21 @@ const Product: IProduct = async (props) => {
       <Link
         href={props.link}
         className={classNames(
-          'flex-shrink-0 bg-white !w-[10rem] overflow-hidden rounded-[2.4rem] block border border-black/[.05]',
+          'flex-shrink-0 flex items-center overflow-hidden rounded-[2.4rem]',
           {
-            'absolute !h-[12rem] right-[0]': !mono,
             'relative h-full': mono,
           },
         )}
       >
-        <Image
-          fill
-          src={props.image ? props.image_url! : noImage.src}
-          alt={props.title}
-          className={classNames(`z-0 object-cover relative`, {
-            grayscale: foundTagSoldOut,
-          })}
+        <ProductImage
+          {...props}
+          className={classNames(
+            `z-0 object-cover relative bg-white overflow-hidden rounded-[2.4rem] block border border-black/[.05]`,
+            {
+              grayscale: foundTagSoldOut,
+            },
+          )}
         />
-
-        {props.single_mode && (
-          <>
-            <span
-              className="z-10 absolute inset-0"
-              style={{
-                background:
-                  'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 40%, rgba(224, 224, 224, 1) 100%)',
-              }}
-            ></span>
-            <div className="text-[1.2rem] text-typography absolute bottom-[.3rem] left-[50%] translate-x-[-50%] font-bold z-20">
-              {`${props.prices[0].value.toLocaleString('IR-fa')} ت`}
-            </div>
-          </>
-        )}
       </Link>
     );
   };

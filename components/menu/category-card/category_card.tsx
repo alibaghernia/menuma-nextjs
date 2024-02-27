@@ -3,8 +3,10 @@ import { ICategoryCard } from './types';
 import Image from 'next/image';
 import classNames from 'classnames';
 import { twMerge } from 'tailwind-merge';
+import { useCurrentBreakpoints } from '@/utils/hooks';
 
 export const CategoryCard: ICategoryCard = (props) => {
+  const breakpoints = useCurrentBreakpoints();
   const element = useMemo(
     () => (
       <div
@@ -22,7 +24,8 @@ export const CategoryCard: ICategoryCard = (props) => {
       >
         {props.image && (
           <Image
-            fill
+            width={breakpoints.isXs ? 126 : 140}
+            height={breakpoints.isXs ? 126 : 140}
             src={props.image}
             alt={props.title}
             className="z-0 object-cover"

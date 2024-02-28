@@ -26,6 +26,7 @@ const nextConfig = {
     'react-jss',
   ],
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'http',

@@ -1,4 +1,5 @@
 import '@/assets/styles/global.scss';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ConfigProvider } from 'antd';
@@ -27,6 +28,7 @@ export default function RootLayout({
 
   return (
     <html lang="fa" dir="rtl">
+      <GoogleAnalytics gaId="G-V92XWT394X" />
       <body>
         <main className="bg-background">
           <ConfigProvider

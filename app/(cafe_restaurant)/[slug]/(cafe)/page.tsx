@@ -76,11 +76,13 @@ async function Profile({ params }: any) {
                 <FlexItem className="text-typography text-[.9rem] text-justify py-2 rounded-[2rem]">
                   {profileData.address}
                 </FlexItem>
-                <FlexItem className="mt-2">
-                  <div className="rounded-[1rem] overflow-hidden h-[12.7rem] relative z-0">
-                    <Map business={profileData} />
-                  </div>
-                </FlexItem>
+                {!!profileData.location_lat && !!profileData.location_long && (
+                  <FlexItem className="mt-2">
+                    <div className="rounded-[1rem] overflow-hidden h-[12.7rem] relative z-0">
+                      <Map business={profileData} />
+                    </div>
+                  </FlexItem>
+                )}
               </FlexBox>
             </Section>
             <Contacts business={profileData} />

@@ -18,7 +18,7 @@ const ProductImage: FC<ProductEntity> = (product) => {
       src={product?.image ? product?.image_url! : noImage.src}
       alt={product?.title! || 'pic'}
       className={twMerge(
-        classNames(`inset-0 block object-cover w-full h-full`, {
+        classNames(`inset-0 block object-cover !w-full !h-full`, {
           grayscale: foundTagSoldOut,
         }),
       )}

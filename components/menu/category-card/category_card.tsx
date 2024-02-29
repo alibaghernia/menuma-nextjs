@@ -28,7 +28,7 @@ export const CategoryCard: ICategoryCard = (props) => {
             height={breakpoints.isXs ? 126 : 140}
             src={props.image}
             alt={props.title}
-            className="z-0 object-cover"
+            className="z-0 object-cover w-full h-full"
           />
         )}
         <span

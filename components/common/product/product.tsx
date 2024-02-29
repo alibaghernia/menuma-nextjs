@@ -145,7 +145,9 @@ const Product: IProduct = async (props) => {
               },
             )}
           >
-            {props.fullWidth && <FlexItem>{renderImage(true)}</FlexItem>}
+            {props.fullWidth && (
+              <FlexItem className="shrink-0">{renderImage(true)}</FlexItem>
+            )}
             <FlexItem grow>
               <FlexBox direction="column" gap={2} className="h-full">
                 <FlexItem>

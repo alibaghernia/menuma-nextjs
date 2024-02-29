@@ -1,5 +1,4 @@
 import '@/assets/styles/global.scss';
-import { GoogleAnalytics } from '@next/third-parties/google';
 import type { Metadata } from 'next';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { ConfigProvider } from 'antd';
@@ -10,6 +9,11 @@ import _ from 'lodash';
 import Provider from '@/providers/main/provider';
 import { cookies } from 'next/headers';
 import { getIsNotMenuma } from '@/actions/cookie';
+import {
+  GoogleAnalytics as GoogleAnalyticsTag,
+  GoogleTagManager as GoogleTagManagerTag,
+} from '@next/third-parties/google';
+import { Fragment } from 'react';
 
 export const generateMetadata = (): Awaited<Metadata> => {
   const isNotMenuma = getIsNotMenuma();
@@ -26,9 +30,32 @@ export default function RootLayout({
 }>) {
   const isNotMenuma = !!+cookies().get('is-not-menuma')?.value!;
 
+  let GoogleAnalytics: any = Fragment;
+  let GAID;
+  if (process.env.NODE_ENV == 'production') {
+    GAID = process.env.NEXT_PUBLIC_GAID;
+    if (!GAID) {
+      console.error('Check google analytics ID');
+      process.exit(1);
+    }
+    GoogleAnalytics = GoogleAnalyticsTag;
+  }
+
+  let GoogleTagManager: any = Fragment;
+  let GTMID;
+  if (process.env.NODE_ENV == 'production') {
+    GTMID = process.env.NEXT_PUBLIC_GTMID;
+    if (!GTMID) {
+      console.error('Check google tag manager ID');
+      process.exit(1);
+    }
+    GoogleTagManager = GoogleTagManagerTag;
+  }
+
   return (
     <html lang="fa" dir="rtl">
-      <GoogleAnalytics gaId="G-V92XWT394X" />
+      <GoogleAnalytics gaId={GAID} />
+      <GoogleTagManager gtmId={GTMID} />
       <body>
         <main className="bg-background">
           <ConfigProvider

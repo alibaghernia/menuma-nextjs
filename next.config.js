@@ -20,6 +20,7 @@ const nextConfig = {
   transpilePackages: [
     'kitchen-flow-editor',
     '@ant-design/icons',
+    '@next/third-parties/google',
     'zustand',
     'leva',
     'zaman',

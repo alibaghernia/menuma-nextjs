@@ -6,6 +6,7 @@ import React, { FC } from 'react';
 import { useCurrentBreakpoints } from '@/utils/hooks';
 import { ProductEntity } from '@/services/business/business';
 import classNames from 'classnames';
+import { twMerge } from 'tailwind-merge';
 
 const ProductImage: FC<ProductEntity> = (product) => {
   const breakpoints = useCurrentBreakpoints();
@@ -16,9 +17,11 @@ const ProductImage: FC<ProductEntity> = (product) => {
     <Image
       src={product?.image ? product?.image_url! : noImage.src}
       alt={product?.title! || 'pic'}
-      className={classNames(`inset-0 block object-cover w-full h-full`, {
-        grayscale: foundTagSoldOut,
-      })}
+      className={twMerge(
+        classNames(`inset-0 block object-cover w-full h-full`, {
+          grayscale: foundTagSoldOut,
+        }),
+      )}
       width={breakpoints.isXs ? 359 : 323}
       height={breakpoints.isXs ? 359 : 323}
       quality={product?.image ? 100 : 60}

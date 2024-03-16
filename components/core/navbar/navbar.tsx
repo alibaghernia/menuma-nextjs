@@ -86,16 +86,16 @@ export const Navbar: INavBar = ({
         url: `/${slug}/events`,
       });
     }
-    if (
-      typeof coffeShopState.profile.has_gallery == 'undefined' ||
-      !!+coffeShopState.profile.has_gallery
-    ) {
-      menu.push({
-        title: 'گالری',
-        icon: <View360 color={typographyColor} />,
-        url: `/${slug}/gallery`,
-      });
-    }
+    // if (
+    //   typeof coffeShopState.profile.has_gallery == 'undefined' ||
+    //   !!+coffeShopState.profile.has_gallery
+    // ) {
+    //   menu.push({
+    //     title: 'گالری',
+    //     icon: <View360 color={typographyColor} />,
+    //     url: `/${slug}/gallery`,
+    //   });
+    // }
     if (
       coffeShopState.profile.has_customer_club &&
       coffeShopState.profile.enabled_customer_club
@@ -318,7 +318,11 @@ export const Navbar: INavBar = ({
           <FlexItem className="text-gray-300 font-bold w-full text-center py-3">
             <Link href="https://menuma.online">
               <span className="hover:underline">
-                قدرت گرفته از <span className="text-blue-400">منوما</span>
+                قدرت گرفته از&nbsp;
+                <span>
+                  <span className="text-blue-400">منو</span>
+                  <span className="text-[#eeb33f]">ما</span>
+                </span>
               </span>
             </Link>
           </FlexItem>
